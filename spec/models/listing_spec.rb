@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Listing do
-  describe 'associations' do
+  describe 'associations tests:' do
     it 'has a title' do 
       expect(@listing1.title).to eq("Beautiful Apartment on Main Street")
     end
@@ -31,7 +31,7 @@ describe Listing do
     end
 
     it 'has many reviews' do 
-      expect(@listing3.reviews).to include(@review3)
+      expect(@listing4.reviews).to include(@review3)
     end
 
     it 'has many reservations' do
