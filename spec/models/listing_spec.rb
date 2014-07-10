@@ -36,7 +36,7 @@ describe Listing do
 
     it 'has many reservations' do
       vaca_res = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 2)
-      staycation = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 3)
+      staycation = Reservation.create(checkin: '2015-04-10', checkout: '2015-04-15', listing_id: @listing3.id, guest_id: 1)
       expect(@listing3.reservations).to include(vaca_res)
       expect(@listing3.reservations).to include(staycation)
     end
