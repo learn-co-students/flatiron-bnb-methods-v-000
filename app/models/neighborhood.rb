@@ -50,7 +50,7 @@ class Neighborhood < ActiveRecord::Base
   def find_res_count(nabe)
     res_count = 0
     nabe.listings.each do |listing|
-      res_count += listing.reservations.count
+      res_count += listing.reservations.where(:status => "accepted").count
     end
     return res_count
   end

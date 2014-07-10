@@ -68,7 +68,7 @@ RSpec.configure do |config|
 
     @listing3 = Listing.create(address: '44 Ridge Lane', listing_type: "whole house", title: "Beautiful Home on Mountain", description: "Whole house for rent on mountain. Many bedrooms.", price: 200.00, neighborhood_id: Neighborhood.find_by(id: 3).id, host_id: User.find_by(id: 3).id)
 
-    @reservation1 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: Listing.first.id, guest_id: User.find_by(id: 4).id)
+    @reservation1 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: 1, guest_id: 4)
 
     @reservation2 = Reservation.create(checkin: '2014-03-10', checkout: '2014-03-25', listing_id: Listing.find_by(id: 2).id, guest_id: User.find_by(id: 5).id)
 

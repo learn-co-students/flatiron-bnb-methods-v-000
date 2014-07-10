@@ -18,4 +18,24 @@ describe Review do
       expect(@review1.listing).to eq(@listing1) 
     end
   end
+
+  describe 'model methods' do
+    before(:each) do 
+      @valid = Review.create(:description => "blah", :rating => 3)
+      @invalidrating = Review.new(:description => "hi", :rating => nil)
+      @invaliddescription = Review.new(:description => nil, :rating => 5)
+    end
+
+    it 'is valid with a rating and description' do
+      expect(@valid).to be_valid 
+    end
+
+    it 'is invalid without a rating' do 
+      expect(@invalidrating).to_not be_valid
+    end
+
+    it 'is invalid without a description' do
+      expect(@invaliddescription).to_not be_valid 
+    end
+  end
 end

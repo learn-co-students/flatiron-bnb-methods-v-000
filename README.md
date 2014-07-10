@@ -2,9 +2,9 @@
 tags: rails, full application, class methods, instance methods, validations, callbacks
 language: ruby
 unit: rails
-module: Building Complete Apps
+module: Helper Methods
 level: advanced
-resources: 0
+resources: 2
 ---
 
 # Flatiron-bnb: Methods
@@ -23,4 +23,5 @@ You will need to make a few new migrations.
 
 ## Resources
 
-
+[AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
+[Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)

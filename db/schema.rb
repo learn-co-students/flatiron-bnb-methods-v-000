@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710175622) do
+ActiveRecord::Schema.define(version: 20140710181927) do
 
   create_table "cities", force: true do |t|
     t.string   "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20140710175622) do
     t.integer  "guest_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "status",     default: "pending"
   end
 
   create_table "reviews", force: true do |t|

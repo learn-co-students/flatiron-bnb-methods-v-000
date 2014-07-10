@@ -18,7 +18,7 @@ class Reservation < ActiveRecord::Base
   # Make sure guest and host not the same
   def guest_and_host_not_the_same
     if self.guest_id == self.listing.host_id
-      errors.add(:guest, "You can't book your own apartment")
+      errors.add(:guest_id, "You can't book your own apartment")
     end
   end
 
@@ -27,7 +27,7 @@ class Reservation < ActiveRecord::Base
     self.listing.reservations.each do |r|
       booked_dates = r.checkin..r.checkout
       if booked_dates === self.checkin || booked_dates === self.checkout
-        errors.add(:guest, "Sorry, this place isn't available during your requested dates.")
+        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
       end
     end
   end
@@ -39,7 +39,7 @@ class Reservation < ActiveRecord::Base
 
   # Updates reservation object to be accepted by listing host
   def host_rejects
-    self.status.update(:status => "rejected") 
+    self.status.update(:status => "declined") 
   end
 
 end

@@ -50,7 +50,7 @@ class City < ActiveRecord::Base
   def find_res_count(city)
     res_count = 0
     city.listings.each do |listing|
-      res_count += listing.reservations.count
+      res_count += listing.reservations.where(:status => "accepted").count
     end
     return res_count
   end
