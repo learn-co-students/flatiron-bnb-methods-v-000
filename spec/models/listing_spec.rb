@@ -43,7 +43,9 @@ describe Listing do
 
     it 'knows about all of its guests' do 
       vaca_res = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 1)
+      staycation = Reservation.create(checkin: '2015-04-10', checkout: '2015-04-15', listing_id: @listing3.id, guest_id: 2)
       expect(@listing3.guests.collect{|g| g.id }).to include(1)
+      expect(@listing3.guests.collect{|g| g.id }).to include(2)
     end
   end
 
