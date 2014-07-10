@@ -2,7 +2,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
 
-  validate :guest_and_host_not_the_same, :listing_available?
+  validate :guest_and_host_not_the_same, :check_availablity
 
   # Returns the length (in days) of a reservation
   def length
@@ -22,14 +22,13 @@ class Reservation < ActiveRecord::Base
   end
 
   # Check if listing is available for a reservation request
-  def listing_available?
+  def check_availablity
     self.listing.reservations.each do |r|
       booked_dates = r.checkin..r.checkout
       if booked_dates === self.checkin || booked_dates === self.checkout
-        false
+        errors.add(:guest, "Sorry, this place isn't available during your requested dates.")
       end
     end
-    true
   end
 
   # Makes a new reservation object given if its available

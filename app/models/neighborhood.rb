@@ -8,6 +8,7 @@ class Neighborhood < ActiveRecord::Base
 
   # Returns most popular neighborhood (most listings)
   def self.most_popular
+    
   end
 
 end

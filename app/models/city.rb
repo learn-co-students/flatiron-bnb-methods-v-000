@@ -8,7 +8,7 @@ class City < ActiveRecord::Base
 
   # Returns most popular city (most listings)
   def self.most_popular
-    
+
   end
 
 end

@@ -5,11 +5,29 @@ class Listing < ActiveRecord::Base
   has_many :guests, :class_name => "User", :through => :reservations
   has_many :reviews
 
+  before_save :make_host
+  before_destroy :host_status
+
   # Finds the average rating for a listing
   def average_rating
-    ratings = []
+    total = 0
     self.reviews.each do |review|
-      ratings << review.rating
+      total += review.rating
+    end
+    average = total.to_f / ratings.count
+  end
+
+  # Makes user a host when a listing is created
+  def make_host
+    unless self.host.host
+      self.host.update(:host => true)
+    end
+  end
+
+  # Changes host status to false when listing is destroyed and user has no more listings
+  def host_status
+    if self.host.listings.count <= 1
+      self.host.update(:host => false)
     end
   end
 
