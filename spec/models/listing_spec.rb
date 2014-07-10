@@ -35,7 +35,10 @@ describe Listing do
     end
 
     it 'has many reservations' do
-      expect(@listing3.reservations).to include(@reservation3)
+      vaca_res = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 2)
+      staycation = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 3)
+      expect(@listing3.reservations).to include(vaca_res)
+      expect(@listing3.reservations).to include(staycation)
     end
 
     it 'knows about all of its guests' do 
