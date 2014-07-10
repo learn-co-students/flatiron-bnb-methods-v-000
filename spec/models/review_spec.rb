@@ -19,15 +19,14 @@ describe Review do
     end
   end
 
-  describe 'model methods' do
+  describe 'review validations' do
     before(:each) do 
-      @valid = Review.create(:description => "blah", :rating => 3)
       @invalidrating = Review.new(:description => "hi", :rating => nil)
       @invaliddescription = Review.new(:description => nil, :rating => 5)
     end
 
     it 'is valid with a rating and description' do
-      expect(@valid).to be_valid 
+      expect(@review1).to be_valid 
     end
 
     it 'is invalid without a rating' do 

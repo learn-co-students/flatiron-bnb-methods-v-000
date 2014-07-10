@@ -19,7 +19,7 @@ There are many methods and validations and callbacks to build! <em>Work together
 
 ### Hints
 
-You will need to make a few new migrations.
+You will need to make a few new migrations to add some columns to some tables, and they should have default values.
 
 ## Resources
 

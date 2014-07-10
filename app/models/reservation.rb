@@ -6,13 +6,13 @@ class Reservation < ActiveRecord::Base
   validate :guest_and_host_not_the_same, :check_availablity
 
   # Returns the length (in days) of a reservation
-  def length
+  def duration
     (self.checkout - self.checkin).to_i
   end
 
-  # Given the length of the stay and the listing price, returns how much does the reservation costs
+  # Given the duration of the stay and the listing price, returns how much does the reservation costs
   def total_price
-    self.listing.price * length
+    self.listing.price * duration
   end
 
   # Make sure guest and host not the same
@@ -30,16 +30,6 @@ class Reservation < ActiveRecord::Base
         errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
       end
     end
-  end
-
-  # Updates reservation object to be accepted by listing host
-  def host_accepts
-    self.status.update(:status => "accepted") 
-  end
-
-  # Updates reservation object to be accepted by listing host
-  def host_rejects
-    self.status.update(:status => "declined") 
   end
 
 end
