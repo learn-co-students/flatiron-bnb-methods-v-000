@@ -1,18 +1,26 @@
 ---
-tags: rails, full application, associations, migrations, foreign keys
+tags: rails, full application, class methods, instance methods
 language: ruby
 unit: rails
 module: Building Complete Apps
 level: advanced
-resources: 1
+resources: 0
 ---
 
-# Flatiron-bnb: Associations
+# Flatiron-bnb: Methods
 
-We're going to build Airbnb. Really. We're going to take this in steps. First let's work on our model associations and writing migrations. This will be challenging, but doable. Take is slow and work together. Follow the model specs and <em>read the resources below</em>.
+In the previous iteration, we built out our model associations and migrated our database. Now we're going to work on building useful methods (class and instance) for rendering data and our own validations (also instance methods). We're doing this to follow the principle that our controllers should be skinny, our models fat, so therefore our views have very little logic in them.
 
 <em>Before anything</em>, note that when you generate models, controllers, etc, be sure to include this option, so that it skips tests (which we already have): `--no-test-framework`
 
+## Methods
+
+validations maybe? (make these instance methods)
+- owners cannot rent own apartments
+- renters cannot rent two apartments at the same time
+- a listing cannot be booked by two renters at the same time
+
+
 ## Resources
 
-[Foreign key and Class Name AR class methods](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html)
+

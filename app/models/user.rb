@@ -3,19 +3,19 @@ class User < ActiveRecord::Base
   has_many :reservations, :foreign_key => 'guest_id'
   has_many :reviews, :foreign_key => 'guest_id'
 
-  # Returns all guests a host has had
+  # Returns all guests (objects) a host has had
   def guests
     self.listings.each do |listing|
       listing.reservations.collect do |reservation|
-        reservation.guest.name
+        reservation.guest
       end
     end
   end
 
-  # Returns all hosts a guest has had
+  # Returns all hosts (objects) a guest has had
   def hosts
     self.reservations.each do |reservation|
-      reservation.listing.host.name
+      reservation.listing.host
     end
   end
 
