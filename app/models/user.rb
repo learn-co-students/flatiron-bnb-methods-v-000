@@ -6,16 +6,18 @@ class User < ActiveRecord::Base
   # Returns all guests (objects) a host has had
   # This might not be the best way to do this, if our database gets larger
   def guests
+    host_guests = []
     self.listings.each do |listing|
-      listing.reservations.collect do |reservation|
-        reservation.guest
+      listing.reservations.each do |reservation|
+        host_guests << reservation.guest
       end
     end
+    return host_guests
   end
 
   # Returns all hosts (objects) a guest has had
   def hosts
-    self.reservations.each do |reservation|
+    self.reservations.collect do |reservation|
       reservation.listing.host
     end
   end
@@ -24,7 +26,7 @@ class User < ActiveRecord::Base
   def host_reviews
     guests.collect do |guest|
       guest.reviews
-    end
+    end.flatten
   end
   
 end
