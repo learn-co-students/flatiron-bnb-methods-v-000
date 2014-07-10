@@ -31,15 +31,15 @@ describe Listing do
     end
 
     it 'has many reviews' do 
-      expect(@listing3.reviews).to eq([@review3])
+      expect(@listing3.reviews).to include(@review3)
     end
 
-    it 'has many reservations' do 
-      expect(@listing3.reservations).to eq([@reservation3])
+    it 'has many reservations' do
+      expect(@listing3.reservations).to include(@reservation3)
     end
 
     it 'knows about all of its guests' do 
-      expect(@listing3.guests).to eq([@avi])
+      expect(@listing3.guests).to include(@avi)
     end
   end
 
