@@ -49,6 +49,36 @@ describe Listing do
     end
   end
 
-  describe 'model methods' do 
+  describe 'listing validations' do 
+    xit 'is invalid without an address' do 
+    end
+
+    xit 'is invalid without a listing type' do 
+    end
+
+    xit 'is invalid without a title' do 
+    end
+
+    xit 'is invalid without a description' do 
+    end
+
+    xit 'is invalid without a price' do 
+    end
+
+    xit 'is invalid without an associated neighborhood' do 
+    end
+  end
+
+  describe 'callback methods' do 
+    xit 'changes user host status when created' do 
+    end
+
+    xit 'changes host status when deleted and host has no more listings' do 
+    end
+  end 
+
+  describe 'instance methods' do 
+    xit 'knows its average ratings from its reviews' do 
+    end
   end
 end

@@ -11,10 +11,20 @@ describe Neighborhood do
     end
 
     it 'has many listings' do 
-      expect(@nabe3.listings).to eq([@listing3])
+      expect(@nabe3.listings).to include(@listing3)
     end
   end
 
-  describe 'model methods' do 
+  describe 'instance methods' do
+    xit 'knows about all the available listings given a date range' do 
+    end 
+  end
+
+  describe 'class methods' do
+    xit 'knows the neighborhood with the highest ratio of reservations to listings' do 
+    end
+
+    xit 'knows the neighborhood with the most reservations' do 
+    end 
   end
 end

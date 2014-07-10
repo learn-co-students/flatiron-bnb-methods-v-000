@@ -11,6 +11,16 @@ describe City do
     end
   end
 
-  describe 'model methods' do 
+  describe 'instance methods' do
+    xit 'knows about all the available listings given a date range' do 
+    end 
+  end
+
+  describe 'class methods' do
+    xit 'knows the city with the highest ratio of reservations to listings' do 
+    end
+
+    xit 'knows the city with the most reservations' do 
+    end 
   end
 end
