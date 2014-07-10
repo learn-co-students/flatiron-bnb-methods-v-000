@@ -7,15 +7,15 @@ describe User do
     end
 
     it 'as a host has many listings' do
-      expect(@amanda.listings).to eq([@listing1]) 
+      expect(@amanda.listings).to include(@listing1) 
     end
 
     it 'as a guest has many reservations' do
-      expect(@tristan.reservations).to eq([@reservation2])
+      expect(@tristan.reservations).to include(@reservation2)
     end
 
     it 'as a guest has written many reviews' do
-      expect(@avi.reviews).to eq([@review3])
+      expect(@avi.reviews).to include(@review3)
     end
   end
 
