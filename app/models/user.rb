@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   has_many :reviews, :foreign_key => 'guest_id'
 
   # Returns all guests (objects) a host has had
+  # This might not be the best way to do this, if our database gets larger
   def guests
     self.listings.each do |listing|
       listing.reservations.collect do |reservation|

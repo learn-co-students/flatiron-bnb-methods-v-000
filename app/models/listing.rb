@@ -5,9 +5,12 @@ class Listing < ActiveRecord::Base
   has_many :guests, :class_name => "User", :through => :reservations
   has_many :reviews
 
-  # For a user to check if listing is available during provided dates
-  def available?(start_date, end_date)
-    if self.reservations.
+  # Finds the average rating for a listing
+  def average_rating
+    ratings = []
+    self.reviews.each do |review|
+      ratings << review.rating
+    end
   end
 
 end
