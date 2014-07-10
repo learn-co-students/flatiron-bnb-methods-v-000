@@ -13,11 +13,13 @@ In the previous iteration, we built out our model associations and migrated our 
 
 <em>Before anything</em>, note that when you generate models, controllers, etc, be sure to include this option, so that it skips tests (which we already have): `--no-test-framework`
 
-validations maybe? (make these instance methods)
-- owners cannot rent own apartments
-- renters cannot rent two apartments at the same time
-- a listing cannot be booked by two renters at the same time
+## Instructions
 
+There are many methods and validations and callbacks to build! <em>Work together</em>. Get the tests to pass. Read the resources listed.
+
+### Hints
+
+You will need to make a few new migrations.
 
 ## Resources
 

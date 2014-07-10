@@ -18,4 +18,7 @@ describe Reservation do
     expect(@reservation1.listing).to eq(@listing1)
     end
   end
+
+  describe 'model methods' do 
+  end
 end

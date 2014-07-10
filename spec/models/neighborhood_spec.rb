@@ -14,4 +14,7 @@ describe Neighborhood do
       expect(@nabe3.listings).to eq([@listing3])
     end
   end
+
+  describe 'model methods' do 
+  end
 end

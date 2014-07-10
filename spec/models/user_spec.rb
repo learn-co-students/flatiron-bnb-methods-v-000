@@ -18,4 +18,7 @@ describe User do
       expect(@avi.reviews).to eq([@review3])
     end
   end
+
+  describe 'model methods' do 
+  end
 end

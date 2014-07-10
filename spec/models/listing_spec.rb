@@ -42,4 +42,7 @@ describe Listing do
       expect(@listing3.guests).to eq([@avi])
     end
   end
+
+  describe 'model methods' do 
+  end
 end

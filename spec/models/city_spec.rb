@@ -10,4 +10,7 @@ describe City do
       expect(City.first.neighborhoods).to eq([@nabe1, @nabe2, @nabe3])
     end
   end
+
+  describe 'model methods' do 
+  end
 end
