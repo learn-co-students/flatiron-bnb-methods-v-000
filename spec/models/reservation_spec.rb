@@ -25,8 +25,8 @@ describe Reservation do
 
   describe 'reservation validations' do
     before(:each) do 
-      @invalidcheckin = Reservation.new(checkin: nil, checkout: '2014-01-30', guest_id: User.find_by(id: 4).id, listing_id: Listing.first.id)
-      @invalidcheckout = Reservation.new(checkin:  '2014-01-30', checkout: nil, guest_id: User.find_by(id: 5).id, listing_id: Listing.find_by(id: 2).id)
+      @invalidcheckin = Reservation.new(checkout: '2014-01-30', guest_id: User.find_by(id: 4).id, listing_id: Listing.first.id)
+      @invalidcheckout = Reservation.new(checkin:  '2014-01-30', guest_id: User.find_by(id: 5).id, listing_id: Listing.find_by(id: 2).id)
       @invalid_same_ids = Reservation.new(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: 1, guest_id: 1)
       @invalid_checkin = Reservation.new(checkin: '2014-04-26', checkout: '2014-05-28', guest_id: User.find_by(id: 4).id, listing_id: Listing.first.id)
       @invalid_checkout = Reservation.new(checkin: '2014-04-20', checkout: '2014-04-26', guest_id: User.find_by(id: 4).id, listing_id: Listing.first.id)
