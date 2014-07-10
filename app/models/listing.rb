@@ -5,6 +5,9 @@ class Listing < ActiveRecord::Base
   has_many :guests, :class_name => "User", :through => :reservations
   has_many :reviews
 
+  validates_presence_of :address, :listing_type, :title, :description, :price, :neighborhood_id
+  validates_existance_of :neighborhood
+
   before_save :make_host
   before_destroy :host_status
 

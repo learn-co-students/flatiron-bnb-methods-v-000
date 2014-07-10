@@ -2,6 +2,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
 
+  validates_presence_of :checkin, :checkout
   validate :guest_and_host_not_the_same, :check_availablity
 
   # Returns the length (in days) of a reservation
@@ -31,8 +32,14 @@ class Reservation < ActiveRecord::Base
     end
   end
 
-  # Makes a new reservation object given if its available
-  def book!
+  # Updates reservation object to be accepted by listing host
+  def host_accepts
+    self.status.update(:status => "accepted") 
+  end
+
+  # Updates reservation object to be accepted by listing host
+  def host_rejects
+    self.status.update(:status => "rejected") 
   end
 
 end
