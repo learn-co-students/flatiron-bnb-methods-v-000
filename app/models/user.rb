@@ -1,8 +1,8 @@
 class User < ActiveRecord::Base
   has_many :listings, :foreign_key => 'host_id'
   has_many :reservations, :through => :listings
-
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
+  has_many :reviews, :foreign_key => 'guest_id'
 
   # Returns all guests (objects) a host has had
   # This might not be the best way to do this, if our database gets larger
