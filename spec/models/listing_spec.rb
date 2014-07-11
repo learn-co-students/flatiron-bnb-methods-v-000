@@ -50,30 +50,60 @@ describe Listing do
   end
 
   describe 'listing validations' do 
-    xit 'is invalid without an address' do 
+    it 'is invalid without an address' do
+      no_addy = Listing.new(listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
+      expect(no_addy).to_not be_valid
     end
 
-    xit 'is invalid without a listing type' do 
+    it 'is invalid without a listing type' do 
+      no_type = Listing.new(address: '123 Main Street', title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
+      expect(no_type).to_not be_valid
     end
 
-    xit 'is invalid without a title' do 
+    it 'is invalid without a title' do 
+      no_title = Listing.new(address: '123 Main Street', listing_type: "shared room", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
+      expect(no_title).to_not be_valid
     end
 
-    xit 'is invalid without a description' do 
+    it 'is invalid without a description' do
+      no_desc = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
+      expect(no_desc).to_not be_valid
     end
 
-    xit 'is invalid without a price' do 
+    it 'is invalid without a price' do
+      no_price = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
+      expect(no_price).to_not be_valid
     end
 
-    xit 'is invalid without an associated neighborhood' do 
+    it 'is invalid without an associated neighborhood' do 
+      no_nabe = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", host_id: User.find_by(id: 2).id)
+      expect(no_nabe).to_not be_valid
     end
+
   end
 
   describe 'callback methods' do 
-    xit 'changes user host status when created' do 
+    it 'changes user host status when created' do 
+      tina = User.create(name: "Tina Fey")
+      expect(tina.host).to eq(false)
+      la = City.create(name: "Los Angeles")
+      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
+      listing = Listing.create(address: '123 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
+      tina_found = User.find_by(:name=> "Tina Fey")
+      expect(tina_found.host).to eq(true)
     end
 
-    xit 'changes host status when deleted and host has no more listings' do 
+    it 'changes host status when deleted and host has no more listings' do 
+      tina = User.create(name: "Tina Fey")
+      la = City.create(name: "Los Angeles")
+      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
+      listing = Listing.create(address: '3429384723 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
+      tina_found = User.find_by(:name=> "Tina Fey")
+      expect(tina_found.host).to eq(true)
+      that_listing = Listing.find_by(address: '3429384723 Main Street')
+      that_listing.destroy
+      tina_found_again = User.find_by(:name=> "Tina Fey")
+      expect(tina_found_again.host).to eq(false)
     end
   end 
 
