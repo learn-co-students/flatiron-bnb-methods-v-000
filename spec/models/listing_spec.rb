@@ -76,11 +76,10 @@ describe Listing do
     end
 
     it 'is invalid without an associated neighborhood' do 
-      no_nabe = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id)
-      nabe_does_not_exist = Listing.create(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: 100)
+      no_nabe = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", host_id: User.find_by(id: 2).id)
       expect(no_nabe).to_not be_valid
-      expect(nabe_does_not_exist).to_not be_valid
     end
+
   end
 
   describe 'callback methods' do 
