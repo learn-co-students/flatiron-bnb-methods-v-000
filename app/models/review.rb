@@ -4,11 +4,12 @@ class Review < ActiveRecord::Base
 
   validates_presence_of :description, :rating, :reservation_id
 
-  validate :reservation_exists
+  validate :reservation_exists_and_accepted
 
   private
   #You can't write a review on a reservation that doesn't exist
-  def reservation_exists
-    errors.add(:reservation_id, "doesn't exist") unless Reservation.exists?(reservation_id)
+  def reservation_exists_and_accepted
+    errors.add(:reservation_id, "doesn't exist") unless Reservation.exists?(reservation_id) && Reservation.find(reservation_id).status == "accepted" && Reservation.find(reservation_id).checkout < Time.now
   end
+
 end
