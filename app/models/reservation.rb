@@ -15,6 +15,7 @@ class Reservation < ActiveRecord::Base
     self.listing.price * duration
   end
 
+  private
   # Make sure guest and host not the same
   def guest_and_host_not_the_same
     if self.guest_id == self.listing.host_id

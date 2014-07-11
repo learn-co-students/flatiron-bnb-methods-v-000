@@ -10,8 +10,12 @@ describe User do
       expect(@amanda.listings).to include(@listing1) 
     end
 
-    it 'as a guest has many reservations' do
-      expect(@tristan.reservations).to include(@reservation2)
+    it 'as a guest has many trips' do
+      expect(@tristan.trips).to include(@reservation2)
+    end
+
+    it 'as a host has many reservations through their listing' do 
+      expect(@amanda.reservations).to include(@reservation1)
     end
 
     it 'as a guest has written many reviews' do
