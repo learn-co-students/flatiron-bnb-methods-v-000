@@ -18,8 +18,8 @@ class User < ActiveRecord::Base
 
   # Returns all hosts (objects) a guest has had
   def hosts
-    self.reservations.collect do |reservation|
-      reservation.listing.host
+    self.trips.collect do |trip|
+      trip.listing.host
     end
   end
 
