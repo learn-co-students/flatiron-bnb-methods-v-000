@@ -34,7 +34,7 @@ Callbacks are ways to attach methods/behavior to different points of a model's l
 
 methods declared as callbacks should always be `private`, so they can't be called from code outside of the model.
 
-### Hints
+### Hint
 
 You will need to make a few new migrations to add some columns to some tables, and they should have default values.
 

@@ -18,15 +18,19 @@ class Neighborhood < ActiveRecord::Base
 
   # Returns nabe with highest ratio of reservations to listings
   def self.highest_ratio_res_to_listings
-    popular_nabe = "?"
+    popular_nabe = Neighborhood.create(:name => "There is no popular neighborhood.")
     highest_ratio = 0.00
     self.all.each do |nabe|  
       denominator = nabe.listings.count
-      numerator = find_res_count(nabe)
-      popularity_ratio = numerator / denominator
-      if popularity_ratio > highest_ratio
-        highest_ratio = popularity_ratio
-        popular_nabe = nabe
+      numerator = nabe.find_res_count
+      if denominator == 0 || numerator == 0
+        next
+      else
+        popularity_ratio = numerator / denominator
+        if popularity_ratio > highest_ratio
+          highest_ratio = popularity_ratio
+          popular_nabe = nabe
+        end
       end
     end
     return popular_nabe
@@ -37,7 +41,7 @@ class Neighborhood < ActiveRecord::Base
     most_reservation = "currently unknown"
     total_reservation_number = 0
     self.all.each do |nabe|
-      nabe_reservation_number = find_res_count(nabe)
+      nabe_reservation_number = nabe.find_res_count
       if nabe_reservation_number > total_reservation_number
         total_reservation_number = nabe_reservation_number
         most_reservation = nabe
@@ -47,9 +51,9 @@ class Neighborhood < ActiveRecord::Base
   end
 
   #helper for above class methods
-  def find_res_count(nabe)
+  def find_res_count
     res_count = 0
-    nabe.listings.each do |listing|
+    self.listings.each do |listing|
       res_count += listing.reservations.where(:status => "accepted").count
     end
     return res_count

@@ -16,17 +16,30 @@ class City < ActiveRecord::Base
     return openings
   end
 
+  #helper for below class methods
+  def find_res_count
+    res_count = 0
+    self.listings.each do |listing|
+      res_count += listing.reservations.where(:status => "accepted").count
+    end
+    return res_count
+  end
+
   # Returns city with highest ratio of reservations to listings
   def self.highest_ratio_res_to_listings
-    popular_city = "?"
+    popular_city = City.create(:name => "There is no popular city")
     highest_ratio = 0.00
     self.all.each do |city|  
       denominator = city.listings.count
-      numerator = find_res_count(city)
-      popularity_ratio = numerator / denominator
-      if popularity_ratio > highest_ratio
-        highest_ratio = popularity_ratio
-        popular_city = city
+      numerator = city.find_res_count
+      if denominator == 0 || numerator == 0
+        next
+      else
+        popularity_ratio = numerator / denominator
+        if popularity_ratio > highest_ratio
+          highest_ratio = popularity_ratio
+          popular_city = city
+        end
       end
     end
     return popular_city
@@ -37,7 +50,7 @@ class City < ActiveRecord::Base
     most_reservation = "currently unknown"
     total_reservation_number = 0
     self.all.each do |city|
-      city_reservation_number = find_res_count(city)
+      city_reservation_number = city.find_res_count
       if city_reservation_number > total_reservation_number
         total_reservation_number = city_reservation_number
         most_reservation = city
@@ -46,13 +59,5 @@ class City < ActiveRecord::Base
     return most_reservation
   end
 
-  #helper for above class methods
-  def find_res_count(city)
-    res_count = 0
-    city.listings.each do |listing|
-      res_count += listing.reservations.where(:status => "accepted").count
-    end
-    return res_count
-  end
 end
 

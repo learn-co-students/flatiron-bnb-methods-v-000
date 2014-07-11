@@ -11,7 +11,7 @@ describe Reservation do
     end
 
     it 'has a status, default is pending' do 
-      expect(@reservation3.status).to eq("pending")
+      expect(@reservation3.status).to eq("accepted")
     end
 
     it 'belongs to a guest' do 
