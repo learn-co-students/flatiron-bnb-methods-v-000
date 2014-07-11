@@ -38,6 +38,10 @@ methods declared as callbacks should always be `private`, so they can't be calle
 
 You will need to make a few new migrations to add some columns to some tables, and they should have default values.
 
+## Super Bonus
+
+Instead of creating instance methods `hosts` and `guests`, try to use Active Record associations. The same tests should pass.
+
 ## Resources
 
 *[AR Validations](http://guides.rubyonrails.org/active_record_validations.html)

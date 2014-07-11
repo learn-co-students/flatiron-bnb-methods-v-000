@@ -4,8 +4,12 @@ class User < ActiveRecord::Base
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
   has_many :reviews, :foreign_key => 'guest_id'
 
+  # crazy way to not make methods below
+  # has_many :trip_listings, :through => :trips, :source => :listing
+  # has_many :hosts, :through => :trip_listings, :foreign_key => :host_id
+  # has_many :guests, :through => :reservations, :class_name => "User"
+
   # Returns all guests (objects) a host has had
-  # This might not be the best way to do this, if our database gets larger
   def guests
     host_guests = []
     self.listings.each do |listing|
