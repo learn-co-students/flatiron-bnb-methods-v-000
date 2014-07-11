@@ -50,22 +50,36 @@ describe Listing do
   end
 
   describe 'listing validations' do 
-    xit 'is invalid without an address' do 
+    it 'is invalid without an address' do
+      no_addy = Listing.new(listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
+      expect(no_addy).to_not be_valid
     end
 
-    xit 'is invalid without a listing type' do 
+    it 'is invalid without a listing type' do 
+      no_type = Listing.new(address: '123 Main Street', title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
+      expect(no_type).to_not be_valid
     end
 
-    xit 'is invalid without a title' do 
+    it 'is invalid without a title' do 
+      no_title = Listing.new(address: '123 Main Street', listing_type: "shared room", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
+      expect(no_title).to_not be_valid
     end
 
-    xit 'is invalid without a description' do 
+    it 'is invalid without a description' do
+      no_desc = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
+      expect(no_desc).to_not be_valid
     end
 
-    xit 'is invalid without a price' do 
+    it 'is invalid without a price' do
+      no_price = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
+      expect(no_price).to_not be_valid
     end
 
-    xit 'is invalid without an associated neighborhood' do 
+    it 'is invalid without an associated neighborhood' do 
+      no_nabe = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id)
+      nabe_does_not_exist = Listing.create(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: 100)
+      expect(no_nabe).to_not be_valid
+      expect(nabe_does_not_exist).to_not be_valid
     end
   end
 
