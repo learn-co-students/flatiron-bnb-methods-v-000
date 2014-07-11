@@ -4,7 +4,7 @@ class CreateReviews < ActiveRecord::Migration
       t.text :description
       t.integer :rating
       t.integer :guest_id
-      t.integer :listing_id
+      t.integer :reservation_id
       t.timestamps
     end
   end

@@ -30,10 +30,6 @@ describe Listing do
       expect(@listing2.host.name).to eq('Katie')
     end
 
-    it 'has many reviews' do 
-      expect(@listing4.reviews).to include(@review3)
-    end
-
     it 'has many reservations' do
       vaca_res = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 2)
       staycation = Reservation.create(checkin: '2015-04-10', checkout: '2015-04-15', listing_id: @listing3.id, guest_id: 1)
@@ -109,22 +105,7 @@ describe Listing do
 
   describe 'instance methods' do 
     it 'knows its average ratings from its reviews' do 
-      tina = User.create(name: "Tina Fey")
-      guest_1 = User.create(name: "Harold")
-      guest_2 = User.create(name: "Monica")
-      guest_3 = User.create(name: "Aunt Greene")
-      la = City.create(name: "Los Angeles")
-      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
-      room = Listing.create(address: '3429384723 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
-      apt = Listing.create(address: '2348 Between Two Ferns', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "250.00", neighborhood_id: santa_monica.id, host_id: tina.id)
-      res_1 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: room.id, guest_id: guest_1.id)
-      res_2 = Reservation.create(checkin: '2014-04-31', checkout: '2014-05-10', listing_id: room.id, guest_id: guest_2.id)
-      res_3 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: apt.id,  guest_id: guest_3.id)
-      review_1 = Review.create(description: "This place was great!", rating: 5, guest_id: guest_1.id, listing_id: room.id)
-      review_2 =Review.create(description: "Great place, close to subway!", rating: 4, guest_id: guest_2.id, listing_id: room.id)
-      review_3 = Review.create(description: "Meh, the host I shared a room with snored.", rating: 3, guest_id: guest_2.id, listing_id: room.id)      
-      room_found = Listing.find_by(address: '3429384723 Main Street')
-      expect(room_found.average_rating).to eq(4)
+      expect(@listing1.average_rating).to eq(4.5)
     end
   end
 end

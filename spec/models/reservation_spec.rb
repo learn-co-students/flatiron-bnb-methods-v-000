@@ -21,6 +21,10 @@ describe Reservation do
     it 'belongs to a listing' do
     expect(@reservation1.listing).to eq(@listing1)
     end
+
+    it 'has a review' do 
+      expect(@reservation1.review).to eq(@review1)
+    end
   end
 
   describe 'reservation validations' do

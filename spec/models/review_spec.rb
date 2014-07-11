@@ -14,8 +14,8 @@ describe Review do
       expect(@review1.guest).to eq(@logan) 
     end
 
-    it 'belongs to a listing' do
-      expect(@review1.listing).to eq(@listing1) 
+    it 'belongs to a reservation' do
+      expect(@review1.reservation).to eq(@reservation1) 
     end
   end
 
@@ -35,6 +35,11 @@ describe Review do
 
     it 'is invalid without a description' do
       expect(@invaliddescription).to_not be_valid 
+    end
+
+    it 'is invalid without an associated reservation' do 
+      no_res = Review.create(description: "Meh", rating: 2, guest_id: User.find_by(id: 6).id)
+      expect(no_res).to_not be_valid
     end
   end
 end

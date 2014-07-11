@@ -1,6 +1,7 @@
 class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
+  has_one :review
 
   validates_presence_of :checkin, :checkout
   validate :guest_and_host_not_the_same, :check_availablity, :checkout_after_checkin

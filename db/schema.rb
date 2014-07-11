@@ -52,7 +52,7 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.text     "description"
     t.integer  "rating"
     t.integer  "guest_id"
-    t.integer  "listing_id"
+    t.integer  "reservation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

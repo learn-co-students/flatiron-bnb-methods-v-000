@@ -38,9 +38,11 @@ methods declared as callbacks should always be `private`, so they can't be calle
 
 You will need to make a few new migrations to add some columns to some tables, and they should have default values.
 
-## Super Bonus
+## Super Bonuses
 
 Instead of creating instance methods `hosts` and `guests`, try to use Active Record associations. The same tests should pass.
+
+Make it so that a review cannot be created unless the reservation was "accepted". Uncomment out the test to get it to pass.
 
 ## Resources
 
