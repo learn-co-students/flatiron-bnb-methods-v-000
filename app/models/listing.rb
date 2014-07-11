@@ -18,7 +18,7 @@ class Listing < ActiveRecord::Base
     self.reviews.each do |review|
       total += review.rating
     end
-    average = total.to_f / ratings.count
+    average = total.to_f / self.reviews.count
   end
 
   private
