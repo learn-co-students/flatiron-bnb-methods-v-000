@@ -83,10 +83,27 @@ describe Listing do
   end
 
   describe 'callback methods' do 
-    xit 'changes user host status when created' do 
+    it 'changes user host status when created' do 
+      tina = User.create(name: "Tina Fey")
+      expect(tina.host).to eq(false)
+      la = City.create(name: "Los Angeles")
+      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
+      listing = Listing.create(address: '123 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
+      tina_found = User.find_by(:name=> "Tina Fey")
+      expect(tina_found.host).to eq(true)
     end
 
-    xit 'changes host status when deleted and host has no more listings' do 
+    it 'changes host status when deleted and host has no more listings' do 
+      tina = User.create(name: "Tina Fey")
+      la = City.create(name: "Los Angeles")
+      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
+      listing = Listing.create(address: '3429384723 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
+      tina_found = User.find_by(:name=> "Tina Fey")
+      expect(tina_found.host).to eq(true)
+      that_listing = Listing.find_by(address: '3429384723 Main Street')
+      that_listing.destroy
+      tina_found_again = User.find_by(:name=> "Tina Fey")
+      expect(tina_found_again.host).to eq(false)
     end
   end 
 
