@@ -43,6 +43,10 @@ describe Listing do
       expect(@listing3.guests.collect{|g| g.id }).to include(1)
       expect(@listing3.guests.collect{|g| g.id }).to include(2)
     end
+
+    it 'has many reviews through reservations' do 
+      expect(@listing1.reviews).to include(@review1)
+    end
   end
 
   describe 'listing validations' do 
