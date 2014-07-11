@@ -16,15 +16,18 @@ describe Neighborhood do
   end
 
   describe 'instance methods' do
-    xit 'knows about all the available listings given a date range' do 
+    it 'knows about all the available listings given a date range' do
+      expect(@nabe1.neighborhood_openings('2014-05-01', '2014-05-30')).to include(@listing1) 
     end 
   end
 
   describe 'class methods' do
-    xit 'knows the neighborhood with the highest ratio of reservations to listings' do 
+    it 'knows the neighborhood with the highest ratio of reservations to listings' do 
+        expect(Neighborhood.highest_ratio_res_to_listings).to eq(@nabe1)
     end
 
-    xit 'knows the neighborhood with the most reservations' do 
+    it 'knows the neighborhood with the most reservations' do 
+        expect(Neighborhood.most_res).to eq(@nabe1)
     end 
   end
 end

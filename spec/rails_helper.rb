@@ -70,11 +70,11 @@ RSpec.configure do |config|
 
     @listing4 = Listing.create(address: '4782 Yaya Lane', listing_type: "private room", title: "Beautiful Room in awesome house", description: "Art collective hosue.", price: 400.00, neighborhood_id: Neighborhood.find_by(:name => "Pacific Heights").id, host_id: User.find_by(id: 3).id)
 
-    @reservation1 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: 1, guest_id: 4)
+    @reservation1 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: 1, guest_id: 4, :status => "accepted")
 
-    @reservation2 = Reservation.create(checkin: '2014-03-10', checkout: '2014-03-25', listing_id: Listing.find_by(id: 2).id, guest_id: User.find_by(id: 5).id)
+    @reservation2 = Reservation.create(checkin: '2014-03-10', checkout: '2014-03-25', listing_id: Listing.find_by(id: 2).id, guest_id: User.find_by(id: 5).id, :status => "accepted")
 
-    @reservation3 = Reservation.create(checkin: '2014-06-02', checkout: '2014-06-30', listing_id: Listing.last.id, guest_id: User.find_by(id: 6).id)
+    @reservation3 = Reservation.create(checkin: '2014-06-02', checkout: '2014-06-30', listing_id: Listing.last.id, guest_id: User.find_by(id: 6).id, :status => "accepted")
 
     @review1 = Review.create(description: "This place was great!", rating: 5, guest_id: User.find_by(id: 4).id, listing_id: Listing.first.id)
 
