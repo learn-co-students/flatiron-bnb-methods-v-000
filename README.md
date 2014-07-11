@@ -1,5 +1,5 @@
 ---
-tags: rails, full application, class methods, instance methods, validations, callbacks
+tags: rails, full application, class methods, instance methods, validations, callbacks, private methods, scope
 language: ruby
 unit: rails
 module: Helper Methods
@@ -16,6 +16,18 @@ In the previous iteration, we built out our model associations and migrated our 
 ## Instructions
 
 There are many methods and validations and callbacks to build! <em>Work together</em>. Get the tests to pass. Read the resources listed.
+
+## About Validations
+
+Validations "allow you to declaritively define valid states for your model objects. The validation methods hook into the life cycle of an Active Record model object and re able to inspec the object to determine whether certain attributes are set, have values in a given range, or pass any other logical hurdles that you specify." (The Rails 4 Way, pg 241)
+
+## About Callbacks
+
+Callbacks are ways to attach methods/behavior to different points of a model's life cycle, like before saving and before destroying.
+
+## About Scope
+
+Scopes make it possible to define and chain query criteria. We're going to use scopes to clarify that 
 
 ### Hints
 

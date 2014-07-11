@@ -19,6 +19,7 @@ class Listing < ActiveRecord::Base
     average = total.to_f / ratings.count
   end
 
+  private
   # Makes user a host when a listing is created
   def make_host
     unless self.host.host
