@@ -32,7 +32,7 @@ Custom validation methods should always be `private`, so they can't be called fr
 
 Callbacks are ways to attach methods/behavior to different points of a model's life cycle, like before saving and before destroying.
 
-methods declared as callbacks should always be `private`, so they can't be called from code outside of the model.
+Methods declared as callbacks should always be `private`, so they can't be called from code outside of the model.
 
 ### Hint
 
