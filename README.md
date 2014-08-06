@@ -1,9 +1,6 @@
 ---
 tags: rails, full application, class methods, instance methods, validations, callbacks, private methods, aliases
 language: ruby
-unit: rails
-module: Helper Methods
-level: advanced
 resources: 4
 ---
 
