@@ -45,4 +45,3 @@ Instead of creating instance methods `hosts` and `guests`, try to use Active Rec
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
 * [Rails 4 Way: Validations](http://beta-library.herokuapp.com/books/the-rails-4-way#page=247)
 * [Rails 4 Way: Callbacks](http://beta-library.herokuapp.com/books/the-rails-4-way#page=273)
-
