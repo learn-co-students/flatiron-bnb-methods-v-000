@@ -40,7 +40,7 @@ describe Review do
     it 'is invalid without an associated reservation, has been accepted, and checkout has happened' do 
       no_res = Review.create(description: "Meh", rating: 2, guest_id: User.find_by(id: 6).id)
       res = Reservation.create(checkin: '2014-04-05', checkout: '2014-04-29', listing_id: 1, guest_id: 5, :status => "pending")
-      new_res = Reservation.create(checkin: '2014-08-01', checkout: Time.now + 1, listing_id: 1, guest_id: 5, :status => "accepted")
+      new_res = Reservation.create(checkin: '2014-08-01', checkout: Date.today + 1, listing_id: 1, guest_id: 5, :status => "accepted")
       res_not_accepted = Review.create(description: "Hi!", rating: 3, guest_id: User.find_by(id: 5).id, reservation_id: res.id)
       res_not_passed = Review.create(description: "Hi!", rating: 3, guest_id: User.find_by(id: 5).id, reservation_id: new_res.id)
       expect(no_res).to_not be_valid
