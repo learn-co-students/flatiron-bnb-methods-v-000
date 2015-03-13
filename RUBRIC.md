@@ -67,6 +67,17 @@ def self.highest_ratio_res_to_listings
   popular_city
 end
 ```
+Alternatively, you can use a helper method for this. If you write an instance method `ratio_res_to_listings`, then you can sort all instances of City by their ratios and take the last one:
+```ruby
+# app/models/city.rb
+def ratio_res_to_listings
+  self.reservations.count.to_f / self.listings.count
+end
+
+def self.highest_ratio_res_to_listings
+  self.all.sort {|x, y| x.ratio_res_to_listings <=> y.ratio_res_to_listings}.last
+end
+```
 
 - The next test that's failing is `knows the city with the most reservations (FAILED - 1)`. Let's go ahead and make a new class method called `self.most_res`. It will grab the city with the most reservations.
 
@@ -84,6 +95,12 @@ def self.most_res
     end
   end
   most_reservations
+end
+```
+Alternatively, you can use sort again:
+```ruby
+def self.most_res
+  self.all.sort {|x, y| x.reservations.count <=> y.reservations.count}.last
 end
 ```
 
