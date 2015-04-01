@@ -14,11 +14,13 @@ class Listing < ActiveRecord::Base
 
   # Finds the average rating for a listing
   def average_rating
-    total = 0
-    self.reviews.each do |review|
-      total += review.rating
+    numerator = reviews.inject(0){|sum,r| sum += r.rating }
+    denominator = self.reviews.count 
+    if denominator > 0
+      numerator.to_f / denominator
+    else
+      "cannot divide by 0"
     end
-    average = total.to_f / self.reviews.count
   end
 
   private
