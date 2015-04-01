@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe Listing do
   describe 'associations tests:' do
     it 'has a title' do 
@@ -107,9 +105,11 @@ describe Listing do
     end
   end 
 
-  describe 'instance methods' do 
-    it 'knows its average ratings from its reviews' do 
-      expect(@listing1.average_rating).to eq(4.5)
+  describe 'instance methods' do
+    describe "#average_rating" do
+      it 'knows its average ratings from its reviews' do 
+        expect(@listing1.average_rating).to eq(4.0)
+      end
     end
   end
 end

@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe City do
   describe 'associations' do 
     it 'has a name' do 
@@ -18,12 +16,26 @@ describe City do
   end
 
   describe 'class methods' do
-    it 'knows the city with the highest ratio of reservations to listings' do
-      expect(City.highest_ratio_res_to_listings).to eq(City.find_by(:name => "San Fransisco")) 
+    describe ".highest_ratio_res_to_listings" do
+      it 'knows the city with the highest ratio of reservations to listings' do
+        expect(City.highest_ratio_res_to_listings).to eq(City.find_by(:name => "NYC")) 
+      end
+
+      it "doesn't hardcode the city with the highest ratio of reservations to listings" do
+        make_denver
+        expect(City.highest_ratio_res_to_listings).to eq(City.find_by(:name => "Denver")) 
+      end
     end
 
-    it 'knows the city with the most reservations' do
-      expect(City.most_res).to eq(City.first) 
-    end 
+    describe ".most_res" do
+      it 'knows the city with the most reservations' do
+        expect(City.most_res).to eq(City.find_by(:name => "NYC")) 
+      end 
+
+      it 'knows the city with the most reservations' do
+        make_denver
+        expect(City.most_res).to eq(City.find_by(:name => "Denver")) 
+      end
+    end
   end
 end

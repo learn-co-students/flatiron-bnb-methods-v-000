@@ -46,3 +46,31 @@ RSpec.configure do |config|
     @review3 = Review.create(description: "Meh, the host I shared a room with snored.", rating: 3, guest_id: User.find_by(id: 6).id, reservation_id: Reservation.last.id)
   end
 end
+
+def make_denver
+  denver = City.create(:name => "Denver")
+  lakewood = Neighborhood.create(name: 'Lakewood', city_id: denver.id)
+  listing = Listing.create(
+    address: '9300 W. Mountain Ave.', 
+    listing_type: "private room", 
+    title: "pretty cabin outside of the city", 
+    description: "My cabin is great. I have a coffeemaker", 
+    price: 20.00, 
+    neighborhood_id: lakewood.id, 
+    host_id: User.first.id
+  )
+  checkin_day = 1
+  6.times do |i|
+    guest_id = i + 1
+    if guest_id != listing.host.id
+      Reservation.create(
+        checkin: "2014-08-#{checkin_day}", 
+        checkout: "2014-08-#{checkin_day + 3}", 
+        listing_id: listing.id, 
+        guest_id: "#{guest_id}", 
+        status: "accepted"
+      )
+      checkin_day += 5
+    end
+  end
+end
