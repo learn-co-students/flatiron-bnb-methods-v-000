@@ -40,7 +40,7 @@ You will need to make a few new migrations to add some columns to some tables, a
 Instead of creating instance methods `hosts` and `guests`, try to use Active Record associations. The same tests should pass.
 
 ## Resources
-* [About Public and Private Methods](http://learn.flatironschool.com/admin/lessons/1890)
+* [About Private Methods](http://stackoverflow.com/a/4293330/2890716)
 * [AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
 * [Rails 4 Way: Validations](http://beta-library.herokuapp.com/books/the-rails-4-way#page=247)
