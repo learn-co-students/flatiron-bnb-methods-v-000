@@ -21,7 +21,7 @@ There are many methods and validations and callbacks to build! They will be chal
 
 ## About Validations
 
-Validations "allow you to declaritively define valid states for your model objects. The validation methods hook into the life cycle of an Active Record model object and re able to inspec the object to determine whether certain attributes are set, have values in a given range, or pass any other logical hurdles that you specify." (The Rails 4 Way, pg 241)
+Validations "allow you to declaratively define valid states for your model objects. The validation methods hook into the life cycle of an Active Record model object and are able to inspect the object to determine whether certain attributes are set, have values in a given range, or pass any other logical hurdles that you specify." (The Rails 4 Way, pg 241)
 
 Custom validation methods should always be `private`, so they can't be called from code outside of the model.
 
