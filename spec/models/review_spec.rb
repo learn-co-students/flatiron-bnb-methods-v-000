@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe Review do
   describe 'associations' do
     it 'has a description' do

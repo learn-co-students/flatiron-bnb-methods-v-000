@@ -1,5 +1,3 @@
-require 'rails_helper'
-
 describe Reservation do
   describe 'associations' do 
     it 'has a checkin time' do 
@@ -77,12 +75,15 @@ describe Reservation do
   end
 
   describe 'instance methods' do
-    it 'knows about its duration based on checkin and checkout dates' do
-      expect(@reservation1.duration).to eq(5) 
+    describe "#duration" do
+      it 'knows about its duration based on checkin and checkout dates' do
+        expect(@reservation1.duration).to eq(5) 
+      end
     end
-
-    it 'knows about its total price' do
-      expect(@reservation1.total_price).to eq(250.00) 
+    describe "#total_price" do
+      it 'knows about its total price' do
+        expect(@reservation1.total_price).to eq(250.00) 
+      end
     end
   end
 end
