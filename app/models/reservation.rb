@@ -16,7 +16,7 @@ class Reservation < ActiveRecord::Base
     self.listing.price * duration
   end
 
-  private
+  # private
   # Make sure guest and host not the same
   def guest_and_host_not_the_same
     if self.guest_id == self.listing.host_id
@@ -25,13 +25,10 @@ class Reservation < ActiveRecord::Base
   end
 
   # Check if listing is available for a reservation request
-  def check_availablity
-    self.listing.reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      if booked_dates === self.checkin || booked_dates === self.checkout
-        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
-      end
-    end
+  def check_availability
+    query = "select * from reservations where listing_id = #{self.id} AND '#{self.checkin}' between checkin AND checkout AND '#{self.checkout}' between checkin and checkout"
+    return errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.") if Reservation.find_by_sql(query).size > 0
+    return true
   end
 
   # Checks if checkout day happens after checkin day
