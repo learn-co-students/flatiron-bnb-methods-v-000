@@ -31,16 +31,7 @@ class City < ActiveRecord::Base
 
   # Returns city with most reservations
   def self.most_res
-    most_reservation = "currently unknown"
-    total_reservation_number = 0
-    self.all.each do |city|
-      city_reservation_number = city.reservations.count
-      if city_reservation_number > total_reservation_number
-        total_reservation_number = city_reservation_number
-        most_reservation = city
-      end
-    end
-    most_reservation
+    City.find_by_sql("select c.id, c.name, COUNT(c.id) as num_res from cities c JOIN neighborhoods n on c.id = n.city_id JOIN listings l on n.id = l.neighborhood_id JOIN reservations r on l.id = r.listing_id group by c.id, c.name ORDER BY num_res DESC LIMIT 1").first
   end
 
 end
