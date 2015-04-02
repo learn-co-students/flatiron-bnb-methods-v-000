@@ -14,13 +14,7 @@ class Listing < ActiveRecord::Base
 
   # Finds the average rating for a listing
   def average_rating
-    numerator = reviews.inject(0){|sum,r| sum += r.rating }
-    denominator = self.reviews.count 
-    if denominator > 0
-      numerator.to_f / denominator
-    else
-      "cannot divide by 0"
-    end
+    Listing.joins("LEFT JOIN RESERVATIONS R ON R.listing_id = listings.id", "LEFT JOIN REVIEWS RE ON RE.reservation_id = R.id").select("listings.title, AVG(rating) as 'avg_rating'").where("listings.id = ?", self.id).first.avg_rating
   end
 
   private

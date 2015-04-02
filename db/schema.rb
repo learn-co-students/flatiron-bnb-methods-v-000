@@ -13,13 +13,16 @@
 
 ActiveRecord::Schema.define(version: 20140710181927) do
 
-  create_table "cities", force: true do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "cities", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "listings", force: true do |t|
+  create_table "listings", force: :cascade do |t|
     t.string   "address"
     t.string   "listing_type"
     t.string   "title"
@@ -31,14 +34,14 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.datetime "updated_at"
   end
 
-  create_table "neighborhoods", force: true do |t|
+  create_table "neighborhoods", force: :cascade do |t|
     t.string   "name"
     t.integer  "city_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "reservations", force: true do |t|
+  create_table "reservations", force: :cascade do |t|
     t.date     "checkin"
     t.date     "checkout"
     t.integer  "listing_id"
@@ -48,7 +51,7 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.string   "status",     default: "pending"
   end
 
-  create_table "reviews", force: true do |t|
+  create_table "reviews", force: :cascade do |t|
     t.text     "description"
     t.integer  "rating"
     t.integer  "guest_id"
@@ -57,7 +60,7 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.datetime "updated_at"
   end
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
