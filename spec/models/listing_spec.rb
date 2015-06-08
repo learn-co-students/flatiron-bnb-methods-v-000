@@ -1,11 +1,18 @@
 describe Listing do
-  describe 'associations tests:' do
+  describe 'attributes' do
+
+    let(:listing) { Listing.new(title: 'Beautiful Apartment on Main Street',
+                                description: "Whole house for rent on mountain. Many bedrooms.",
+                                address: '123 Main Street',
+                                listing_type: 'shared room',
+                                price: 15.00) }
+
     it 'has a title' do 
-      expect(@listing1.title).to eq("Beautiful Apartment on Main Street")
+      expect(listing.title).to eq("Beautiful Apartment on Main Street")
     end
 
     it 'has a description' do
-      expect(@listing3.description).to eq("Whole house for rent on mountain. Many bedrooms.")
+      expect(listing.description).to eq("Whole house for rent on mountain. Many bedrooms.")
     end
 
     it 'has an address' do 
@@ -17,99 +24,205 @@ describe Listing do
     end
 
     it 'has a price' do
-      expect(@listing2.price).to eq(15.00) 
+      expect(@listing2.price).to eq(15.00)
+    end
+  end
+
+  describe 'belongs_to associations' do
+    let(:listing) { Listing.new }
+    let(:host) { User.new }
+    let(:neighborhood) { Neighborhood.new }
+
+    it 'belongs to a neighborhood' do
+      listing.neighborhood = neighborhood
+      expect(listing.neighborhood).to eq(neighborhood)
     end
 
-    it 'belongs to a neighborhood' do 
-      expect(@listing2.neighborhood.name).to eq('Green Point')
+    it 'belongs to a host' do
+      listing.host = host
+      expect(listing.host).to eq(host)
     end
+  end
 
-    it 'belongs to a host' do 
-      expect(@listing2.host.name).to eq('Katie')
+  describe 'has_many associations' do
+    let(:vacation)    { Reservation.create }
+    let(:staycation)  { Reservation.create }
+    let(:bart_simpson) { User.create }
+    let(:lisa_simpson) { User.create }
+
+    before :each do
+      @listing = Listing.create(title: 'Beautiful Apartment on Main Street',
+                                description: "Whole house for rent on mountain. Many bedrooms.",
+                                neighborhood: Neighborhood.new,
+                                address: '123 Main Street',
+                                listing_type: 'shared room',
+                                price: 15.00,
+                                reservations: [vacation, staycation],
+                                host: User.new)
     end
 
     it 'has many reservations' do
-      vaca_res = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 2)
-      staycation = Reservation.create(checkin: '2015-04-10', checkout: '2015-04-15', listing_id: @listing3.id, guest_id: 1)
-      expect(@listing3.reservations).to include(vaca_res)
-      expect(@listing3.reservations).to include(staycation)
+      expect(@listing.reservations).to include(vacation)
+      expect(@listing.reservations).to include(staycation)
     end
 
-    it 'knows about all of its guests' do 
-      vaca_res = Reservation.create(checkin: '2015-03-15', checkout: '2015-03-20', listing_id: @listing3.id, guest_id: 1)
-      staycation = Reservation.create(checkin: '2015-04-10', checkout: '2015-04-15', listing_id: @listing3.id, guest_id: 2)
-      expect(@listing3.guests.collect{|g| g.id }).to include(1)
-      expect(@listing3.guests.collect{|g| g.id }).to include(2)
+    it 'has many guests' do
+      @listing.guests = [bart_simpson, lisa_simpson]
+      expect(@listing.guests).to include(bart_simpson)
+      expect(@listing.guests).to include(lisa_simpson)
     end
 
-    it 'has many reviews through reservations' do 
-      expect(@listing1.reviews).to include(@review1)
+    it 'has many reviews' do
+      good_review = Review.create(guest: bart_simpson, reservation: vacation)
+      reservation = Reservation.create(listing: @listing)
+      expect(@listing.reviews).to include(good_review)
     end
   end
 
-  describe 'listing validations' do 
+  describe 'listing validations' do
+    let(:listing) { Listing.new }
+
+    before :each do
+      listing.valid?
+    end
+
     it 'is invalid without an address' do
-      no_addy = Listing.new(listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
-      expect(no_addy).to_not be_valid
+      expect(listing.errors.full_messages).to include "Address can't be blank"
     end
 
-    it 'is invalid without a listing type' do 
-      no_type = Listing.new(address: '123 Main Street', title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
-      expect(no_type).to_not be_valid
+    it 'is invalid without a listing type' do
+      expect(listing.errors.full_messages).to include "Listing type can't be blank"
     end
 
-    it 'is invalid without a title' do 
-      no_title = Listing.new(address: '123 Main Street', listing_type: "shared room", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "50.00", neighborhood_id: Neighborhood.first.id, host_id: User.first.id) 
-      expect(no_title).to_not be_valid
+    it 'is invalid without a title' do
+      expect(listing.errors.full_messages).to include "Title can't be blank"
     end
 
     it 'is invalid without a description' do
-      no_desc = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", price: "15.00", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
-      expect(no_desc).to_not be_valid
+      expect(listing.errors.full_messages).to include "Description can't be blank"
     end
 
     it 'is invalid without a price' do
-      no_price = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
-      expect(no_price).to_not be_valid
+      expect(listing.errors.full_messages).to include "Price can't be blank"
     end
 
     it 'is invalid without an associated neighborhood' do 
-      no_nabe = Listing.new(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: "15.00", host_id: User.find_by(id: 2).id)
-      expect(no_nabe).to_not be_valid
+      expect(listing.errors.full_messages).to include "Neighborhood can't be blank"
     end
-
   end
 
-  describe 'callback methods' do 
-    it 'changes user host status when created' do 
-      tina = User.create(name: "Tina Fey")
-      expect(tina.host).to eq(false)
-      la = City.create(name: "Los Angeles")
-      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
-      listing = Listing.create(address: '123 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
-      tina_found = User.find_by(:name=> "Tina Fey")
-      expect(tina_found.host).to eq(true)
+  describe 'callback methods' do
+    let(:los_angelos) { City.create(name: "Los Angeles") }
+    let(:santa_monica) { Neighborhood.create(name: 'Santa Monica', city: los_angelos) }
+
+    context 'when listing created' do
+      let(:user) { User.create(name: 'Tina Fey', host: false) }
+      let(:other_user) { User.create(name: 'Not Tina Fey') }
+
+      it 'changes user host status' do
+        expect(user.host?).to eq(false)
+
+        listing = Listing.create(address: '123 Main Street',
+          listing_type: "private room",
+          title: "Foo",
+          description: "Foo",
+          price: "150.00",
+          neighborhood: santa_monica,
+          host: user)
+        expect(user.reload.host?).to eq(true)
+      end
     end
 
-    it 'changes host status when deleted and host has no more listings' do 
-      tina = User.create(name: "Tina Fey")
-      la = City.create(name: "Los Angeles")
-      santa_monica = Neighborhood.create(name: 'Santa Monica', city_id: la.id)
-      listing = Listing.create(address: '3429384723 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: "150.00", neighborhood_id: santa_monica.id, host_id: tina.id)
-      tina_found = User.find_by(:name=> "Tina Fey")
-      expect(tina_found.host).to eq(true)
-      that_listing = Listing.find_by(address: '3429384723 Main Street')
-      that_listing.destroy
-      tina_found_again = User.find_by(:name=> "Tina Fey")
-      expect(tina_found_again.host).to eq(false)
-    end
-  end 
+    context "when some of a host's listings are destroyed" do
+      let(:user) { User.create(name: 'Tina Fey', host: true) }
+      let(:other_user) { User.create(name: 'Not Tina Fey') }
 
-  describe 'instance methods' do
-    describe "#average_rating" do
-      it 'knows its average ratings from its reviews' do 
-        expect(@listing1.average_rating).to eq(4.0)
+      let(:first_listing) { Listing.create(address: '123 Main Street',
+          listing_type: "private room",
+          title: "Foo",
+          description: "Foo",
+          price: "150.00",
+          neighborhood: santa_monica,
+          host: user) }
+        let(:second_listing) { Listing.create(address: '123 Main Street',
+          listing_type: "private room",
+          title: "Foo",
+          description: "Foo",
+          price: "150.00",
+          neighborhood: santa_monica,
+          host: user) }
+        let(:unrelated_listing) { Listing.create(address: '123 Main Street',
+          listing_type: "private room",
+          title: "Foo",
+          description: "Foo",
+          price: "150.00",
+          neighborhood: santa_monica,
+          host: user) }
+
+        before :each do 
+          first_listing
+          second_listing
+        end
+
+      it 'does not change the host status to false' do
+        expect(user.host?).to eq(true)
+        first_listing.destroy
+        expect(user.reload.host?).to eq(true)
+      end
+    end
+
+    context "when all of a host's listings are destroyed" do
+      let(:user) { User.create(name: 'Tina Fey', host: true) }
+      let(:other_user) { User.create(name: 'Not Tina Fey') }
+
+      let(:first_listing) { Listing.create(address: '123 Main Street', 
+          listing_type: "private room",
+          title: "Foo",
+          description: "Foo",
+          price: "150.00",
+          neighborhood: santa_monica,
+          host: user) }
+        let(:second_listing) { Listing.create(address: '123 Main Street', 
+          listing_type: "private room", 
+          title: "Foo", 
+          description: "Foo", 
+          price: "150.00", 
+          neighborhood: santa_monica, 
+          host: user) } 
+        let(:unrelated_listing) { Listing.create(address: '123 Main Street', 
+          listing_type: "private room", 
+          title: "Foo", 
+          description: "Foo", 
+          price: "150.00", 
+          neighborhood: santa_monica, 
+          host: user) } 
+
+      it 'changes host status to false' do 
+        expect(user.host).to eq(true)
+        first_listing.destroy
+        second_listing.destroy
+        expect(user.reload.host?).to eq(false)
       end
     end
   end
+
+  describe "#average_review_rating" do
+    let(:first_review) { Review.create(rating: 1) }
+    let(:second_review) { Review.create(rating: 2) }
+
+    it 'knows its average ratings from its reviews' do
+      listing = Listing.create(address: '123 Main Street',
+          listing_type: "private room",
+          title: "Foo",
+          description: "Foo",
+          price: "150.00",
+          neighborhood: Neighborhood.create, 
+          host: User.create)
+
+      Reservation.create(review: first_review, listing: listing)
+      Reservation.create(review: second_review, listing: listing)
+      
+      expect(listing.average_review_rating).to eq(1.5)
+    end
+  end  
 end
