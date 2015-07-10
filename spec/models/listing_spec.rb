@@ -239,7 +239,7 @@ describe Listing do
 
     it 'knows its average ratings from its reviews' do
       listing.reload
-      expect(listing.average_rating).to eq(2.5)
+      expect(listing.average_review_rating).to eq(2.5)
     end
   end  
 end
