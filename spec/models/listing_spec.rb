@@ -45,37 +45,49 @@ describe Listing do
   end
 
   describe 'has_many associations' do
-    let(:vacation)    { Reservation.create }
-    let(:staycation)  { Reservation.create }
+    
+    
+
+    before :each do
+      @older_reservation = Reservation.create(checkin: 10.days.ago, 
+                                              listing: listing, 
+                                              checkout: 5.days.ago, status: 'accepted')
+      @recent_reservation = Reservation.create(checkin: 30.days.ago, 
+                                              listing: listing, checkout: 29.days.ago, 
+                                              status: 'accepted')
+      @older_reservation.guest = bart_simpson
+      @older_reservation.save
+      @recent_reservation.guest = lisa_simpson
+      @recent_reservation.save
+      @review = Review.create(rating: 1, description: 'it was good', reservation_id: @recent_reservation.id)
+      @other_review = Review.create(rating: 4, description: 'also good', reservation_id: @older_reservation.id)
+      
+      listing.reload
+    end
+
+    let(:listing) { listing = Listing.create(address: '123 Main Street',
+                                            listing_type: "private room",
+                                            title: "Foo",
+                                            description: "Foo",
+                                            price: "150.00",
+                                            neighborhood: Neighborhood.create, 
+                                            host: User.create) }
+
     let(:bart_simpson) { User.create }
     let(:lisa_simpson) { User.create }
 
-    before :each do
-      @listing = Listing.create(title: 'Beautiful Apartment on Main Street',
-                                description: "Whole house for rent on mountain. Many bedrooms.",
-                                neighborhood: Neighborhood.new,
-                                address: '123 Main Street',
-                                listing_type: 'shared room',
-                                price: 15.00,
-                                reservations: [vacation, staycation],
-                                host: User.new)
-    end
-
     it 'has many reservations' do
-      expect(@listing.reservations).to include(vacation)
-      expect(@listing.reservations).to include(staycation)
+      expect(listing.reservations).to include(@older_reservation)
+      expect(listing.reservations).to include(@recent_reservation)
     end
 
     it 'has many guests' do
-      @listing.guests = [bart_simpson, lisa_simpson]
-      expect(@listing.guests).to include(bart_simpson)
-      expect(@listing.guests).to include(lisa_simpson)
+      expect(listing.guests).to include(bart_simpson)
+      expect(listing.guests).to include(lisa_simpson)
     end
 
     it 'has many reviews' do
-      good_review = Review.create(guest: bart_simpson, reservation: vacation)
-      reservation = Reservation.create(listing: @listing)
-      expect(@listing.reviews).to include(good_review)
+      expect(listing.reviews).to include(@review)
     end
   end
 
@@ -208,31 +220,26 @@ describe Listing do
 
 
   describe "#average_review_rating" do
-    let(:first_review) { Review.create(rating: 1, description: 'it was good', 
-                        reservation: Reservation.create(listing: @listing, 
-                                                        checkin: 10.days.ago, 
-                                                        checkout: 4.days.ago)
-                                                        ) }
+    before do 
+      recent_reservation = Reservation.create(listing: listing, checkin: 10.days.ago, checkout: 5.days.ago, status: 'accepted')
+      older_reservation = Reservation.create(listing: listing, checkin: 30.days.ago, checkout: 29.days.ago, status: 'accepted')
+      review = Review.create(rating: 1, description: 'it was good', reservation_id: recent_reservation.id)
+      other_review = Review.create(rating: 4, description: 'also good', reservation_id: older_reservation.id)
+    end
+    
+    
 
-    let(:second_review) { Review.create(rating: 4, description: 'also good',  
-                        reservation: Reservation.create(listing: @listing, 
-                                                        checkin: 11.days.ago, 
-                                                        checkout: 5.days.ago)
-                                                                            ) }
+    let(:listing) { listing = Listing.create(address: '123 Main Street',
+                                            listing_type: "private room",
+                                            title: "Foo",
+                                            description: "Foo",
+                                            price: "150.00",
+                                            neighborhood: Neighborhood.create, 
+                                            host: User.create) }
 
     it 'knows its average ratings from its reviews' do
-      listing = Listing.create(address: '123 Main Street',
-          listing_type: "private room",
-          title: "Foo",
-          description: "Foo",
-          price: "150.00",
-          neighborhood: Neighborhood.create, 
-          host: User.create)
-
-      Reservation.create(review: first_review, listing: listing)
-      Reservation.create(review: second_review, listing: listing)
-      
-      expect(listing.average_review_rating).to eq(1.5)
+      listing.reload
+      expect(listing.average_rating).to eq(2.5)
     end
   end  
 end
