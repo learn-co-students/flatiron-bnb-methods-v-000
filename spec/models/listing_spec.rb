@@ -206,9 +206,19 @@ describe Listing do
     end
   end
 
+
   describe "#average_review_rating" do
-    let(:first_review) { Review.create(rating: 1) }
-    let(:second_review) { Review.create(rating: 2) }
+    let(:first_review) { Review.create(rating: 1, description: 'it was good', 
+                        reservation: Reservation.create(listing: @listing, 
+                                                        checkin: 10.days.ago, 
+                                                        checkout: 4.days.ago)
+                                                        ) }
+
+    let(:second_review) { Review.create(rating: 4, description: 'also good',  
+                        reservation: Reservation.create(listing: @listing, 
+                                                        checkin: 11.days.ago, 
+                                                        checkout: 5.days.ago)
+                                                                            ) }
 
     it 'knows its average ratings from its reviews' do
       listing = Listing.create(address: '123 Main Street',
