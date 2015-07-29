@@ -1,8 +1,4 @@
----
-tags: rails, class methods, instance methods, validations, callbacks, private methods, aliases
-language: ruby
-resources: 4
----
+
 
 # Flatiron-bnb: Methods
 
