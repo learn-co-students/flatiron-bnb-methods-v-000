@@ -5,7 +5,7 @@ class CreateReviews < ActiveRecord::Migration
       t.integer :rating
       t.integer :guest_id
       t.integer :reservation_id
-      t.timestamps
+      t.timestamps :null false
     end
   end
 end

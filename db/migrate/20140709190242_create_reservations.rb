@@ -5,7 +5,7 @@ class CreateReservations < ActiveRecord::Migration
       t.date :checkout
       t.integer :listing_id
       t.integer :guest_id
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end
