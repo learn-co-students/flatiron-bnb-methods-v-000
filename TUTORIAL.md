@@ -64,3 +64,18 @@ def self.highest_ratio_res_to_listings
 end
 ```
 
+3. Finally, we want our `City` class to be able to return the city with the most reservations. The logic here is the same as finding the highest_ratio_res_to_listings method, only comparing a count of reservations instead.
+
+```ruby
+def self.most_res
+  most_reservations = self.first
+  self.all.each do |city|
+    if city.reservations.count > most_reservations.reservations.count
+      most_reservations = city
+    end
+  end
+  most_reservations
+end
+```
+
+Our City model is now passing all of our tests - awesome!

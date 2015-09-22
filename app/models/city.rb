@@ -36,16 +36,13 @@ class City < ActiveRecord::Base
 
   # Returns city with most reservations
   def self.most_res
-    most_reservation = "currently unknown"
-    total_reservation_number = 0
+    most_reservations = self.first
     self.all.each do |city|
-      city_reservation_number = city.reservations.count
-      if city_reservation_number > total_reservation_number
-        total_reservation_number = city_reservation_number
-        most_reservation = city
+      if city.reservations.count > most_reservations.reservations.count
+        most_reservations = city
       end
     end
-    most_reservation
+    most_reservations
   end
 
 end
