@@ -5,10 +5,10 @@ class City < ActiveRecord::Base
   
   # Returns all of the available apartments in a city, given the date range
   def city_openings(start_date, end_date)
-    reservations.each_with_object([]) do |r, openings|
+    reservations.collect do |r|
       booked_dates = r.checkin..r.checkout
       unless booked_dates === start_date || booked_dates === end_date
-        openings << r.listing
+        r.listing
       end
     end
   end
