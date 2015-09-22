@@ -26,7 +26,7 @@ describe Neighborhood do
       end
       it "doesn't hardcode the neighborhood with the highest ratio" do 
         make_denver
-        expect(Neighborhood.most_res).to eq(Neighborhood.find_by(:name => "Lakewood"))
+        expect(Neighborhood.highest_ratio_res_to_listings).to eq(Neighborhood.find_by(:name => "Lakewood"))
       end
     end
 
