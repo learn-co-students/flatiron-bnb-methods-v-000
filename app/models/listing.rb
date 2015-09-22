@@ -5,7 +5,7 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
 
-  validates_presence_of :address, :listing_type, :title, :description, :price, :neighborhood_id
+  validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
 
   validate :neighborhood_exists
 
