@@ -79,3 +79,5 @@ end
 ```
 
 Our City model is now passing all of our tests - awesome!
+
+### Neighborhood Spec
