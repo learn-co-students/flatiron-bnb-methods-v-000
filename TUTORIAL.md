@@ -292,7 +292,75 @@ Now, our reservation spec should be passing. Awesome job! Let's move on.
 
 ### Listing Spec
 
+Adding validations to our listing spec should look familiar at this point. We need to make sure that address, listing_type, title, description, price, and neighborhood aren't blank.
 
+```ruby
+class Listing < ActiveRecord::Base
+  belongs_to :neighborhood
+  belongs_to :host, :class_name => "User"
+  has_many :reservations
+  has_many :reviews, :through => :reservations
+  has_many :guests, :class_name => "User", :through => :reservations
+
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
+```
+
+Now that our listing's been validated, we need to add some custom callbacks. When a user posts a listing, their status of `host` should update. We can hook into the moment in time when a listing is saved and update this using ActiveRecord's `before_save` callback. First, let's define a method that changes the listing's user's host_status to `true`. Like our other callback methods, this should be private.
+
+```ruby
+private
+  # Makes user a host when a listing is created
+  def make_host
+    unless self.host.host
+      self.host.update(:host => true)
+    end
+  end
+```
+
+This method `make_host` checks to see if the listing's host's host has a status that returns true. If it returns false, it updates that property to `true`. Now, let's run that method when the listing is saved.
+
+```ruby
+class Listing < ActiveRecord::Base
+  belongs_to :neighborhood
+  belongs_to :host, :class_name => "User"
+  has_many :reservations
+  has_many :reviews, :through => :reservations
+  has_many :guests, :class_name => "User", :through => :reservations
+
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
+
+  before_save :make_host
+```
+Awesome. Along the same lines, we need to check our host's status when the listing is destroyed. If the user has no other listings, their host status should be changed to `false`.
+
+```ruby
+  # Changes host status to false when listing is destroyed and user has no more listings
+  def host_status
+    if self.host.listings.count <= 1
+      self.host.update(:host => false)
+    end
+  end
+```
+
+We can use the `before_destroy` callback to run this method when a listing is destroyed. 
+
+```ruby
+class Listing < ActiveRecord::Base
+  belongs_to :neighborhood
+  belongs_to :host, :class_name => "User"
+  has_many :reservations
+  has_many :reviews, :through => :reservations
+  has_many :guests, :class_name => "User", :through => :reservations
+
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
+
+  before_save :make_host
+  before_destroy :host_status
+```
+
+Awesome job. Our `listing` spec should be all green now!
+
+### User
 
 
 

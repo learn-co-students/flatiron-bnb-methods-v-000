@@ -5,9 +5,7 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
 
-  validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
-
-  validate :neighborhood_exists
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
 
   before_save :make_host
   before_destroy :host_status
@@ -38,8 +36,5 @@ class Listing < ActiveRecord::Base
     end
   end
 
-  # Confirms neighborhood exists ebfore listing validated
-  def neighborhood_exists
-    errors.add(:neighborhood_id, "doesn't exist") unless Neighborhood.exists?(neighborhood_id)
-  end
+  
 end
