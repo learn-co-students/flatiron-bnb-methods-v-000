@@ -38,5 +38,18 @@ def city_openings(start_date, end_date)
 
 To find the highest reservations to listings ratio, we need each instance of city to be able to calculate it's reservations to listings. Let's create a helper method, `ratio_res_to_listing` for instances of cities. 
 
+```ruby
+def ratio_res_to_listings
+  	if listings.count > 0
+  		reservations.count.to_f / listings.count.to_f
+  	else
+  		0
+  	end
+end
+```
 
+Since dividing by 0 is a big no-no, we only run this calculation if our number of listings is great than or equal to 1. Otherwise, this method will return 0. 
+
+Now, we can simply iterate through each city and keep track of the one whose value is highest. 
+  
 

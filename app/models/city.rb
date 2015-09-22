@@ -13,6 +13,16 @@ class City < ActiveRecord::Base
     end
   end
 
+  ## returns a cities ratio of reservations to listings. Returns 0 if there are no listings.
+
+  def ratio_res_to_listings
+    if listings.count > 0
+      reservations.count.to_f / listings.count.to_f
+    else
+      0
+    end
+  end
+
   # Returns city with highest ratio of reservations to listings
   def self.highest_ratio_res_to_listings
     popular_city = City.create(:name => "There is no popular city")
