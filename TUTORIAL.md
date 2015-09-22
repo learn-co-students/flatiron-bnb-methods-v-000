@@ -175,7 +175,106 @@ class Review < ActiveRecord::Base
 
 ```
 
+### Reservation Spec
 
+Let's add some validations to our reservation. First, we need to validate the presence of checkin and checkout. 
+
+```ruby
+class Reservation < ActiveRecord::Base
+  belongs_to :listing
+  belongs_to :guest, :class_name => "User"
+  has_one :review
+
+  validates :checkin, :checkout, presence: true
+```
+
+Next, let's add some custom validations. A user can't book their own listing, meaning that the reservation's listing's host can't be the same as the reservation's guest. 
+
+```ruby
+class Reservation < ActiveRecord::Base
+  belongs_to :listing
+  belongs_to :guest, :class_name => "User"
+  has_one :review
+
+  validates :checkin, :checkout, presence: true
+  validate :guest_and_host_not_the_same
+
+  private
+  # Make sure guest and host not the same
+  def guest_and_host_not_the_same
+    if self.guest_id == self.listing.host_id
+      errors.add(:guest_id, "You can't book your own apartment")
+    end
+  end
+```
+
+Awesome. Next, we need to make sure that the listing is available. To do this, we'll need to iterate through the listings other reservations and compare the booked dates with our reservation's start and end dates. 
+
+```ruby
+class Reservation < ActiveRecord::Base
+  belongs_to :listing
+  belongs_to :guest, :class_name => "User"
+  has_one :review
+
+  validates :checkin, :checkout, presence: true
+  validate :guest_and_host_not_the_same, :check_availability
+
+  private
+  # Make sure guest and host not the same
+  def guest_and_host_not_the_same
+    if self.guest_id == self.listing.host_id
+      errors.add(:guest_id, "You can't book your own apartment")
+    end
+  end
+
+  def check_availablity
+    self.listing.reservations.each do |r|
+      booked_dates = r.checkin..r.checkout
+      if booked_dates === self.checkin || booked_dates === self.checkout
+        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
+      end
+    end
+  end
+```
+
+Lastly, we need to make sure that the checkout isn't before the checkin date, because that wouldn't make sense. We check that both are present first, to avoid comparing an integer with nil. 
+
+```ruby
+class Reservation < ActiveRecord::Base
+  belongs_to :listing
+  belongs_to :guest, :class_name => "User"
+  has_one :review
+
+  validates :checkin, :checkout, presence: true
+  validate :guest_and_host_not_the_same, :check_availability, :checkout_after_checkin
+
+  private
+  # Make sure guest and host not the same
+  def guest_and_host_not_the_same
+    if self.guest_id == self.listing.host_id
+      errors.add(:guest_id, "You can't book your own apartment")
+    end
+  end
+
+  def check_availablity
+    self.listing.reservations.each do |r|
+      booked_dates = r.checkin..r.checkout
+      if booked_dates === self.checkin || booked_dates === self.checkout
+        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
+      end
+    end
+  end
+
+  def checkout_after_checkin
+    if self.checkout && self.checkin
+      if self.checkout <= self.checkin
+        errors.add(:guest_id, "Your checkin date needs to be after your checkout date")
+      end
+    end
+  end
+```
+
+Awesome, our validations are complete! This process should feel similar to adding the validations to our review. 
 
 
 

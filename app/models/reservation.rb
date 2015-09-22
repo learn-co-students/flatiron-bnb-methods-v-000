@@ -3,7 +3,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
 
-  validates_presence_of :checkin, :checkout
+  validates :checkin, :checkout, presence: true
   validate :guest_and_host_not_the_same, :check_availablity, :checkout_after_checkin
 
   # Returns the length (in days) of a reservation
