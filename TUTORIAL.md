@@ -125,6 +125,20 @@ end
 ```
 That'll get the tests passing. It's a little bit annoying that we had to copy/paste that code. As a bonus, think about how we could include those methods on both classes...
 
+### Review Spec
+
+Next, let's take a look at some of our validations. Validations are ways to make sure that only valid data is saved to the database. Client-side validations won't allow users to fill out a form without certain fields, but can be unreliable when used alone. Adding server-side validations to Rails makes sure that we only end up with valid results.
+
+Let's start with the Review spec. For example, two basic validations are that a review must include a rating and a description. We'll add a line to our model: `validates :description, :rating, :reservation, presence: true`
+
+```ruby
+class Review < ActiveRecord::Base
+  belongs_to :reservation
+  belongs_to :guest, :class_name => "User"
+
+  validates :description, :rating, :reservation, presence: true
+```
+
 
 
 
