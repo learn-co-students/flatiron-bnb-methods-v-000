@@ -9,7 +9,7 @@ class Review < ActiveRecord::Base
   private
   #You can't write a review on a reservation that doesn't exist
   def reservation_exists_and_accepted_hasnt_happened_yet
-    errors.add(:reservation_id, "doesn't exist") unless Reservation.exists?(reservation_id) && Reservation.find(reservation_id).status == "accepted" && Reservation.find(reservation_id).checkout < Date.today
+    errors.add(:reservation, "not valid") unless reservation && reservation.status == "accepted" && reservation.checkout < Date.today
   end
 
 end

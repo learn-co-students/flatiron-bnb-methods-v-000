@@ -139,6 +139,45 @@ class Review < ActiveRecord::Base
   validates :description, :rating, :reservation, presence: true
 ```
 
+We can also write a custom validation method. This method should be private we never want to call these validation methods outside of our class. 
+
+```ruby
+class Review < ActiveRecord::Base
+  belongs_to :reservation
+  belongs_to :guest, :class_name => "User"
+
+  validates :description, :rating, :reservation, presence: true
+  validate :reservation_exists_and_accepted_hasnt_happened_yet
+
+  private
+  #You can't write a review on a reservation that doesn't exist
+  def reservation_exists_and_accepted_hasnt_happened_yet
+    errors.add(:reservation, "not valid") unless reservation
+  end
+
+```
+
+This method will create an error unless there's a reservation associated with the review. Let's also check that the reservation has an "accepted" status, and that the checkout date is in the past.
+
+```ruby
+class Review < ActiveRecord::Base
+  belongs_to :reservation
+  belongs_to :guest, :class_name => "User"
+
+  validates :description, :rating, :reservation, presence: true
+  validate :reservation_exists_and_accepted_hasnt_happened_yet
+
+  private
+  #You can't write a review on a reservation that doesn't exist
+  def reservation_exists_and_accepted_hasnt_happened_yet
+    errors.add(:reservation, "not valid") unless reservation && reservation.status == "accepted" && reservation.checkout < Date.today
+  end
+
+```
+
+
+
+
 
 
 
