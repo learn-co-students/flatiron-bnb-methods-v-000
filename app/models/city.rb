@@ -25,22 +25,13 @@ class City < ActiveRecord::Base
 
   # Returns city with highest ratio of reservations to listings
   def self.highest_ratio_res_to_listings
-    popular_city = City.create(:name => "There is no popular city")
-    highest_ratio = 0.00
-    self.all.each do |city|  
-      denominator = city.listings.count
-      numerator = city.reservations.count
-      if denominator == 0 || numerator == 0
-        next
-      else
-        popularity_ratio = numerator / denominator
-        if popularity_ratio > highest_ratio
-          highest_ratio = popularity_ratio
-          popular_city = city
-        end
+    highest = self.first
+    self.all.each do |city|
+      if city.ratio_res_to_listings > highest.ratio_res_to_listings
+        highest = city
       end
     end
-    popular_city
+    highest
   end
 
   # Returns city with most reservations

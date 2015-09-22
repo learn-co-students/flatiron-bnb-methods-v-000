@@ -51,5 +51,16 @@ end
 Since dividing by 0 is a big no-no, we only run this calculation if our number of listings is great than or equal to 1. Otherwise, this method will return 0. 
 
 Now, we can simply iterate through each city and keep track of the one whose value is highest. 
-  
+
+```ruby
+def self.highest_ratio_res_to_listings
+  highest = self.first
+  self.all.each do |city|
+    if city.ratio_res_to_listings > highest.ratio_res_to_listings
+      highest = city
+    end
+  end
+  highest
+end
+```
 
