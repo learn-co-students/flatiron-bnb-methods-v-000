@@ -274,7 +274,24 @@ class Reservation < ActiveRecord::Base
   end
 ```
 
-Awesome, our validations are complete! This process should feel similar to adding the validations to our review. 
+Awesome, our validations are complete! This process should feel similar to adding the validations to our review. To finish our reservation spec, we'll define two instance methods: one called `duration` that returns the length in days, and one called `total_price` that returns the total price of the reservation. These methods should be public - we'll want to access them in other parts of our application. For example, you could imagine calling this in a view to display to our user.
+
+```ruby
+
+  # Returns the length (in days) of a reservation
+  def duration
+    (self.checkout - self.checkin).to_i
+  end
+
+  # Given the duration of the stay and the listing price, returns how much does the reservation costs
+  def total_price
+    self.listing.price * duration
+  end
+```
+Now, our reservation spec should be passing. Awesome job! Let's move on.
+
+### Listing Spec
+
 
 
 
