@@ -393,5 +393,52 @@ class User < ActiveRecord::Base
 end
 ```
 
+Because we're using the name `host_reviews`, we need to declare the source of this relationship. ActiveRecord will know to use the reviews table to find associated `host_reviews` where the guest and the host are in common via the reservation.
 
+Lastly, our guests should know about all of their hosts. For this, we'll first need to pull up all of the listings from our trips. Our hosts already have many listings that belong to them directly, but our guests also have many trip_listings from the trips they've booked.
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :listings, :foreign_key => 'host_id'
+  has_many :reservations, :through => :listings
+  has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
+  has_many :reviews, :foreign_key => 'guest_id'
+
+  ## As a guest
+  has_many :trip_listings, :through => :trips, :source => :listing
+
+  ## As a host
+  has_many :guests, :through => :reservations, :class_name => "User"
+  has_many :host_reviews, :through => :guests, :source => :reviews
+end
+```
+
+From here, we can add that a guest `has_many hosts through: trip_listings`, specifying that the foreign_key we're looking at is the `host_id`
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :listings, :foreign_key => 'host_id'
+  has_many :reservations, :through => :listings
+  has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
+  has_many :reviews, :foreign_key => 'guest_id'
+
+  ## As a guest
+  has_many :trip_listings, :through => :trips, :source => :listing
+  has_many :hosts, :through => :trip_listings, :foreign_key => :host_id
+
+  ## As a host
+  has_many :guests, :through => :reservations, :class_name => "User"
+  has_many :host_reviews, :through => :guests, :source => :reviews
+end
+```
+
+And that's it! All of our tests are passing.
+
+## Conclusion/So What?
+
+That was a long lab - give yourself a pat on the back. Some of the big takeaways are:
+
+1). We can use instance and class methods to get custom data out of our models. Doing this will make our lives much easier in our controllers and views.
+2). We can use ActiveRecord Associations to setup complex relationships where users have different associations based on behavior. 
+3). We can use ActiveRecord validations to make sure that only data we want is saved to our database.
 
