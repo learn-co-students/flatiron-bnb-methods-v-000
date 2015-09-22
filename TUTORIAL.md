@@ -362,8 +362,36 @@ Awesome job. Our `listing` spec should be all green now!
 
 ### User
 
-The `user` tests concern our User model having different behaviors as a host vs as a guest. 
+The `user` tests concern our User model having different behaviors as a host vs as a guest. We could, if we wanted to, define our own instance methods to return these values. However, in this case, it makes more sense to add ActiveRecord associations. 
 
+First, as a host, our user should know about the guests that it's had. Since our host has many reservations through listings, and reservations have many guests, we can use this association to allow our host to have many guests. 
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :listings, :foreign_key => 'host_id'
+  has_many :reservations, :through => :listings
+  has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
+  has_many :reviews, :foreign_key => 'guest_id'
+
+  ## As a host
+  has_many :guests, :through => :reservations, :class_name => "User"
+end
+```
+
+Our host can also have many `host_reviews` through the guests.
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :listings, :foreign_key => 'host_id'
+  has_many :reservations, :through => :listings
+  has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
+  has_many :reviews, :foreign_key => 'guest_id'
+
+  ## As a host
+  has_many :guests, :through => :reservations, :class_name => "User"
+  has_many :host_reviews, :through => :guests, :source => :reviews
+end
+```
 
 
 
