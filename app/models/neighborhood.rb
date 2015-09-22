@@ -5,48 +5,43 @@ class Neighborhood < ActiveRecord::Base
 
   # Returns all of the available apartments in a neighborhood, given the date range
   def neighborhood_openings(start_date, end_date)
-    self.listings.each_with_object([]) do |listing, openings|
-      listing.reservations.each do |r|
-        booked_dates = r.checkin..r.checkout
-        unless booked_dates === start_date || booked_dates === end_date
-          openings << listing
-        end
+    reservations.collect do |r|
+      booked_dates = r.checkin..r.checkout
+      unless booked_dates === start_date || booked_dates === end_date
+        r.listing
       end
     end
   end
 
+  def ratio_res_to_listings
+    if listings.count > 0
+      reservations.count.to_f / listings.count.to_f
+    else
+      0
+    end
+  end
+
+
   # Returns nabe with highest ratio of reservations to listings
   def self.highest_ratio_res_to_listings
-    popular_nabe = Neighborhood.create(:name => "There is no popular neighborhood.")
-    highest_ratio = 0.00
-    self.all.each do |nabe|  
-      denominator = nabe.listings.count
-      numerator = nabe.reservations.count
-      if denominator == 0 || numerator == 0
-        next
-      else
-        popularity_ratio = numerator / denominator
-        if popularity_ratio > highest_ratio
-          highest_ratio = popularity_ratio
-          popular_nabe = nabe
-        end
+    highest = self.first
+    self.all.each do |neighborhood|
+      if neighborhood.ratio_res_to_listings > highest.ratio_res_to_listings
+        highest = neighborhood
       end
     end
-    return popular_nabe
+    highest
   end
 
   # Returns nabe with most reservations
   def self.most_res
-    most_reservation = "currently unknown"
-    total_reservation_number = 0
-    self.all.each do |nabe|
-      nabe_reservation_number = nabe.reservations.count
-      if nabe_reservation_number > total_reservation_number
-        total_reservation_number = nabe_reservation_number
-        most_reservation = nabe
+    most_reservations = self.first
+    self.all.each do |neighborhood|
+      if neighborhood.reservations.count > most_reservations.reservations.count
+        most_reservations = neighborhood
       end
     end
-    return most_reservation
+    most_reservations
   end
   
 end

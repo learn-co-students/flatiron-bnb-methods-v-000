@@ -81,3 +81,50 @@ end
 Our City model is now passing all of our tests - awesome!
 
 ### Neighborhood Spec
+
+1). Let's move on to the `neighborhood` spec next. The tests are running in alphabetical order, but remember that we can run them in any order we want by specifying the file. For example, `rspec spec/models/neighborhood_spec.rb` will run only the tests in the `neighborhood_spec` file. 
+
+The three failing tests here should look familiar - they're exactly the same as our `city` tests. In fact, we can copy and paste the contents of our `city_openings` method into our `neighborhood_openings` method. 
+
+```ruby
+def neighborhood_openings(start_date, end_date)
+  reservations.collect do |r|
+    booked_dates = r.checkin..r.checkout
+    unless booked_dates === start_date || booked_dates === end_date
+      r.listing
+    end
+  end
+end
+```
+
+2). For our class methods, we can re-use what we wrote for our City model. 
+
+```ruby
+# Returns nabe with highest ratio of reservations to listings
+def self.highest_ratio_res_to_listings
+  highest = self.first
+  self.all.each do |neighborhood|
+    if neighborhood.ratio_res_to_listings > highest.ratio_res_to_listings
+      highest = neighborhood
+    end
+  end
+  highest
+end
+
+# Returns nabe with most reservations
+def self.most_res
+  most_reservations = self.first
+  self.all.each do |neighborhood|
+    if neighborhood.reservations.count > most_reservations.reservations.count
+      most_reservations = neighborhood
+    end
+  end
+  most_reservations
+end
+
+```
+That'll get the tests passing. It's a little bit annoying that we had to copy/paste that code. As a bonus, think about how we could include those methods on both classes...
+
+
+
+
