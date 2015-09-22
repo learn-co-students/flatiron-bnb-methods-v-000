@@ -362,6 +362,8 @@ Awesome job. Our `listing` spec should be all green now!
 
 ### User
 
+The `user` tests concern our User model having different behaviors as a host vs as a guest. 
+
 
 
 
