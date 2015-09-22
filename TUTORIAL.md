@@ -34,5 +34,9 @@ def city_openings(start_date, end_date)
 
 
 
-2). 
+2). `highest_ratio_res_to_listings` - for the next test, we'll create a class method to return the City with the highest ratio of reservations to listings. You can imagine using this in our controller - `@most_popular_city = City.highest_ratio_res_to_listings` that could be displayed in a view. Including this logic in our model helps keep our controllers and views lightweight. 
+
+To find the highest reservations to listings ratio, we need each instance of city to be able to calculate it's reservations to listings. Let's create a helper method, `ratio_res_to_listing` for instances of cities. 
+
+
 
