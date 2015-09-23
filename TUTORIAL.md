@@ -375,6 +375,14 @@ class Listing < ActiveRecord::Base
   before_destroy :host_status
 ```
 
+We need to add one instance method to our Listing - `average_review_rating` should return the average rating from all of the reviews on our listing. For this one, we can use one of ActiveRecord's cool [caluclation methods](http://api.rubyonrails.org/classes/ActiveRecord/Calculations.html) - in this case, average. 
+
+```ruby
+def average_review_rating
+	self.reviews.average(:rating)
+end
+```
+
 Awesome job. Our `listing` spec should be all green now!
 
 ### User
