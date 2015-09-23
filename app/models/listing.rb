@@ -16,7 +16,11 @@ class Listing < ActiveRecord::Base
   end
 
   def booked_dates
-    
+    reservations.collect do |res|
+      res.reservation_dates.collect do |date|
+        date
+      end
+    end.flatten.uniq
   end
 
   private

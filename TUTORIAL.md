@@ -336,6 +336,27 @@ And that's it! All of our tests are passing.
 
 Let's define a method, `city_openings`, that returns takes in two dates as arguments and returns any listings that aren't booked during that range. This means that calling `@city.city_openings("2015-05-01", "2015-05-05")` should only return listings that are available during that entire time.
 
+To make our lives easier, let's define a helper method, `booked_dates` on our Listing model. This should return an array containing a Date object for each day the listing is reserved.
+
+```ruby
+# app/models/listing.rb
+
+  def booked_dates
+    reservations.collect do |res|
+      res.reservation_dates.collect do |date|
+        date
+      end
+    end.flatten.uniq
+  end
+```
+
+Now, let's iterate through a cities listings.
+
+```ruby
+# app/models/city.rb
+
+
+```
 After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
 
 ```ruby
