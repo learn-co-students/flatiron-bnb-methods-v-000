@@ -334,6 +334,8 @@ And that's it! All of our tests are passing.
 
 ### City Spec
 
+Let's define a method, `city_openings`, that returns takes in two dates as arguments and returns any listings that aren't booked during that range. This means that calling `@city.city_openings("2015-05-01", "2015-05-05")` should only return listings that are available during that entire time.
+
 After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
 
 ```ruby
@@ -342,30 +344,6 @@ class City < ActiveRecord::Base
   has_many :listings, :through => :neighborhoods
   has_many :reservations, :through => :listings
 ```
-
-Now, we'll define our `city_openings` method to take two arguments, a `start_date` and an `end_date`. There are two types of listings that we want to include: listings with no reservations, and listings with reservations that don't overlap with our date range. Let's iterate through our listings first and collect any listing without reservations.
-
-```ruby
-def city_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-end
-```
-Next, let's iterate through all of our city's reservations and include any listings whose reservations don't overlap. Here, we're using `===` to compare a date to a given date range. This will return `true` if the Data is in the range.
-At the end, we're returning our open_listings array and calling `uniq` so we don't get duplicates.
-
-```ruby
-def city_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-    reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
-        open_listings << r.listing
-      end
-    end
-    open_listings.uniq
-  end
-```
- 
 
 For the next test, we'll create a class method to return the City with the highest ratio of reservations to listings. You can imagine using this in our controller to create a 	`@most_popular_city` instance variable as so:  `@most_popular_city = City.highest_ratio_res_to_listings` This could then be displayed in any of our views.  Including this logic in our model helps keep our controllers and views lightweight. 
 

@@ -15,6 +15,10 @@ class Listing < ActiveRecord::Base
     reviews.average(:rating)
   end
 
+  def booked_dates
+    
+  end
+
   private
   # Makes user a host when a listing is created
   def make_host
