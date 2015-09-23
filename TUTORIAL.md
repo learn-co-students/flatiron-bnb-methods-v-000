@@ -343,9 +343,7 @@ To make our lives easier, let's define a helper method, `booked_dates` on our Li
 
   def booked_dates
     reservations.collect do |res|
-      res.reservation_dates.collect do |date|
-        date
-      end
+      (res.check..res.checkout).to_a     
     end.flatten.uniq
   end
 ```
