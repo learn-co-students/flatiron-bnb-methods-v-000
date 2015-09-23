@@ -2,15 +2,21 @@
 
 ## Overview
 
-In a previous version of Flatiron BnB, we built out the tables, models, and associations for our application. Today, we'll be extending their functionality through additional methods, associations, and validations. This will make it really easy to add more complex data into our controllers and views. For example, we may want to list the most popular cities on our home page. We can give our model a method, `highest_ratio_res_to_listings`, that returns the city with the highest "booked" percentage. This is much neater than including that logic into our controller or view. 
+In a previous version of Flatiron BnB, we built out the tables, models, and associations for our application. Today, we'll be extending their functionality through additional methods, associations, and validations. This will make it really easy to add more complex data into our controllers and views. For example, we may want to list the most popular cities on our home page. We can give our model a method, `highest_ratio_res_to_listings`, that returns the city with the highest "booked" percentage. This is much neater than including that logic into our controller or view. We'll also be using instance methods to add validations for our models. For example, our users shouldn't be able to create reservations on listings that are booked during that time. 
 
-We'll also be using instance methods to add validations for our models. For example, our users shouldn't be able to create reservations on listings that are booked during that time. 
 
-## Steps
+Why is this important? First, adding validations makes sure that only the data we want will get stored in the database. It wouldn't make sense to have listings without hosts, or reservations where the checkout date comes before the checkin.  Validating this data when it's saved allows us to make certain assumptions about the state of our application in the future. 
+
+Second, adding instance and class methods to retrieve certain interesting information from our Models will keep our controllers and views nice and light. It's much nicer to write `City.highest_ratio_res_to_listings` in the controller than iterating through those items each time. This pattern is called "Fat models, skinny controllers" and is very strong in Rails.
+
+There are tons of tests here. We'll go through the specs one at a time. 
+
+
+## Steps to Solve
 
 ### City Spec
 
-1). After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
+After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
 
 ```ruby
 class City < ActiveRecord::Base
@@ -19,24 +25,33 @@ class City < ActiveRecord::Base
   has_many :reservations, :through => :listings
 ```
 
-Now, we'll define our `city_openings` method to take two arguments, a `start_date` and an `end_date`. We can iterate through the reservations associated with `self` and keep track of any listing that doesn't have a reservation for that day. We're using the reservation's checkin and checkout to create a date range. Comparing a date range to a single date using `===` will return true if the single date overlaps with the range. Therefore, we can compare our reservation's range to the start date and the end date to make sure there's no overlap. 
+Now, we'll define our `city_openings` method to take two arguments, a `start_date` and an `end_date`. There are two types of listings that we want to include: listings with no reservations, and listings with reservations that don't overlap with our date range. Let's iterate through our listings first and collect any listing without reservations.
 
 ```ruby
 def city_openings(start_date, end_date)
-    reservations.collect do |r|
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+end
+```
+Next, let's iterate through all of our city's reservations and include any listings whose reservations don't overlap. Here, we're using `===` to compare a date to a given date range. This will return `true` if the Data is in the range.
+At the end, we're returning our open_listings array and calling `uniq` so we don't get duplicates.
+
+```ruby
+def city_openings(start_date, end_date)
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+    reservations.each do |r|
       booked_dates = r.checkin..r.checkout
-      unless booked_dates === start_date || booked_dates === end_date
-        r.listing
+      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
+        open_listings << r.listing
       end
     end
+    open_listings.uniq
   end
 ```
+ 
 
+For the next test, we'll create a class method to return the City with the highest ratio of reservations to listings. You can imagine using this in our controller to create a 	`@most_popular_city` instance variable as so:  `@most_popular_city = City.highest_ratio_res_to_listings` This could then be displayed in any of our views.  Including this logic in our model helps keep our controllers and views lightweight. 
 
-
-2). `highest_ratio_res_to_listings` - for the next test, we'll create a class method to return the City with the highest ratio of reservations to listings. You can imagine using this in our controller - `@most_popular_city = City.highest_ratio_res_to_listings` that could be displayed in a view. Including this logic in our model helps keep our controllers and views lightweight. 
-
-To find the highest reservations to listings ratio, we need each instance of city to be able to calculate it's reservations to listings. Let's create a helper method, `ratio_res_to_listing` for instances of cities. 
+To find the highest reservations to listings ratio, we need each instance of city to be able to calculate the ratio of reservations to listings. Let's create a helper method, `ratio_res_to_listing` for instances of cities. 
 
 ```ruby
 def ratio_res_to_listings
@@ -64,7 +79,7 @@ def self.highest_ratio_res_to_listings
 end
 ```
 
-3. Finally, we want our `City` class to be able to return the city with the most reservations. The logic here is the same as finding the highest_ratio_res_to_listings method, only comparing a count of reservations instead.
+Finally, we want our `City` class to be able to return the city with the most reservations. The logic here is the same as finding the `highest_ratio_res_to_listings method`, only comparing a count of reservations instead.
 
 ```ruby
 def self.most_res
@@ -82,22 +97,24 @@ Our City model is now passing all of our tests - awesome!
 
 ### Neighborhood Spec
 
-1). Let's move on to the `neighborhood` spec next. The tests are running in alphabetical order, but remember that we can run them in any order we want by specifying the file. For example, `rspec spec/models/neighborhood_spec.rb` will run only the tests in the `neighborhood_spec` file. 
+Let's move on to the `neighborhood` spec next. The tests are running in alphabetical order, but remember that we can run them in any order we want by specifying the file. For example, `rspec spec/models/neighborhood_spec.rb` will run only the tests in the `neighborhood_spec` file. 
 
 The three failing tests here should look familiar - they're exactly the same as our `city` tests. In fact, we can copy and paste the contents of our `city_openings` method into our `neighborhood_openings` method. 
 
 ```ruby
-def neighborhood_openings(start_date, end_date)
-  reservations.collect do |r|
-    booked_dates = r.checkin..r.checkout
-    unless booked_dates === start_date || booked_dates === end_date
-      r.listing
+def neightborhood_openings(start_date, end_date)
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+    reservations.each do |r|
+      booked_dates = r.checkin..r.checkout
+      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
+        open_listings << r.listing
+      end
     end
+    open_listings.uniq
   end
-end
 ```
 
-2). For our class methods, we can re-use what we wrote for our City model. 
+For our class methods, we can re-use what we wrote for our City model verbatim. 
 
 ```ruby
 # Returns nabe with highest ratio of reservations to listings
@@ -127,9 +144,9 @@ That'll get the tests passing. It's a little bit annoying that we had to copy/pa
 
 ### Review Spec
 
-Next, let's take a look at some of our validations. Validations are ways to make sure that only valid data is saved to the database. Client-side validations won't allow users to fill out a form without certain fields, but can be unreliable when used alone. Adding server-side validations to Rails makes sure that we only end up with valid results.
+Next, let's take a look at some of our validations. ActiveRecord validations make sure that only valid data is saved to the database. For example, we don't want to save any reviews that aren't associated with a reservation. 
 
-Let's start with the Review spec. For example, two basic validations are that a review must include a rating and a description. We'll add a line to our model: `validates :description, :rating, :reservation, presence: true`
+Let's start with the Review spec. For example, three basic validations are that a review must include a reservation, rating and a description. We'll add a line to our model: `validates :description, :rating, :reservation, presence: true`
 
 ```ruby
 class Review < ActiveRecord::Base
@@ -139,7 +156,7 @@ class Review < ActiveRecord::Base
   validates :description, :rating, :reservation, presence: true
 ```
 
-We can also write a custom validation method. This method should be private we never want to call these validation methods outside of our class. 
+We can also write a custom validation method. This method should be private, as we don't want to expose them to other parts of our application. 
 
 ```ruby
 class Review < ActiveRecord::Base
@@ -208,7 +225,7 @@ class Reservation < ActiveRecord::Base
   end
 ```
 
-Awesome. Next, we need to make sure that the listing is available. To do this, we'll need to iterate through the listings other reservations and compare the booked dates with our reservation's start and end dates. 
+Awesome job. Next, we need to make sure that the listing is available. To do this, we'll need to iterate through the listings other reservations and compare the booked dates with our reservation's start and end dates. 
 
 ```ruby
 class Reservation < ActiveRecord::Base
@@ -438,7 +455,7 @@ And that's it! All of our tests are passing.
 
 That was a long lab - give yourself a pat on the back. Some of the big takeaways are:
 
-1). We can use instance and class methods to get custom data out of our models. Doing this will make our lives much easier in our controllers and views.
-2). We can use ActiveRecord Associations to setup complex relationships where users have different associations based on behavior. 
-3). We can use ActiveRecord validations to make sure that only data we want is saved to our database.
+1. We can use instance and class methods to get custom data out of our models. Doing this will make our lives much easier in our controllers and views.
+2. We can use ActiveRecord Associations to setup complex relationships where users have different associations based on behavior. 
+3. We can use ActiveRecord validations to make sure that only data we want is saved to our database.
 

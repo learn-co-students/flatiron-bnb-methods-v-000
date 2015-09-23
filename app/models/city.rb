@@ -5,12 +5,14 @@ class City < ActiveRecord::Base
   
   # Returns all of the available apartments in a city, given the date range
   def city_openings(start_date, end_date)
-    reservations.collect do |r|
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+    reservations.each do |r|
       booked_dates = r.checkin..r.checkout
-      unless booked_dates === start_date || booked_dates === end_date
-        r.listing
+      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
+        open_listings << r.listing
       end
     end
+    open_listings.uniq
   end
 
   ## returns a cities ratio of reservations to listings. Returns 0 if there are no listings.
