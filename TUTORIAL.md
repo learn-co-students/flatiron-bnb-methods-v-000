@@ -14,137 +14,10 @@ There are tons of tests here. We'll go through the specs one at a time.
 
 ## Steps to Solve
 
-### City Spec
-
-After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
-
-```ruby
-class City < ActiveRecord::Base
-  has_many :neighborhoods
-  has_many :listings, :through => :neighborhoods
-  has_many :reservations, :through => :listings
-```
-
-Now, we'll define our `city_openings` method to take two arguments, a `start_date` and an `end_date`. There are two types of listings that we want to include: listings with no reservations, and listings with reservations that don't overlap with our date range. Let's iterate through our listings first and collect any listing without reservations.
-
-```ruby
-def city_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-end
-```
-Next, let's iterate through all of our city's reservations and include any listings whose reservations don't overlap. Here, we're using `===` to compare a date to a given date range. This will return `true` if the Data is in the range.
-At the end, we're returning our open_listings array and calling `uniq` so we don't get duplicates.
-
-```ruby
-def city_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-    reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
-        open_listings << r.listing
-      end
-    end
-    open_listings.uniq
-  end
-```
- 
-
-For the next test, we'll create a class method to return the City with the highest ratio of reservations to listings. You can imagine using this in our controller to create a 	`@most_popular_city` instance variable as so:  `@most_popular_city = City.highest_ratio_res_to_listings` This could then be displayed in any of our views.  Including this logic in our model helps keep our controllers and views lightweight. 
-
-To find the highest reservations to listings ratio, we need each instance of city to be able to calculate the ratio of reservations to listings. Let's create a helper method, `ratio_res_to_listing` for instances of cities. 
-
-```ruby
-def ratio_res_to_listings
-  	if listings.count > 0
-  		reservations.count.to_f / listings.count.to_f
-  	else
-  		0
-  	end
-end
-```
-
-Since dividing by 0 is a big no-no, we only run this calculation if our number of listings is great than or equal to 1. Otherwise, this method will return 0. 
-
-Now, we can simply iterate through each city and keep track of the one whose value is highest. 
-
-```ruby
-def self.highest_ratio_res_to_listings
-  highest = self.first
-  self.all.each do |city|
-    if city.ratio_res_to_listings > highest.ratio_res_to_listings
-      highest = city
-    end
-  end
-  highest
-end
-```
-
-Finally, we want our `City` class to be able to return the city with the most reservations. The logic here is the same as finding the `highest_ratio_res_to_listings method`, only comparing a count of reservations instead.
-
-```ruby
-def self.most_res
-  most_reservations = self.first
-  self.all.each do |city|
-    if city.reservations.count > most_reservations.reservations.count
-      most_reservations = city
-    end
-  end
-  most_reservations
-end
-```
-
-Our City model is now passing all of our tests - awesome!
-
-### Neighborhood Spec
-
-Let's move on to the `neighborhood` spec next. The tests are running in alphabetical order, but remember that we can run them in any order we want by specifying the file. For example, `rspec spec/models/neighborhood_spec.rb` will run only the tests in the `neighborhood_spec` file. 
-
-The three failing tests here should look familiar - they're exactly the same as our `city` tests. In fact, we can copy and paste the contents of our `city_openings` method into our `neighborhood_openings` method. 
-
-```ruby
-def neightborhood_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-    reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
-        open_listings << r.listing
-      end
-    end
-    open_listings.uniq
-  end
-```
-
-For our class methods, we can re-use what we wrote for our City model verbatim. 
-
-```ruby
-# Returns nabe with highest ratio of reservations to listings
-def self.highest_ratio_res_to_listings
-  highest = self.first
-  self.all.each do |neighborhood|
-    if neighborhood.ratio_res_to_listings > highest.ratio_res_to_listings
-      highest = neighborhood
-    end
-  end
-  highest
-end
-
-# Returns nabe with most reservations
-def self.most_res
-  most_reservations = self.first
-  self.all.each do |neighborhood|
-    if neighborhood.reservations.count > most_reservations.reservations.count
-      most_reservations = neighborhood
-    end
-  end
-  most_reservations
-end
-
-```
-That'll get the tests passing. It's a little bit annoying that we had to copy/paste that code. As a bonus, think about how we could include those methods on both classes...
 
 ### Review Spec
 
-Next, let's take a look at some of our validations. ActiveRecord validations make sure that only valid data is saved to the database. For example, we don't want to save any reviews that aren't associated with a reservation. 
+To begin, let's set up some validations. ActiveRecord validations make sure that only valid data is saved to the database. For example, we don't want to save any reviews that aren't associated with a reservation. 
 
 Let's start with the Review spec. For example, three basic validations are that a review must include a reservation, rating and a description. We'll add a line to our model: `validates :description, :rating, :reservation, presence: true`
 
@@ -458,6 +331,135 @@ end
 ```
 
 And that's it! All of our tests are passing.
+
+### City Spec
+
+After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
+
+```ruby
+class City < ActiveRecord::Base
+  has_many :neighborhoods
+  has_many :listings, :through => :neighborhoods
+  has_many :reservations, :through => :listings
+```
+
+Now, we'll define our `city_openings` method to take two arguments, a `start_date` and an `end_date`. There are two types of listings that we want to include: listings with no reservations, and listings with reservations that don't overlap with our date range. Let's iterate through our listings first and collect any listing without reservations.
+
+```ruby
+def city_openings(start_date, end_date)
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+end
+```
+Next, let's iterate through all of our city's reservations and include any listings whose reservations don't overlap. Here, we're using `===` to compare a date to a given date range. This will return `true` if the Data is in the range.
+At the end, we're returning our open_listings array and calling `uniq` so we don't get duplicates.
+
+```ruby
+def city_openings(start_date, end_date)
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+    reservations.each do |r|
+      booked_dates = r.checkin..r.checkout
+      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
+        open_listings << r.listing
+      end
+    end
+    open_listings.uniq
+  end
+```
+ 
+
+For the next test, we'll create a class method to return the City with the highest ratio of reservations to listings. You can imagine using this in our controller to create a 	`@most_popular_city` instance variable as so:  `@most_popular_city = City.highest_ratio_res_to_listings` This could then be displayed in any of our views.  Including this logic in our model helps keep our controllers and views lightweight. 
+
+To find the highest reservations to listings ratio, we need each instance of city to be able to calculate the ratio of reservations to listings. Let's create a helper method, `ratio_res_to_listing` for instances of cities. 
+
+```ruby
+def ratio_res_to_listings
+  	if listings.count > 0
+  		reservations.count.to_f / listings.count.to_f
+  	else
+  		0
+  	end
+end
+```
+
+Since dividing by 0 is a big no-no, we only run this calculation if our number of listings is great than or equal to 1. Otherwise, this method will return 0. 
+
+Now, we can simply iterate through each city and keep track of the one whose value is highest. 
+
+```ruby
+def self.highest_ratio_res_to_listings
+  highest = self.first
+  self.all.each do |city|
+    if city.ratio_res_to_listings > highest.ratio_res_to_listings
+      highest = city
+    end
+  end
+  highest
+end
+```
+
+Finally, we want our `City` class to be able to return the city with the most reservations. The logic here is the same as finding the `highest_ratio_res_to_listings method`, only comparing a count of reservations instead.
+
+```ruby
+def self.most_res
+  most_reservations = self.first
+  self.all.each do |city|
+    if city.reservations.count > most_reservations.reservations.count
+      most_reservations = city
+    end
+  end
+  most_reservations
+end
+```
+
+Our City model is now passing all of our tests - awesome!
+
+### Neighborhood Spec
+
+Let's move on to the `neighborhood` spec next. The tests are running in alphabetical order, but remember that we can run them in any order we want by specifying the file. For example, `rspec spec/models/neighborhood_spec.rb` will run only the tests in the `neighborhood_spec` file. 
+
+The three failing tests here should look familiar - they're exactly the same as our `city` tests. In fact, we can copy and paste the contents of our `city_openings` method into our `neighborhood_openings` method. 
+
+```ruby
+def neightborhood_openings(start_date, end_date)
+    open_listings = listings.collect {|l| l if l.reservations.count == 0}
+    reservations.each do |r|
+      booked_dates = r.checkin..r.checkout
+      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
+        open_listings << r.listing
+      end
+    end
+    open_listings.uniq
+  end
+```
+
+For our class methods, we can re-use what we wrote for our City model verbatim. 
+
+```ruby
+# Returns nabe with highest ratio of reservations to listings
+def self.highest_ratio_res_to_listings
+  highest = self.first
+  self.all.each do |neighborhood|
+    if neighborhood.ratio_res_to_listings > highest.ratio_res_to_listings
+      highest = neighborhood
+    end
+  end
+  highest
+end
+
+# Returns nabe with most reservations
+def self.most_res
+  most_reservations = self.first
+  self.all.each do |neighborhood|
+    if neighborhood.reservations.count > most_reservations.reservations.count
+      most_reservations = neighborhood
+    end
+  end
+  most_reservations
+end
+
+```
+That'll get the tests passing. It's a little bit annoying that we had to copy/paste that code. As a bonus, think about how we could include those methods on both classes...
+
 
 ## Conclusion/So What?
 
