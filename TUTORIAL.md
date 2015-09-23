@@ -458,15 +458,17 @@ The three failing tests here should look familiar - they're exactly the same as 
 
 ```ruby
 def neightborhood_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-    reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
-        open_listings << r.listing
-      end
+  date_range = (Date.parse(start_date)..Date.parse(end_date))
+  listings.collect do |listing|
+    available = true
+    listing.booked_dates.each do |date|
+        if date_range === date
+          available = false
+        end
     end
-    open_listings.uniq
+    listing if available
   end
+end
 ```
 
 For our class methods, we can re-use what we wrote for our City model verbatim. 
