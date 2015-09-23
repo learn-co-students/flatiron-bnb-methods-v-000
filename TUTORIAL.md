@@ -350,14 +350,54 @@ To make our lives easier, let's define a helper method, `booked_dates` on our Li
   end
 ```
 
-Now, let's iterate through a cities listings.
+Now, let's head back to our cities model. First, let's define our method and our Date range that we want to check.
 
 ```ruby
 # app/models/city.rb
 
+  def city_openings(start_date, end_date)
+    date_range = (Date.parse(start_date)..Date.parse(end_date))
+  end
 
 ```
-After running `rspec`, we can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
+
+Next, we'll iterate through each of our listings. We'll keep track of it's availability using a variable called `available`, set to `true` by default. Notice that we're using `collect`, since we want the return value to be an array of listings.
+
+```ruby
+# app/models/city.rb
+
+    def city_openings(start_date, end_date)
+    date_range = (Date.parse(start_date)..Date.parse(end_date))
+    listings.collect do |listing|
+      available = true
+    end
+  end
+
+```
+Now, for each listing, we'll iterate through it's booked_dates and compare if that date is in the given range. Ranges have a cool `===` property. Comparing a single object to a range using `===` will return `true` if that object is contained in the range. If the date is in our date_range, we'll set `available` to false. Once we've checked all of the dates, we'll return `listing` if `available` is `true`. 
+
+```ruby
+# app/models/city.rb
+
+  def city_openings(start_date, end_date)
+    date_range = (Date.parse(start_date)..Date.parse(end_date))
+    listings.collect do |listing|
+      available = true
+      listing.booked_dates.each do |date|
+      	  if date_range === date
+      	    available = false
+      	  end
+      end
+      listing if available
+    end
+  end
+
+```
+
+
+Awesome job, that test is now passing! Let's move on to our next method.
+
+We can see that all of our associations are passing. However, we may need to add more associations to get some of our other tests passing. For example, our first failing test is that a city `knows about the available listings in a given date range`. To make this pass, we'll update our `City` model so that it `has_many :reservations, :through => :listings`. 
 
 ```ruby
 class City < ActiveRecord::Base

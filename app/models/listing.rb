@@ -17,7 +17,7 @@ class Listing < ActiveRecord::Base
 
   def booked_dates
     reservations.collect do |res|
-      res.reservation_dates.collect do |date|
+      (res.checkin..res.checkout).collect do |date|
         date
       end
     end.flatten.uniq
