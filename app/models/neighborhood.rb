@@ -5,14 +5,16 @@ class Neighborhood < ActiveRecord::Base
 
   # Returns all of the available apartments in a neighborhood, given the date range
   def neighborhood_openings(start_date, end_date)
-    open_listings = listings.collect {|l| l if l.reservations.count == 0}
-    reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      unless booked_dates === Date.parse(start_date) || booked_dates === Date.parse(end_date)
-        open_listings << r.listing
+    date_range = (Date.parse(start_date)..Date.parse(end_date))
+    listings.collect do |listing|
+      available = true
+      listing.booked_dates.each do |date|
+          if date_range === date
+            available = false
+          end
       end
+      listing if available
     end
-    open_listings.uniq
   end
 
   def ratio_res_to_listings
