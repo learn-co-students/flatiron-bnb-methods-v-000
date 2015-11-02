@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id         :integer          not null, primary key
+#  name       :string
+#  created_at :datetime
+#  updated_at :datetime
+#  host       :boolean          default(FALSE)
+#
+
 class User < ActiveRecord::Base
   has_many :listings, :foreign_key => 'host_id'
   has_many :reservations, :through => :listings

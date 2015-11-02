@@ -1,42 +1,74 @@
+# == Schema Information
+#
+# Table name: neighborhoods
+#
+#  id         :integer          not null, primary key
+#  name       :string
+#  city_id    :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 describe Neighborhood do
-  describe 'associations' do
-    it 'has a name' do
-      expect(@nabe3.name).to eq('Brighton Beach')
-    end
+  describe 'associations' do    
+    it { should belong_to(:city) }
+    it { should have_many(:listings) }
 
-    it 'belongs to a city' do 
-      expect(@nabe3.city.name).to eq('NYC')
-    end
-
-    it 'has many listings' do 
-      expect(@nabe3.listings).to include(@listing3)
+    it 'is valid' do 
+      expect(FactoryGirl.create :neighborhood).to be_valid
     end
   end
 
-  describe 'instance methods' do
-    it 'knows about all the available listings given a date range' do
-      expect(@nabe1.neighborhood_openings('2014-05-01', '2014-05-30')).to include(@listing1) 
+  describe '#neighborhood_openings' do
+    let(:neighborhood) { FactoryGirl.create(:neighborhood) }
+    let(:available_listing) { FactoryGirl.create :listing, neighborhood: neighborhood }
+    let(:unavailable_listing) { FactoryGirl.create :listing, neighborhood: neighborhood }
+    let(:reservation) { FactoryGirl.create :reservation, 
+                        listing: unavailable_listing,
+                        checkin: '2014-05-01',
+                        checkout: '2014-05-30' }
+    before do 
+      neighborhood
+      available_listing
+      unavailable_listing
+      reservation
+    end
+
+    it 'returns available listings for the date range' do
+      expect(neighborhood.available_listings_from('2014-05-01', '2014-05-30')).to include(available_listing) 
     end 
+
+    it 'does not return unavailable listings' do 
+      expect(neighborhood.available_listings_from('2014-05-01', '2014-05-30')).to_not include(unavailable_listing) 
+    end
   end
 
   describe 'class methods' do
-    describe ".highest_ratio_res_to_listings" do
-      it 'knows the neighborhood with the highest ratio of reservations to listings' do 
-        expect(Neighborhood.highest_ratio_res_to_listings).to eq(@nabe1)
+    let(:manhattan) { FactoryGirl.create(:neighborhood, name: 'Manhattan') }
+    let(:bronx) { FactoryGirl.create(:neighborhood, name: 'Bronx') }
+
+    let(:bronx_listing) { FactoryGirl.create :listing, neighborhood: bronx }
+
+    before :each do 
+      5.times do |i|
+        listing = FactoryGirl.create(:listing, neighborhood: manhattan)
+        FactoryGirl.create(:reservation, listing: listing)
       end
-      it "doesn't hardcode the neighborhood with the highest ratio" do 
-        make_denver
-        expect(Neighborhood.most_res).to eq(Neighborhood.find_by(:name => "Lakewood"))
+
+      4.times do |i|
+        FactoryGirl.create(:reservation, listing: bronx_listing)
+      end
+    end 
+
+    describe ".most_reservations_per_listings" do
+      it 'returns the neighborhood with the highest ratio of reservations to listings' do 
+        expect(Neighborhood.most_reservations_per_listing).to eq(bronx)
       end
     end
 
-    describe ".most_res" do
+    describe ".most_reservations" do
       it 'knows the neighborhood with the most reservations' do 
-        expect(Neighborhood.most_res).to eq(@nabe1)
-      end
-      it "doesn't hardcode the neighborhood with the most reservations" do 
-        make_denver
-        expect(Neighborhood.most_res).to eq(Neighborhood.find_by(:name => "Lakewood"))
+        expect(Neighborhood.most_reservations).to eq(manhattan)
       end
     end 
   end

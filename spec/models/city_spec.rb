@@ -1,40 +1,51 @@
 describe City do
-  describe 'associations' do 
-    it 'has a name' do 
-      expect(City.first.name).to eq('NYC')
+
+  describe 'associations and validations' do 
+    it 'should be valid' do 
+      expect(FactoryGirl.create(:city)).to be_valid
     end
-
-    it 'has many neighborhoods' do 
-      expect(City.first.neighborhoods).to eq([@nabe1, @nabe2, @nabe3])
-    end
+    
+    it { should have_many(:neighborhoods)}
   end
-
-  describe 'instance methods' do
-    it 'knows about all the available listings given a date range' do
-      expect(City.first.city_openings('2014-05-01', '2014-05-05')).to include(@listing1) 
-    end 
-  end
-
+  
   describe 'class methods' do
-    describe ".highest_ratio_res_to_listings" do
-      it 'knows the city with the highest ratio of reservations to listings' do
-        expect(City.highest_ratio_res_to_listings).to eq(City.find_by(:name => "NYC")) 
+      let(:new_york) { FactoryGirl.create(:city, name: 'New York') }
+      let(:philadelphia) { FactoryGirl.create(:city, name: 'Philadelphia') }
+
+      let(:new_york_listing_one) { FactoryGirl.create :listing, neighborhood: FactoryGirl.create(:neighborhood, 
+        name: 'Queens', 
+        city: new_york)}
+      let(:new_york_listing_two) { FactoryGirl.create :listing, neighborhood: FactoryGirl.create(:neighborhood, 
+        name: 'Brooklyn', 
+        city: new_york)}
+
+      let(:philadelphia_listing) { FactoryGirl.create :listing, neighborhood: FactoryGirl.create(:neighborhood, 
+        name: 'Upper Darby', 
+        city: philadelphia)}
+
+    before :each do 
+      5.times do |i|
+        listing = FactoryGirl.create(:listing, neighborhood: FactoryGirl.create(:neighborhood, 
+          name: 'Queens', 
+          city: new_york))
+        FactoryGirl.create(:reservation, 
+                            listing: listing)
       end
 
-      it "doesn't hardcode the city with the highest ratio of reservations to listings" do
-        make_denver
-        expect(City.highest_ratio_res_to_listings).to eq(City.find_by(:name => "Denver")) 
+      4.times do |i|
+        FactoryGirl.create(:reservation, listing: philadelphia_listing)
       end
+    end 
+       
+    describe ".most_reservations" do
+      it 'returns the city with the most reservations' do
+        expect(City.most_reservations).to eq(new_york) 
+      end 
     end
 
-    describe ".most_res" do
-      it 'knows the city with the most reservations' do
-        expect(City.most_res).to eq(City.find_by(:name => "NYC")) 
-      end 
-
-      it 'knows the city with the most reservations' do
-        make_denver
-        expect(City.most_res).to eq(City.find_by(:name => "Denver")) 
+    describe ".most_reservations_per_listings" do
+      it 'returns the city with the highest ratio of reservations to listings' do
+        expect(City.most_reservations_per_listing).to eq(philadelphia) 
       end
     end
   end
