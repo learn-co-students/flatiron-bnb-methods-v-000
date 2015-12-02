@@ -41,3 +41,5 @@ Instead of creating instance methods `hosts` and `guests`, try to use Active Rec
 * [AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
 
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
+
+<a href='https://learn.co/lessons/flatiron-bnb-methods' data-visibility='hidden'>View this lesson on Learn.co</a>
