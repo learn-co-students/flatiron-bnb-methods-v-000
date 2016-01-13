@@ -215,7 +215,6 @@ describe Listing do
         let(:query_end_date) { '2014-05-05' }
 
         it 'returns false' do
-
           expect(listing.available_from?(query_begin_date, query_end_date)).to eq false
         end
       end

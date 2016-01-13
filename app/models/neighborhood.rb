@@ -10,11 +10,5 @@
 #
 
 class Neighborhood < ActiveRecord::Base
-  belongs_to :city
   has_many :listings
-
-
-  def available_listings_from(begin_date, end_date)
-    listings.listings_available_from(begin_date, end_date)
-  end
 end

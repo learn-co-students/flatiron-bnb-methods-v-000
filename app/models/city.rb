@@ -11,41 +11,30 @@
 class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
+  has_many :reservations, through: :listings
 
-  def self.most_reservations_per_listing
-    ratio = {}
-    reservations_hash = self.reservations_for_all_cities
-    listings_for_all_cities.each do |city_id, number_of_listings|
-      ratio[city_id] = (reservations_hash[city_id] / number_of_listings.to_f)
-    end
-    
-    city_id = ratio.max_by{|k, v| v }.first
-    City.find(city_id)
+  def self.reservations_of_cities
+    City.joins(:reservations).group(:city_id).count
   end
 
-  def total_number_of_reservations
-    reservations.count
-  end
-
-  def total_number_of_listings
-    reservations.map(&:listings).count
-  end
-
-  def reservations_per_listings
-    total_number_of_reservations / total_number_of_listings 
+  def self.listings_of_cities
+    City.joins(:listings).group(:city_id).count
   end
 
   def self.most_reservations
-    city_id = reservations_for_all_cities.max_by{|k, v| v }.first
+    city_id = reservations_of_cities.max_by{|k,v| v}.first
     City.find(city_id)
   end
 
-  def self.listings_for_all_cities
-    City.joins(:listings).group('city_id').count("listings.id")
-  end
-
-  def self.reservations_for_all_cities
-    city_id = City.joins(:listings => :reservations).group('city_id').count("reservations.id")
+  def self.reservations_per_listings
+    # reservations of cities = {city_id => reservation_count, 15 = 1}
+    # listings_of_cities = {city_id = listing_count, 15 = 1}
+    ratios = listings_of_cities.each_with_object({}) do |(city_id, number_of_listings), obj|
+      obj[city_id] = reservations_of_cities[city_id].to_f / number_of_listings
+    end
+    # ratios = {nyc_id => 1.5, philly_id => 3.3,  }
+    city_id = ratios.max_by{|k,v| v}.first
+    City.find(city_id)
   end
 end
 

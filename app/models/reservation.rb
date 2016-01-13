@@ -16,4 +16,9 @@ class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
   has_one :review
+
+  def self.booked(query_begin_date, query_end_date)
+    where(checkin: query_begin_date..query_end_date) |
+    where(checkout: query_begin_date..query)
+  end
 end
