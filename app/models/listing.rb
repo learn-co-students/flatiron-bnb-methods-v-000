@@ -5,26 +5,26 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
 
-  validates_presence_of :title, :address, :listing_type, :description, :price, :neighborhood
+  validates_presence_of :title, :address, :description, :listing_type, :price, :neighborhood
 
-  before_save :change_host_status
-  before_destroy :destroy_host
+  before_validation :truthy_host_status
+  before_destroy :falsey_host_status
 
   def average_review_rating
-    reviews.collect(&:rating).inject(:+).to_f / reviews.count
+    reviews.collect(&:rating).inject(:+) / reviews.count.to_f
   end
 
   protected
 
-  def change_host_status
-    if self.host.present?
-      host.update(host: true)
+  def truthy_host_status
+    if host.present?
+      self.host.update(host: true)
     end
   end
 
-  def destroy_host
-    if self.host.listings.size <= 1
-      host.update(host: false)
+  def falsey_host_status
+    if host.listings.count <= 1
+      self.host.update(host: false)
     end
   end
 end
