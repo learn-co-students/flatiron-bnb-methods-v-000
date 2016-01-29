@@ -56,4 +56,4 @@ The same class/instance methods as your `City` object. Maybe there is a way they
 * [AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
 
-<a href='https://learn.co/lessons/flatiron-bnb-methods' data-visibility='hidden'>View this lesson on Learn.co</a>
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/flatiron-bnb-methods' title='Flatiron-bnb: Methods'>Flatiron-bnb: Methods</a> on Learn.co and start learning to code for free.</p>
