@@ -2,15 +2,14 @@ module SearchConcerns
   
   module InstanceMethods
     def openings(start_range,end_range)
-      @openings = []
       checkin_date = Date.parse(start_range)
       checkout_date = Date.parse(end_range)
-      listings.each do |listing|
-        @openings << listing unless listing.reservations.any? do |reservation|
-          checkin_date.between?(reservation.checkin, reservation.checkout) && checkout_date.between?(reservation.checkin, reservation.checkout)
+      listings.select do |listing|
+        listing.reservations.all? do |reservation|
+          !(reservation.checkin..reservation.checkout).include?(checkin_date) ||
+          !(reservation.checkin..reservation.checkout).include?(checkout_date)
         end
       end
-      @openings
     end
   end
 
