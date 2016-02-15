@@ -12,6 +12,11 @@ class Listing < ActiveRecord::Base
   	reviews.average(:rating)
  end
 
+ # def available?
+ # 	if reservations.any? do |reservation|
+ # 		reservation.checkout
+
+
 
  private  
 
