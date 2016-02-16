@@ -19,7 +19,7 @@ class Reservation < ActiveRecord::Base
     listing.price * duration
   end
 
-  def day_lister(duration,checkin)
+  def day_lister
     days = *0..duration
     days.collect { |d| checkin + d }
   end
@@ -29,7 +29,7 @@ class Reservation < ActiveRecord::Base
   def booking_conflict
   	if !listing.nil?
       listing.reservations.detect do |l|
-        if (l.day_lister(l.duration, l.checkin) & [checkin, checkout]).any?
+        if l.day_lister & [checkin, checkout]).any?
           errors.add(:booking_conflict, "There is already a booking at that time")
         end
       end
