@@ -4,10 +4,11 @@ class Reservation < ActiveRecord::Base
   has_many :hosts, class_name: "User", through: :listing
   has_many :host_reviews, class_name: "Review"
   has_one :review
-  validates :checkin, presence: true
-  validates :checkout, presence: true
+  validates :checkin, :checkout, presence: true
   validate :cant_make_reservation_on_own_listing
-  validate :checkin_conflict
+  validate :booking_conflict
+  validate :checkout_checkin_conflict
+
 
 
   def duration
@@ -18,25 +19,30 @@ class Reservation < ActiveRecord::Base
     listing.price * duration
   end
 
-  
-  def checkin_conflict
-  	if !listing.nil? && listing.reservations.include?(checkin)
-  		errors.add(:checkin_conflict, "There is already a booking at that time")
-  	end
+  def day_lister(duration,checkin)
+    days = *0..duration
+    days.collect { |d| checkin + d }
   end
-  # end
-  # def reservation_conflict
-  # 	if !listing.nil?
-  # 		conflict = listing.reservations.detect do |reservation|
-  # 			checkin == reservation.checkin || checkout == reservation.checkout
-  # 		end
-  # 		if !conflict.nil?
-  # 			errors.add(:conflict, "Your reservation conlicts with someone else's")
-  # 		end
-  # 	end
-  # end	
 
   private
+
+  def booking_conflict
+  	if !listing.nil?
+      listing.reservations.detect do |l|
+        if (l.day_lister(l.duration, l.checkin) & [checkin, checkout]).any?
+          errors.add(:booking_conflict, "There is already a booking at that time")
+        end
+      end
+  	end
+  end
+
+ 
+  def checkout_checkin_conflict
+    if !checkin.nil? && !checkout.nil? && checkin >= checkout
+      errors.add(:checkout_conflict, "You can't book checkin on or after checkout date")
+    end
+  end
+
 
   def cant_make_reservation_on_own_listing
   	if guest_id == listing.host_id
