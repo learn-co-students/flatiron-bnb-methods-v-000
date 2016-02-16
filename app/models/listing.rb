@@ -29,5 +29,18 @@ class Listing < ActiveRecord::Base
     total / count
   end
 
+  def openings(start_date, end_date)
+    availibility = true
+    self.reservations.each do |reservation|
+      if start_date >= reservation.checkout
+      elsif
+        if end_date <= reservation.checkin
+        end
+      else
+        availibility = false
+      end
+    end
+    availibility
+  end
 
 end

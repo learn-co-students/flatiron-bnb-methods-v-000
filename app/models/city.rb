@@ -2,42 +2,15 @@ class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
-  #passes returning all listings belonging to city
   def city_openings(start_date, end_date)
-    # binding.pry
-    #this will have to look into reservations i think
-    #look at each listing
-    #for each listing look at all reservations
-    #check if check in or checkout falls between start and end date
-    # greater than or equal to checkin
-
-    # probably should really be the responsibility of the 
-    #reservation to do it.  
-
-
-    # start_date_arr = start_date.split("-")
-    # end_date_arr = end_date.split("-")
-    # start_date_time = Time.new(start_date_arr[0], start_date_arr[1], start_date_arr[2])
-    # end_date_time = Time.new(end_date_arr[0], end_date_arr[1], end_date_arr[2])
-
-    # self.listings.map do |listing|
-    #   reservation_conflict = false
-    #   listing.reservations.each do |reservation|
-    #     if start_date >= reservation.checkout
-    #       # reservation_conflict = false
-    #     elsif
-    #       if end_date <= reservation.checkin
-    #         # reservation_conflict = false
-    #       end
-    #     else
-    #       reservation_conflict = true
-    #     end
-    #   end
-    #   reservation_conflict
-    # end
-    # binding.pry
-    # self.listings
-
+    openings_array = self.listings.map do |listing|
+      current = nil
+      if listing.openings(start_date.to_time, end_date.to_time)
+        current = listing 
+      end
+      current
+    end
+    openings_array.compact
   end
 
   def self.highest_ratio_res_to_listings

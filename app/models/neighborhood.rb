@@ -3,8 +3,14 @@ class Neighborhood < ActiveRecord::Base
   has_many :listings
 
   def neighborhood_openings(start_date, end_date)
-    # binding.pry
-    # self.listings
+    openings_array = self.listings.map do |listing|
+      current = nil
+      if listing.openings(start_date.to_time, end_date.to_time)
+        current = listing 
+      end
+      current
+    end
+    openings_array.compact
   end
 
   def self.highest_ratio_res_to_listings
