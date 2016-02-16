@@ -29,7 +29,7 @@ class Reservation < ActiveRecord::Base
   def booking_conflict
   	if !listing.nil?
       listing.reservations.detect do |l|
-        if l.day_lister & [checkin, checkout]).any?
+        if (l.day_lister & [checkin, checkout]).any?
           errors.add(:booking_conflict, "There is already a booking at that time")
         end
       end
