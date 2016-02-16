@@ -3,6 +3,7 @@ class methods
 
 complicated validations
 
+City
   instance methods
     knows about all the available listings given a date range
   class methods
@@ -25,4 +26,3 @@ Neighborhood
       doesn't hardcode the neighborhood with the most reservations (FAILED - 9)
 
 
-  

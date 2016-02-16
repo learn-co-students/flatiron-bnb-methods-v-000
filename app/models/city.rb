@@ -11,17 +11,37 @@ class City < ActiveRecord::Base
     #check if check in or checkout falls between start and end date
     # greater than or equal to checkin
 
+    # probably should really be the responsibility of the 
+    #reservation to do it.  
 
 
-
-    self.listings
     # start_date_arr = start_date.split("-")
     # end_date_arr = end_date.split("-")
     # start_date_time = Time.new(start_date_arr[0], start_date_arr[1], start_date_arr[2])
+    # end_date_time = Time.new(end_date_arr[0], end_date_arr[1], end_date_arr[2])
+
+    # self.listings.map do |listing|
+    #   reservation_conflict = false
+    #   listing.reservations.each do |reservation|
+    #     if start_date >= reservation.checkout
+    #       # reservation_conflict = false
+    #     elsif
+    #       if end_date <= reservation.checkin
+    #         # reservation_conflict = false
+    #       end
+    #     else
+    #       reservation_conflict = true
+    #     end
+    #   end
+    #   reservation_conflict
+    # end
+    # binding.pry
+    # self.listings
+
   end
 
   def self.highest_ratio_res_to_listings
-    new_array = City.all.map do |city| 
+    city_ratio_array = City.all.map do |city| 
       listings_count = city.listings.count
       reservations_count =  city.listings.map {|listing| listing.reservations.count}.reduce(:+)
       hash = {}
@@ -29,7 +49,17 @@ class City < ActiveRecord::Base
       hash[:city] = city
       hash
     end
-    new_array.max_by{|f| f[:reservation_ratio]}[:city]
+    city_ratio_array.max_by{|f| f[:reservation_ratio]}[:city]
+  end
+
+  def self.most_res
+    city_reservations_array = City.all.map do |city|
+      hash = {}
+      hash[:reservations_count] = city.listings.map {|listing| listing.reservations.count}.reduce(:+)
+      hash[:city] = city 
+      hash
+    end
+    city_reservations_array.max_by{|f| f[:reservations_count]}[:city]
   end
 end
 
