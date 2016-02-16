@@ -5,7 +5,6 @@ class Reservation < ActiveRecord::Base
   validates :checkin, :checkout, presence: true
   validate :checkin_order
   validate :available?
-  # validate :check_availablity
 
   validate :host?
 
@@ -49,13 +48,5 @@ class Reservation < ActiveRecord::Base
     end
   end
 
-  def check_availablity
-    self.listing.reservations.each do |r|
-      booked_dates = r.checkin..r.checkout
-      if booked_dates === self.checkin || booked_dates === self.checkout
-        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
-      end
-    end
-  end
 
 end
