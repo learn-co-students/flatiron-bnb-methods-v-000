@@ -15,6 +15,11 @@ class City < ActiveRecord::Base
   def self.highest_ratio_res_to_listings
     # should return the City that is "most full".
     # What that means is it has the highest amount of reservations per listing
+    self.all.sort_by do |city|
+      city.listings.collect do |listing|
+        listing.reservations.count
+      end.reduce(:+).to_r / city.listings.count.to_r
+    end.last
 
   end
 
