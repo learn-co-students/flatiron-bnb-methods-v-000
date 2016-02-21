@@ -8,7 +8,7 @@ module Concerns
   	module ClassMethods
 
 			def most_res
-		  	y = self.all.collect {|x| x if x.reservation_count.is_a?(Integer) }
+		  	y = self.all.collect { |x| x if x.reservation_count.is_a?(Integer) }
 		  	y.compact.sort { |a,b| a.reservation_count <=> b.reservation_count }.last
 		  end
 
