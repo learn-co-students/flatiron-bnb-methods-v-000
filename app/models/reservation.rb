@@ -5,10 +5,8 @@ class Reservation < ActiveRecord::Base
   has_many :host_reviews, class_name: "Review"
   has_one :review
   validates :checkin, :checkout, presence: true
-  validate :cant_make_reservation_on_own_listing
-  validate :booking_conflict
-  validate :checkout_checkin_conflict
-
+  validate :cant_make_reservation_on_own_listing, :booking_conflict, :checkout_checkin_conflict
+  
 
 
   def duration
