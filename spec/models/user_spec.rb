@@ -19,7 +19,7 @@ describe User do
     it 'as a guest has written many reviews' do
       expect(@avi.reviews).to include(@review3)
     end
-    
+
     it 'as a host, knows about the guests its had' do 
       expect(@amanda.guests).to include(@logan)
     end
