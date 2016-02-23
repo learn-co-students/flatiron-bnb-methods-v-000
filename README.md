@@ -22,8 +22,8 @@ There are many methods here. Check out the specs and **remember to run your code
 
 #### Callbacks
 
-  * Whenever a listing is created, the user attached to that listing should be converted into a "host". This means that that users `host` field is set to `true`
-  * whenever a listing is destroyed (new callback! Google it!) the user attached to that listing should be converted back to a regular user. That means setting the `host` field to false.
+  * Whenever a listing is created, the user attached to that listing should be converted into a "host". This means that the users `host` field is set to `true`
+  * Whenever a listing is destroyed (new callback! Google it!) the user attached to that listing should be converted back to a regular user. That means setting the `host` field to false.
 
 ### Neighborhood
 
@@ -56,4 +56,6 @@ The same class/instance methods as your `City` object. Maybe there is a way they
 * [AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
 
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/flatiron-bnb-methods' title='Flatiron-bnb: Methods'>Flatiron-bnb: Methods</a> on Learn.co and start learning to code for free.</p>
+<a href='https://learn.co/lessons/flatiron-bnb-methods' data-visibility='hidden'>View this lesson on Learn.co</a>
+
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/flatiron-bnb-methods'>Flatiron Bnb Methods Lab</a> on Learn.co and start learning to code for free.</p>
