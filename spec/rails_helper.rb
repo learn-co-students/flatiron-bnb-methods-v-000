@@ -11,11 +11,11 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   DatabaseCleaner.strategy = :truncation
-  config.after(:all) do 
+  config.after(:all) do
     DatabaseCleaner.clean
   end
-  config.before(:each) do 
-    cities = City.create([{ name: 'NYC' }, { name: 'San Fransisco' }])
+  config.before(:each) do
+    cities = City.create([{ name: 'NYC' }, { name: 'San Francisco' }])
 
     @nabe1 = Neighborhood.create(name: 'Fi Di', city_id: City.first.id)
     @nabe2 = Neighborhood.create(name: 'Green Point', city_id: City.first.id)
@@ -40,7 +40,7 @@ RSpec.configure do |config|
     @reservation3 = Reservation.create(checkin: '2014-06-02', checkout: '2014-06-30', listing_id: @listing4.id, guest_id: @avi.id, :status => "accepted")
     @reservation4 = Reservation.create(checkin: '2014-05-02', checkout: '2014-05-08', listing_id: @listing1.id, guest_id: @tristan.id, :status => "accepted")
     @reservation5 = Reservation.create(checkin: '2014-05-10', checkout: '2014-05-15', listing_id: @listing1.id, guest_id: @logan.id, :status => "accepted")
-    
+
     @review1 = Review.create(description: "This place was great!", rating: 5, guest_id: @logan.id, reservation_id: Reservation.first.id)
     @review2 = Review.create(description: "Great place, close to subway!", rating: 4, guest_id: @tristan.id, reservation_id: Reservation.first.id)
     @review3 = Review.create(description: "Meh, the host I shared a room with snored.", rating: 3, guest_id: @avi.id, reservation_id: Reservation.last.id)
@@ -51,12 +51,12 @@ def make_denver
   denver = City.create(:name => "Denver")
   lakewood = Neighborhood.create(name: 'Lakewood', city_id: denver.id)
   listing = Listing.create(
-    address: '9300 W. Mountain Ave.', 
-    listing_type: "private room", 
-    title: "pretty cabin outside of the city", 
-    description: "My cabin is great. I have a coffeemaker", 
-    price: 20.00, 
-    neighborhood_id: lakewood.id, 
+    address: '9300 W. Mountain Ave.',
+    listing_type: "private room",
+    title: "pretty cabin outside of the city",
+    description: "My cabin is great. I have a coffeemaker",
+    price: 20.00,
+    neighborhood_id: lakewood.id,
     host_id: User.first.id
   )
   checkin_day = 1
@@ -64,10 +64,10 @@ def make_denver
     guest_id = i + 1
     if guest_id != listing.host.id
       Reservation.create(
-        checkin: "2014-08-#{checkin_day}", 
-        checkout: "2014-08-#{checkin_day + 3}", 
-        listing_id: listing.id, 
-        guest_id: "#{guest_id}", 
+        checkin: "2014-08-#{checkin_day}",
+        checkout: "2014-08-#{checkin_day + 3}",
+        listing_id: listing.id,
+        guest_id: "#{guest_id}",
         status: "accepted"
       )
       checkin_day += 5
