@@ -1,3 +1,4 @@
+require 'pry'
 describe User do
   describe 'associations' do
     it 'has a name' do

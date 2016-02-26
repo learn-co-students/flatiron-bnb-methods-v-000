@@ -1,3 +1,4 @@
+require 'pry'
 describe Review do
   describe 'associations' do
     it 'has a description' do

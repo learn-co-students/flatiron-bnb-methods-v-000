@@ -30,6 +30,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "capybara"
   gem "selenium-webdriver"
+  gem "tux"
   gem "better_errors"
   gem "sprockets_better_errors"
   gem "binding_of_caller"
