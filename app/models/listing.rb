@@ -16,6 +16,7 @@ class Listing < ActiveRecord::Base
     (collection_of_ratings.sum)/(collection_of_ratings.count).to_f
   end
 
+
   private
   def change_host_status
     #
