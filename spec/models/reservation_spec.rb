@@ -37,7 +37,7 @@ describe Reservation do
       @invalid_same_checkout_checkin = Reservation.new(checkin:  '2014-05-23', checkout: '2014-05-23', guest_id: User.find_by(id: 4).id, listing_id: Listing.first.id)
     end
 
-    it 'is valid with a checkin and checkout' do 
+    it 'is valid with a checkin and checkout' do
       expect(@reservation1).to be_valid
     end
 
