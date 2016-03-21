@@ -12,7 +12,6 @@ class Listing < ActiveRecord::Base
 
   def average_review_rating
     self.reviews.average("rating").to_f
-    # self.reviews.collect{|r| r.rating.to_f}.reduce(:+)/self.reviews.count.to_f
   end
 
 
