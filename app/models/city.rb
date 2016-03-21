@@ -10,8 +10,6 @@ class City < ActiveRecord::Base
   def self.highest_ratio_res_to_listings
     ratios=self.all.collect{|c| [c, (c.reservations.count.to_f/c.listings.count.to_f*100).to_i]}
     ratios.sort_by{|c, r| r}.last[0]
-    # City.find_by(name: city_name)
-# binding.pry
   end
 
   def self.most_res
@@ -20,10 +18,7 @@ class City < ActiveRecord::Base
   end
 
   def self.most_res
-    #returs city object
-
-
-
+    self.all.collect{|c| [c, c.reservations.count]}.sort_by{|c, r| r}.last[0]
   end
 
   def reservations
@@ -33,4 +28,3 @@ class City < ActiveRecord::Base
 end
 
 
-# c.listings.count.to_f/c.reservations.count.to_f
