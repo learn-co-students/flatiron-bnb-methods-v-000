@@ -10,7 +10,7 @@ class Reservation < ActiveRecord::Base
  
 ###VALIDATION METHODS 
   def is_host
-    errors.add(:guest_id, "guest cannot be host") unless !User.find(self.guest_id).host?
+    errors.add(:guest_id, "guest cannot be host") unless self.guest_id != self.listing.host_id
   end
 
   def trip_dates
