@@ -5,6 +5,7 @@ def make_seeds
   make_users
   make_listings
   make_reservations
+  make_reviews
 end
 
 def make_cities
@@ -49,3 +50,4 @@ def make_reviews
 end
 
 make_seeds
+
