@@ -8,7 +8,7 @@ class Reservation < ActiveRecord::Base
 
   validate :trip_dates
  
-
+###VALIDATION METHODS 
   def is_host
     errors.add(:guest_id, "guest cannot be host") unless !User.find(self.guest_id).host?
   end
@@ -27,6 +27,18 @@ class Reservation < ActiveRecord::Base
   def is_available
     listing.available(self.checkin, self.checkout)
   end
+
+###INSTANCE METHODS
+
+  def duration
+    (self.checkout - self.checkin).to_i
+  end
+
+  def total_price
+    self.listing.price.to_f * self.duration
+  end
+
+
 
 
 end
