@@ -26,7 +26,7 @@ class Listing < ActiveRecord::Base
   end
 
   def available(start, fin)
-    dates=(Date.parse(start)..Date.parse(fin))
+    dates=(start..fin)
     self.reservations.none?{|r| dates.overlaps?(r.checkin..r.checkout)}
   end
 

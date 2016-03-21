@@ -3,14 +3,36 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
 
+  validates_presence_of :checkin, :checkout
 
+  validate :is_host
 
+  validate :is_available, :if => "!checkin.nil? && !checkout.nil?"
+ 
+  validate :valid_dates, :if => "!checkin.nil? && !checkout.nil?"
  
 
-  def valid_dates
-     checkin < checkout
+  def is_host
+    errors.add(:guest_id, "guest cannot be host") unless !User.find(self.guest_id).host?
   end
 
+  def is_available
+# binding.pry
+    if !listing.available(self.checkin, self.checkout)
+      errors.add(:checkin, "not available.")
+    end
+
+  end
+
+  def has_dates
+
+  end
+
+  def valid_dates
+     if checkin >= checkout
+      errors.add(:checkin, "must be at least 1 day before checkout")
+    end
+  end
 
 
 end
