@@ -8,17 +8,14 @@ class City < ActiveRecord::Base
   end
 
   def self.highest_ratio_res_to_listings
-    ratios=self.all.collect{|c| [c, (c.reservations.count.to_f/c.listings.count.to_f*100).to_i]}
+    hoods=self.all.select{|n| n.listings.count > 0}
+    ratios=hoods.collect{|c| [c, (c.reservations.count.to_f/c.listings.count.to_f*100).to_i]}
     ratios.sort_by{|c, r| r}.last[0]
   end
 
   def self.most_res
-    self.all.sort{|c| c.reservations}
+    self.all.sort_by{|n|n.reservations.count}.last
 
-  end
-
-  def self.most_res
-    self.all.collect{|c| [c, c.reservations.count]}.sort_by{|c, r| r}.last[0]
   end
 
   def reservations
