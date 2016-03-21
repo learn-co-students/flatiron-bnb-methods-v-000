@@ -7,10 +7,27 @@ class Listing < ActiveRecord::Base
   
   validates_presence_of :address, :listing_type, :title, :description, :price, :neighborhood_id
 
+  before_create :change_host_status
+  after_destroy :still_host?
 
-   def available(start, fin)
+  def average_review_rating
+    self.reviews.collect{|r| r.rating.to_f}.reduce(:+)/self.reviews.count.to_f
+  end
+
+
+  def change_host_status
+    User.find(host_id).update(host: true)
+  end
+
+  def still_host?
+    u=User.find(host_id)
+    u.update(host: false) if u.listings.empty?
+  end
+
+  def available(start, fin)
     dates=(Date.parse(start)..Date.parse(fin))
     self.reservations.none?{|r| dates.overlaps?(r.checkin..r.checkout)}
   end
 
 end
+
