@@ -24,5 +24,11 @@ class Listing < ActiveRecord::Base
  	def average_review_rating
  		reservations.map {|res| (res.review.rating if res.review) || 0}.inject(0.0){|sum, el| sum + el} / reservations.size
  	end
+ 	
+ 	def open_during?(dateRange)
+ 		reservations.empty? || reservations.any? do |res|
+  			!dateRange.cover?(res.checkin) && !dateRange.cover?(res.checkout)
+  	end
+  end
   
 end
