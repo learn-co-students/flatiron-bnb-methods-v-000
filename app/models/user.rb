@@ -20,13 +20,7 @@ class User < ActiveRecord::Base
   
   # returns all of the reviews a host has received from guests
   def host_reviews 
-    @host_reviews = []
-    self.reservations.each do |res| 
-      if res.review 
-        @host_reviews << res.review
-      end
-    end
-    @host_reviews
+    self.reservations.collect { |res| res.review }.compact
   end
   
 end
