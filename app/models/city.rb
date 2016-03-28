@@ -22,8 +22,7 @@ class City < ActiveRecord::Base
     self.all.each do |city|
       number_of_listings = city.listings.count
       reservation_counts = city.listings.map { |listing| listing.reservations.count } # array of res counts
-      sum_of_reservations = 0
-      reservation_counts.each { |count| sum_of_reservations = count + sum_of_reservations } # update sum_of_reservations
+      sum_of_reservations = reservation_counts.inject(0) { |sum, count| sum + count } # update sum_of_reservations
       ratio_score = number_of_listings.to_f / sum_of_reservations.to_f 
       cities_with_scores[city] = ratio_score
     end
@@ -36,8 +35,7 @@ class City < ActiveRecord::Base
     
     self.all.each do |city|
       reservation_counts = city.listings.map { |listing| listing.reservations.count }
-      sum_of_reservations = 0
-      reservation_counts.each { |count| sum_of_reservations = count + sum_of_reservations }
+      sum_of_reservations = reservation_counts.inject(0) { |sum, count| sum + count }
       cities_with_reservation_counts[city] = sum_of_reservations
     end
 
