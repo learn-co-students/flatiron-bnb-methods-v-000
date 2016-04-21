@@ -2,14 +2,28 @@ class Review < ActiveRecord::Base
   belongs_to :reservation
   belongs_to :guest, :class_name => "User"
 
-  validates :description, :rating, :reservation, presence: true
+  validates :description, presence: true
+  validates :rating, presence: true, numericality: {
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 5,
+              only_integer: true
+            }
+  validates :reservation, presence: true
 
-  validate :reservation_exists_and_accepted_hasnt_happened_yet
+  validate :checked_out
+  validate :reservation_accepted
 
   private
-  #You can't write a review on a reservation that doesn't exist
-  def reservation_exists_and_accepted_hasnt_happened_yet
-    errors.add(:reservation, "not valid") unless reservation && reservation.status == "accepted" && reservation.checkout < Date.today
+
+  def checked_out
+    if reservation && reservation.check_out > Date.today
+      errors.add(:reservation, "Reservation must have ended to leave a review.")
+    end
   end
 
+  def reservation_accepted
+    if reservation.try(:status) != 'accepted'
+      errors.add(:reservation, "Reservation must be accepted to leave a review.")
+    end
+  end
 end

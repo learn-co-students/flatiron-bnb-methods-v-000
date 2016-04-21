@@ -1,38 +1,52 @@
 class Listing < ActiveRecord::Base
-  belongs_to :neighborhood
+  belongs_to :neighborhood, required: true
   belongs_to :host, :class_name => "User"
+
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
 
-  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
+  validates :address, presence: true
+  validates :description, presence: true
+  validates :listing_type, presence: true
+  validates :price, presence: true
+  validates :title, presence: true
 
-  before_save :make_host
-  before_destroy :host_status
+  after_save :set_host_as_host
+  before_destroy :unset_host_as_host
 
-  # Finds the average rating for a listing
   def average_review_rating
     reviews.average(:rating)
   end
 
-  def booked_dates
-    reservations.collect { |res| (res.checkin..res.checkout).to_a}.flatten.uniq
-  end
-
   private
-  # Makes user a host when a listing is created
-  def make_host
-    unless self.host.host
-      self.host.update(:host => true)
+
+  def self.available(start_date, end_date)
+    if start_date && end_date
+      joins(:reservations).
+        where.not(reservations: {check_in: start_date..end_date}) &
+      joins(:reservations).
+        where.not(reservations: {check_out: start_date..end_date})
+    else
+      []
     end
   end
 
-  # Changes host status to false when listing is destroyed and user has no more listings
-  def host_status
-    if self.host.listings.count <= 1
-      self.host.update(:host => false)
+
+  # it feels to me like part of what makes this complicated is
+  # that we have column in the database called is_host, 
+  # but instead this could just be a method, and then rely on that..
+  # not sure if it's worth the effort though.
+  def unset_host_as_host
+    # remove .id
+    if Listing.where(host: host).where.not(id: id).empty?
+      host.update(is_host: false)
     end
   end
 
-  
+  def set_host_as_host
+    unless host.is_host?
+      host.update(is_host: true)
+    end
+  end
 end

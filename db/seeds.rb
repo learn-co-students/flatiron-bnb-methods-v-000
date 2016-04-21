@@ -33,14 +33,14 @@ end
 
 def make_reservations
   # first listing
-  Reservation.create!(checkin: '2014-01-01', checkout: '2014-01-07', listing_id: 1, guest_id: User.last.id, :status => "accepted")
-  Reservation.create!(checkin: '2014-01-09', checkout: '2014-01-20', listing_id: 1, guest_id: 5, :status => "accepted")
-  Reservation.create!(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: 1, guest_id: 4, :status => "accepted")
-  # second listing 
-  Reservation.create!(checkin: '2014-03-10', checkout: '2014-03-25', listing_id: Listing.find(2).id, guest_id: User.find_by(id: 5).id, :status => "accepted")
+  Reservation.create!(check_in: '2014-01-01', check_out: '2014-01-07', listing_id: 1, guest_id: User.last.id, :status => "accepted")
+  Reservation.create!(check_in: '2014-01-09', check_out: '2014-01-20', listing_id: 1, guest_id: 5, :status => "accepted")
+  Reservation.create!(check_in: '2014-04-25', check_out: '2014-04-30', listing_id: 1, guest_id: 4, :status => "accepted")
+  # second listing
+  Reservation.create!(check_in: '2014-03-10', check_out: '2014-03-25', listing_id: Listing.find(2).id, guest_id: User.find_by(id: 5).id, :status => "accepted")
   # last listing
-  Reservation.create!(checkin: '2014-06-02', checkout: '2014-06-30', listing_id: Listing.last.id, guest_id: User.find(6).id, :status => "accepted")
-  Reservation.create!(checkin: '2014-05-15', checkout: '2014-06-01', listing_id: Listing.last.id, guest_id: User.find(5).id, :status => "accepted")
+  Reservation.create!(check_in: '2014-06-02', check_out: '2014-06-30', listing_id: Listing.last.id, guest_id: User.find(6).id, :status => "accepted")
+  Reservation.create!(check_in: '2014-05-15', check_out: '2014-06-01', listing_id: Listing.last.id, guest_id: User.find(5).id, :status => "accepted")
 end
 
 def make_reviews
