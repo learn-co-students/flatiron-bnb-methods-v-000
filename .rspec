@@ -1,3 +1,5 @@
---color 
+--color
 --format documentation
 --require rails_helper
+
+--fail-fast
