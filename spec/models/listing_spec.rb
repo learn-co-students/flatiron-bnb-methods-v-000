@@ -142,6 +142,7 @@ describe Listing do
           neighborhood: santa_monica,
           host: user)
         expect(user.reload.host?).to eq(true)
+
       end
     end
 

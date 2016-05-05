@@ -1,27 +1,27 @@
 class City < ActiveRecord::Base
+  include SharedMethods
+  extend SharedMethods
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
   def city_openings(date1, date2)
-    #self.listings.where("date(created_at) >= #{date1} AND date(created_at) <= #{date2}")
+    openings(date1, date2)
+  end
 
-    self.listings.select do |listing|
-      listing if listing.created_at.to_date >= date1.to_date &&
-       listing.created_at.to_date <= date2.to_date
-    end
+  def self.highest_ratio_res_to_listings
+    h_ratio_res_to_listings
   end
 
   def self.most_res
-  # city = Struct.new(:city, :reservations)
+    # select cities.id, count listing_id's in reservations under column listing_count
+    # inner join neigborhoods => listings => reservations (has listing_id)
+    # group by city_id in listings
+    # order by listing_count, limit 1
 
-  #   self.all.each do |city|
-  #     city.listings.each do |listing|
-  #       cities = City.new(city, listing.reservations.count)
-  #       binding.pry
-  #     end
-  #   end
-  #   puts reservations
-  # end
+    city = select("cities.id, count(listing_id) AS listing_count").joins(:listings => :reservations).group(:city_id).order("listing_count DESC").limit(1)
+
+    self.find(city.first.id)
+  end
 
 end
 
