@@ -23,10 +23,7 @@ class Listing < ActiveRecord::Base
   end
 
   def average_review_rating
-    sum = 0
-    self.reservations.each do |reservation|
-      sum += reservation.review.rating.to_f 
-    end
-    sum / self.reservations.size
+    reviews.average(:rating)
   end
+
 end
