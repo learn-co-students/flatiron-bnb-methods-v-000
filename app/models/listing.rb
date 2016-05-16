@@ -4,5 +4,32 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: :true
+
+  before_create :change_host
+  after_destroy :make_false 
+
+
+
+  def change_host
+   
+    @user=User.find(self.host_id)
+    @user.update(host: true)
+  end
+
+  def make_false
+    @user=User.find(self.host_id)
+
+
+    if @user.listings.count == 0
+      
+      @user.update(host: false)
+    else
+  
+      @user.update(host: true)
+    end
+
+
+  end
   
 end

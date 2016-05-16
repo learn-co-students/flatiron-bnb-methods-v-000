@@ -5,6 +5,7 @@ def make_seeds
   make_users
   make_listings
   make_reservations
+  make_host
 end
 
 def make_cities
@@ -21,6 +22,11 @@ def make_users
   ["Amanda", "Katie","Arel","Logan","Tristan","Avi"].each do |name|
     User.create(name: name)
   end
+end
+
+def make_host
+  User.create(name: "Hudson", host: true)
+
 end
 
 def make_listings
