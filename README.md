@@ -10,7 +10,7 @@ There are many methods here. Check out the specs and **remember to run your code
 
 ### City
 
-  * The `#city_openings` method should return all of the `Listing` objects that are available for the **entire span** that is inputted.
+  * The `#city_openings` method should return all of the `Listing` objects that are available for the **entire span** that is inputted. (**NOTE**: This isn't easy. Check the resources below and try out a few things in console until you're satisfied with your solution. Don't be afraid to google!)
   * The `.highest_ratio_res_to_listings` method should return the `City` that is "most full". What that means is it has the highest amount of reservations per listing.
   * The `.most_res` method should return the `City` with the most total number of reservations, no matter if they are all on one listing or otherwise.
 
@@ -57,6 +57,7 @@ The same class/instance methods as your `City` object. Maybe there is a way they
 * [About Private Methods](http://stackoverflow.com/a/4293330/2890716)
 * [AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
+* [Date range overlaps](http://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap)
 
 <a href='https://learn.co/lessons/flatiron-bnb-methods' data-visibility='hidden'>View this lesson on Learn.co</a>
 
