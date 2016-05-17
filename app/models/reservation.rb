@@ -2,10 +2,11 @@ class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
   has_one :review
-  validate :if_not_user
+  validates :checkin, :checkout, presence: :true
   validate :is_after_or_equal
-  validates :checkin, :checkout, presence: true
   validate :checkin_not_taken
+  validate :if_not_user
+  
 
 
   def if_not_user
@@ -26,8 +27,11 @@ class Reservation < ActiveRecord::Base
   end
 
   def is_after_or_equal
-  
-    if self.checkin > self.checkout
+    if self.checkin == nil
+      errors.add(:checkin, "Checkin cannot be blank")
+    elsif self.checkout == nil
+      errors.add(:checkout, "Checkout cannot be blank")
+    elsif self.checkin > self.checkout
       errors.add(:checkin, "Cannot be after checkout date")
     elsif self.checkin == self.checkout
       errors.add(:checkin, "Checkin must be before checkout")
@@ -36,16 +40,25 @@ class Reservation < ActiveRecord::Base
   end
 
   def checkin_not_taken
-    reservations = Reservation.where(listing_id: self.listing_id )
-    reservations.each do |x|
-      start = x.checkin
-      last = x.checkout
-     
-      if self.checkin.between?(start,last) || self.checkout.between?(start,last)
-    
-        errors.add(:checkin, "That listing is currently booked during that time.")
-      end
+    if self.checkin == nil
+      errors.add(:checkin, "Checkin cannot be blank")
+    elsif self.checkout == nil
+      errors.add(:checkout, "Checkout cannot be blank")
+    else
+
+     Reservation.where(listing_id: self.listing_id ).each do |x|
+      if x.id != self.id
+        start = x.checkin
+        last = x.checkout
+       
+        if self.checkin.between?(start,last) || self.checkout.between?(start,last)
+
+      
+          errors.add(:checkin, "That listing is currently booked during that time.")
+        end
     end
+  end
+  end
     end
 
   
