@@ -38,4 +38,6 @@ group :development, :test do
   gem "sqlite3"
   gem "pry"
   gem 'rack_session_access'
+  gem 'pry-byebug'
+  gem 'awesome_print', require: 'ap'
 end
