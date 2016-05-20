@@ -5,4 +5,5 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
   
+  scope :between_dates, ->(start_date, end_date) { where(created_at: start_date..end_date) }
 end
