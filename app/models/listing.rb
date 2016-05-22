@@ -23,6 +23,17 @@ class Listing < ActiveRecord::Base
     reviews.average(:rating)
   end
 
+  # Determine is a listing is available in a given checkin date
+  def valid_date?(date)
+    !self.class.unavilable_listings(date).include?(self)
+  end
+
+  # Return unavilable listings given a date
+  def self.unavilable_listings(date)
+    where_sql = "reservations.checkin <= ? AND reservations.checkout >= ?"
+    Listing.joins(:reservations).where(where_sql, date, date)
+  end
+
   private
 
   def make_user_host
