@@ -5,16 +5,8 @@ class City < ActiveRecord::Base
 
   # Return a city's available listing given a date range
   def city_openings(start_date, end_date)
-    sql = <<-SQL
-      listings.id NOT IN (
-        SELECT distinct(listings.id) FROM listings
-        JOIN reservations ON listings.id = reservations.listing_id
-        WHERE reservations.checkin BETWEEN ? AND ?
-              OR reservations.checkout BETWEEN ? AND ?
-      )
-    SQL
-
-    listings.where(sql, start_date, end_date, start_date, end_date)
+    # listings.where(sql, start_date, end_date)
+    listings.openings(start_date, end_date)
   end
 
   # Find the city withthe highest reservation to listing ratio

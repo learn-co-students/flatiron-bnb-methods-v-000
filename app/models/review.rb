@@ -3,7 +3,7 @@ class Review < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
 
   # Validations
-  validates_presence_of [:rating, :description, :reservation_id]
+  validates_presence_of :rating, :description, :reservation_id
   validate :valid_reservation
 
   def valid_reservation
