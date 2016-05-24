@@ -80,4 +80,5 @@ m_User [label = <<table border="0" align="center" cellspacing="0.5" cellpadding=
   m_User -> m_Review [arrowhead = "normal", arrowtail = "none", weight = "2"];
   m_User -> m_Reservation [style = "dotted", arrowhead = "normal", arrowtail = "none", weight = "1", constraint = "false"];
   m_User -> m_User [style = "dotted", arrowhead = "normal", arrowtail = "none", weight = "1", constraint = "false"];
+  m_User -> m_Review [style = "dotted", arrowhead = "normal", arrowtail = "none", weight = "1", constraint = "false"];
 }

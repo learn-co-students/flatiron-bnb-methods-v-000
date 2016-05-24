@@ -4,12 +4,24 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
+  
   before_create :set_host
+  after_destroy :no_host
+
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :price, presence: true
+  validates :listing_type, presence: true
+  validates :address, presence: true
+  validates :neighborhood, presence: true
+
+  private
 
   def set_host
-    #binding.pry
-    unless self.host.host == true
-      self.host.host = true
-    end
+    self.host.update(:host => true)
+  end
+
+  def no_host
+    self.host.update(:host => false) if self.host.listings.empty?
   end
 end
