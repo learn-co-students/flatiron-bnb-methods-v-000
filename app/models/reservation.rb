@@ -8,6 +8,10 @@ class Reservation < ActiveRecord::Base
   validates :checkin, before_checkout: true
   validates_with AvailabilityValidator, on: :create
 
+  def accepted?
+    status == "accepted"
+  end
+
   def duration
     checkout - checkin
   end
