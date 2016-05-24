@@ -20,7 +20,7 @@ class Listing < ActiveRecord::Base
   end
 
   def self.available_listings_for_dates(start_date, end_date)
-    where("listings.id NOT in (select listing_id from reservations where 
+    where("listings.id NOT IN (SELECT listing_id FROM reservations WHERE 
       reservations.checkin <= ? AND reservations.checkout >= ?)", end_date, start_date)
   end
 end
