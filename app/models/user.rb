@@ -3,5 +3,7 @@ class User < ActiveRecord::Base
   has_many :reservations, :through => :listings
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
   has_many :reviews, :foreign_key => 'guest_id'
-  
+  has_many :guests, through: :reservations, class_name: :User
+   
+  #validates :host, presence: true, uniqueness: true
 end
