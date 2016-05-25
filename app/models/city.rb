@@ -1,5 +1,7 @@
+require_relative '../../lib/ratios_extension.rb'
+
 class City < ActiveRecord::Base
-  #include RatiosExtension
+  include RatiosExtension
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
@@ -8,13 +10,4 @@ class City < ActiveRecord::Base
     Listing.all
   end
 
-  # def highest_ratio_res_to_listings
-
-  # end
-
-  # def most_res
-
-  # end
-
 end
-
