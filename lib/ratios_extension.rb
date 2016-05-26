@@ -1,22 +1,25 @@
 module RatiosExtension
 
-    def self.most_res
-      self.all 
-      # need to see which neighborhood has most reservations
-
-
-      # self.listings.each do |listing|
-      #   listing.reservations.collect {|reservation| reservation.status != "pending"}
-      # end.
-      # x.group_by{|a| a }.sort_by{|a,b| b.size<=>a.size}.first[0]
+    def most_res
+      #binding.pry
+      self.all.each do |element| 
+      #binding.pry 
+        element.listings.max_by {|listing| listing.reservations.length}
+        binding.pry
+      end#.neighborhood.city
+      # binding.pry
     end
 
-    def self.highest_ratio_res_to_listings
-      binding.pry
+    def highest_ratio_res_to_listings
+      #binding.pry
+      #self.all.max_by {|object| object.reservations.length}
     end
 
-    def self.neighborhood_openings(date1, date2)
+    def neighborhood_openings(date1, date2)
 
     end
 
 end
+
+# lib/ratios_extension.rb:15
+# spec/models/city_spec.rb:21
