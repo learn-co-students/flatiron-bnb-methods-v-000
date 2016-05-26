@@ -4,5 +4,12 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
-  
+ 
+
+  def duration
+  end
+
+  def total_price
+  end
+   
 end
