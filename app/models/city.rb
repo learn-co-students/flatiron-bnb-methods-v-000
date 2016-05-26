@@ -20,15 +20,12 @@ class City < ActiveRecord::Base
   end
 
   def self.highest_ratio_res_to_listings
-    ratio_array = self.all.map {|i| {ratio: i.ratio, instance: i}}
-    highest = ratio_array.sort_by{|hash| hash[:ratio] }.shift
-    highest[:instance]
+    self.all.max_by {|x| x.ratio}
   end
 
   def self.most_res
-    reserv = self.all.map {|i| {reservations: i.reservations.count, instance: i}}
-    most = reserv.sort_by{|hash| hash[:reservations]}.pop
-    most[:instance]
+   self.all.max_by {|x| x.reservations.count}
+
   end
 
 
