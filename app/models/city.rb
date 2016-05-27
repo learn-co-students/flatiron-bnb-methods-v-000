@@ -17,7 +17,7 @@ class City < ActiveRecord::Base
     if listings.count > 0  
       self.reservations.count.to_f / self.listings.count.to_f
     else 
-      0.0
+      0
     end
   end
 
