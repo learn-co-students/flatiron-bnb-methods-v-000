@@ -11,13 +11,6 @@ class Listing < ActiveRecord::Base
    after_destroy :remove_user_host_status
 
    
-  
-
-  def duration
-  end
-
-  def total_price
-  end
 
   def average_review_rating
     self.reviews.average(:rating)
