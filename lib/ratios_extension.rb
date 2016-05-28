@@ -2,12 +2,7 @@ module RatiosExtension
 
     def most_res
       #binding.pry
-      self.all.each do |element| 
-      #binding.pry 
-        element.listings.max_by {|listing| listing.reservations.length}
-        binding.pry
-      end#.neighborhood.city
-      # binding.pry
+      self.all.max_by {|city| city.reservations.length}
     end
 
     def highest_ratio_res_to_listings

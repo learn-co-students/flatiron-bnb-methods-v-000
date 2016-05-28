@@ -1,4 +1,8 @@
+#require_relative 'listing_availability.rb'
+
 class Reservation < ActiveRecord::Base
+  #include ActiveModel::Validations
+
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
 
@@ -8,6 +12,10 @@ class Reservation < ActiveRecord::Base
   validates :checkin, presence: true#, date: {on_or_before: :checkout}
   validates :checkout, presence: true
   #validates :user, uniqueness: {scope: :host, :guest}
+  #validates_presence_of :listing, :unless => { |a| a.status == "pending"}
+  STATUS = %w"pending"
+  validates_exclusion_of :status, :in => STATUS
+
 
   def valid_dates
     errors.add(:checkin, "checkin cannot equal checkout") if self.checkin == self.checkout
