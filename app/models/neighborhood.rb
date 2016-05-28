@@ -19,7 +19,6 @@ class Neighborhood < ActiveRecord::Base
 
   def self.most_res
     self.all.max_by {|neighborhood| neighborhood.reservations.length}
-    #self.all.max_by {|city| city.reservations.length}
   end
   
   def self.highest_ratio_res_to_listings

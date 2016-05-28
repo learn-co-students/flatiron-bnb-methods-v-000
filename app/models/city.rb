@@ -1,22 +1,14 @@
-require_relative '../../lib/ratios_extension.rb'
-
 class City < ActiveRecord::Base
-  #extend RatiosExtension
 
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
   has_many :reservations, :through => :listings
 
   def city_openings(date1, date2)
-    #binding.pry
-    self.reservations.collect do |reservation| 
-      range = reservation.checkin..reservation.checkout
-      if range === date1 || range === date2 
-        nil
-      else
-        reservation.listing
-        #binding.pry
-      end
+    range = date1..date2
+
+    listings.each do |listing|
+      listing.reservations.reject {|reservation| reservation != nil || (range === reservation.checkin) || (range === reservation.checkout) }
     end
   end
 

@@ -9,5 +9,4 @@ class User < ActiveRecord::Base
   has_many :trip_listings, :through => :trips, :source => :listing
   has_many :hosts, :through => :trip_listings, :foreign_key => 'host_id'
   
-  #validates :host, presence: true, uniqueness: true
 end
