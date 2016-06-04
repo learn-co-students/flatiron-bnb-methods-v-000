@@ -38,4 +38,5 @@ group :development, :test do
   gem "sqlite3"
   gem "pry"
   gem 'rack_session_access'
+  gem 'railroady'
 end
