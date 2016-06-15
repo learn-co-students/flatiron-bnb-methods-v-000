@@ -2,7 +2,7 @@ class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
-  def city_openings(checkin, checkout)
+  def city_openings(checkin_day, checkout_day)
     #uses checkin and checkout to determine
     #which listings are not booked/available listings
   end

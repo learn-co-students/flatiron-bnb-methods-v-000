@@ -3,8 +3,13 @@ class Review < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
 
   validates :rating, :description, :reservation, presence: true
-
+  validates :rating, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
   validate :reservation_accepted, :checked_out
+
+
+
+
+
 
 
   private
