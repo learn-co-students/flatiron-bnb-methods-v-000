@@ -27,7 +27,7 @@ gem 'spring',        group: :development
 # gem 'bcrypt', '~> 3.1.7'
 
 group :development, :test do
-  gem "rspec-rails"
+  gem "rspec-rails" 
   gem "capybara"
   gem "selenium-webdriver"
   gem "better_errors"
