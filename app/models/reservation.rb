@@ -3,8 +3,7 @@ class Reservation < ActiveRecord::Base
   validates :checkin, :checkout, presence: true
   validate :cannot_make_reservation_on_own_listing
   validate :same_checkin_and_checkout_date
-  validate :checkin_not_before_checkout
-  validate :listing_available
+  validate :listing_validations
   
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
@@ -23,19 +22,20 @@ class Reservation < ActiveRecord::Base
     end
   end
   
-  def listing_available
-    t1 = self.checkin
-    t2 = self.checkout
-      # if !self.listing.is_available?(t1,t2)
-      #   self.errors[:listing] << "this cannot be done!"
-      # end
-  end
-  
-  def checkin_not_before_checkout
+  def listing_validations
     if !self.checkin.nil? && !self.checkout.nil?
+
+      t1, t2 = self.checkin, self.checkout
+      self.listing.reservations.each do |reservation|
+        if t1 <= reservation.checkout && reservation.checkin <= t2
+          self.errors[:listing] << "bad"
+        end
+      end
+
       if self.checkin > self.checkout
         self.errors[:checkin] << "this cannot be done!"
       end
+
     end
   end
   
