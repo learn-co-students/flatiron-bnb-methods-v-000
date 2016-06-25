@@ -31,7 +31,7 @@ class City < ActiveRecord::Base
     end
     #creating a ratio based on the two previous hashes
     cities.each do |city|
-      @reservations_to_listings_ratio[city.id] = @reservations_hash[city.id].fdiv(@listings_hash[city.id])
+      @reservations_to_listings_ratio[city.id] = @reservations_hash[city.id].fdiv(@listings_hash[city.id]) if @reservations_hash[city.id] > 0 && @listings_hash[city.id] > 0
     end
     #sorting the newly created hash
     City.find(@reservations_to_listings_ratio.sort_by{ |key, value| value}.last[0])
@@ -48,15 +48,16 @@ class City < ActiveRecord::Base
     #listings within this city that are not available during that date range
     listings_not_available(checkin_string, checkout_string)
     #all listings that are available during that date range
-    all_listings.keep_if{ |listing| !@all_listings_in_date_range.include?(listing)}
+    all_listings.keep_if{ |listing| !@all_city_listings_in_date_range.include?(listing)}
 
   end
+
 
   def listings_not_available(checkin_string, checkout_string)
     checkin_date = Date.parse(checkin_string)
     checkout_date = Date.parse(checkout_string)
     all_reservations = []
-    @all_listings_in_date_range = []
+    @all_city_listings_in_date_range = []
     
     # 1) find all reservations
     Reservation.all.each do |reservation|
@@ -68,7 +69,7 @@ class City < ActiveRecord::Base
     all_reservations.keep_if{ |reservation| !(reservation.checkin > checkout_date) && !(reservation.checkout < checkin_date) }
     # 4) keeping the listings that are booked in a date range
     all_reservations.each do |reservation|
-      @all_listings_in_date_range << reservation.listing
+      @all_city_listings_in_date_range << reservation.listing
     end
   end
 
