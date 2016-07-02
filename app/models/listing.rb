@@ -10,6 +10,10 @@ class Listing < ActiveRecord::Base
   before_save :make_host
   before_destroy :undo_host
   
+  def average_review_rating
+    ratings = reviews.collect {|review| review.rating}
+    ratings.inject{ |sum, el| sum + el }.to_f / ratings.size
+  end
   
   private
   
