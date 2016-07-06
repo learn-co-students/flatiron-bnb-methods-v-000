@@ -9,6 +9,15 @@ class Listing < ActiveRecord::Base
   validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
 
 
+  def self.available(checkin_date, checkout_date)
+    if checkin_date && checkout_date
+      joins(:reservations).where.not(reservations:{checkin: ((checkin_date.to_datetime)..(checkout_date.to_datetime))}) & joins(:reservations).where.not(reservations:{checkout: ((checkin_date.to_datetime)..(checkout_date.to_datetime))})
+      else
+      []
+    end
+  end
+
+#where not the argument checkin is between the reservations checkin and checkout
 
   private
 
@@ -21,3 +30,8 @@ class Listing < ActiveRecord::Base
   end
 
   end
+
+
+
+  #Listing1 - Has a re 5/2-5/8 
+  #5/1-5/5
