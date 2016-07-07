@@ -21,15 +21,6 @@ class Reservation < ActiveRecord::Base
     listing_id_array = (r + r2).uniq
     !listing_id_array.include?(self.listing.id)
   end
-
-#def self.available(checkin_date, checkout_date)
- #   if checkin_date && checkout_date
-  #  r = Reservation.where(:checkin => checkin_date..checkout_date).pluck(:listing_id)
- #     r2 = Reservation.where(:checkout => checkin_date..checkout_date).pluck(:listing_id)
-  #    where("id not in (?)", r+r2)
-  #    else
- #     []
- #   end
  
 
  end
