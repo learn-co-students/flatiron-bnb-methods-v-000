@@ -6,7 +6,7 @@ class Reservation < ActiveRecord::Base
   before_validation :cannot_make_a_reservation_on_your_own_listing
   validates :checkin, :checkout, presence: true
 
-  before_create :check_if_listing_is_avaliable_before_making_a_reservation
+  validate :check_if_listing_is_avaliable_before_making_a_reservation
 
   
   def cannot_make_a_reservation_on_your_own_listing
@@ -16,9 +16,10 @@ class Reservation < ActiveRecord::Base
   def check_if_listing_is_avaliable_before_making_a_reservation
     checkin_time = self.checkin
     checkout_time = self.checkout
-    listing_id = self.listing_id
-    Listing.find(listing_id).each do |reservation|
-      (reservation.checkin..reservation.checkout).include?(checkin_time) || (reservation.checkin..reservation.checkout).include?(checkout_time)
+    @listing = Listing.find(self.listing_id)
+   
+    @listing.reservations.each do |reservation|
+    !(reservation.checkin..reservation.checkout).include?(checkin_time) && !(reservation.checkin..reservation.checkout).include?(checkout_time)
     end
   end
 
