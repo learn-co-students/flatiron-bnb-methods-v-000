@@ -18,8 +18,8 @@ class Reservation < ActiveRecord::Base
     checkout_time = self.checkout
     @listing = Listing.find(self.listing_id)
    
-    @listing.reservations.each do |reservation|
-    !(reservation.checkin..reservation.checkout).include?(checkin_time) && !(reservation.checkin..reservation.checkout).include?(checkout_time)
+    @listing.reservations.detect do |reservation|
+    !((reservation.checkin..reservation.checkout).include?(checkin_time)) && !((reservation.checkin..reservation.checkout).include?(checkout_time))
     end
   end
 
