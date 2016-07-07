@@ -16,11 +16,17 @@ class Reservation < ActiveRecord::Base
   def check_if_listing_is_avaliable_before_making_a_reservation
     checkin_time = self.checkin
     checkout_time = self.checkout
-    r = Reservation.where(:checkin => checkin_time..checkout_time).pluck(:listing_id)
-    r2 = Reservation.where(:checkout => checkin_time..checkout_time).pluck(:listing_id)
-    listing_id_array = (r + r2).uniq
-    !listing_id_array.include?(self.listing.id)
+    listing_id = self.listing_id
+    Listing.find(listing_id).each do |reservation|
+      (reservation.checkin..reservation.checkout).include?(checkin_time) || (reservation.checkin..reservation.checkout).include?(checkout_time)
+    end
   end
+
+    #r = Reservation.where(:checkin => checkin_time..checkout_time).pluck(:listing_id)
+   # r2 = Reservation.where(:checkout => checkin_time..checkout_time).pluck(:listing_id)
+   # listing_id_array = (r + r2).uniq
+   # !listing_id_array.include?(self.listing.id)
+  #end
  
 
  end
