@@ -9,13 +9,32 @@ class Listing < ActiveRecord::Base
   validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
 
 
+ # def self.available(checkin_date, checkout_date)
+ #   if checkin_date && checkout_date
+  #    joins(:reservations).where.not(reservations:{checkin: (checkin_date..checkout_date)}) & joins(:reservations).where.not(reservations:{checkout: (checkin_date..checkout_date)})
+  #    else
+   #   []
+ #   end
+#  end
+
   def self.available(checkin_date, checkout_date)
     if checkin_date && checkout_date
-      joins(:reservations).where.not(reservations:{checkin: ((checkin_date.to_datetime)..(checkout_date.to_datetime))}) & joins(:reservations).where.not(reservations:{checkout: ((checkin_date.to_datetime)..(checkout_date.to_datetime))})
+      r = Reservation.where(:checkin => checkin_date..checkout_date).pluck(:listing_id)
+      r2 = Reservation.where(:checkout => checkin_date..checkout_date).pluck(:listing_id)
+      where("id not in (?)", r+r2)
       else
       []
     end
   end
+
+ # def self.most_listings
+ #   binding.pry
+  #  array = []
+ #   Listing.joins(:reservations).each do |listing|
+  #    array << listing.reservations.count
+  #  end
+   # joins(:reservations).where(.reservations.count = array.max)
+ # end
 
 #where not the argument checkin is between the reservations checkin and checkout
 
@@ -30,7 +49,6 @@ class Listing < ActiveRecord::Base
   end
 
   end
-
 
 
   #Listing1 - Has a re 5/2-5/8 

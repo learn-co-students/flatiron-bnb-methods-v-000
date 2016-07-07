@@ -6,6 +6,33 @@ class City < ActiveRecord::Base
     Listing.available(checkin_date,checkout_date).uniq & self.listings
   end
 
+  def self.highest_ratio_res_to_listings
+
+  end
+
+  def self.most_res
+    largest_reservation_city = []
+    City.joins(listings: :reservations).group(:city_id).maximum(:listing_id).each do |key,value|
+      largest_reservation_city << key
+      end
+    City.find_by(id: (largest_reservation_city[0]))
+  end
+
+
+    #city_information = cities.max_by{|key, value| value}
+    
+
+    #City.find(city_information[0])
+
+
+    #cities = City.joins(listings: :reservations).group(:city_id)
+
+
+    #Listing.joins(:reservations).group("listing_id").count.maxL 
+    #this gives me the listing with the amount of reservations they have. 
+
+  # city that is most full. city with the highest amount of reservations. 
+
 #should return listing 2, 3
    
    #where.not where.not(reservations: {checkin: checkin_date..checkout_date}

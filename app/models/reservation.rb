@@ -14,4 +14,8 @@ class Reservation < ActiveRecord::Base
     self.checkin < self.checkout
   end
 
+  def self.check_reservations_by_city
+    binding.pry
+  end
+
 end
