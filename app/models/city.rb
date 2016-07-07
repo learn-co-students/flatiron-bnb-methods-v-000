@@ -7,87 +7,32 @@ class City < ActiveRecord::Base
   end
 
   def self.highest_ratio_res_to_listings
-
+    reservations = {}
+    self.all.each do |city|
+      reservation_count = 0
+      city_listing_count = 0
+      city_listing_count += city.listings.count
+      city.listings.each do |listing|
+        reservation_count += listing.reservations.count
+      end
+      reservations[city.id] = (reservation_count / city_listing_count).to_f
+    end
+    City.find(reservations.max_by{ |k,v| v}.first)
   end
 
   def self.most_res
-    largest_reservation_city = []
-    City.joins(listings: :reservations).group(:city_id).maximum(:listing_id).each do |key,value|
-      largest_reservation_city << key
+    reservations = {}
+
+    self.all.each do |city|
+      reservation_count = 0
+      city.listings.each do |listing|
+        reservation_count += listing.reservations.count
       end
-    City.find_by(id: (largest_reservation_city[0]))
+      reservations[city.id] = reservation_count
+      end
+    City.find(reservations.max_by{ |k, v| v}.first)
   end
 
 
-    #city_information = cities.max_by{|key, value| value}
-    
-
-    #City.find(city_information[0])
-
-
-    #cities = City.joins(listings: :reservations).group(:city_id)
-
-
-    #Listing.joins(:reservations).group("listing_id").count.maxL 
-    #this gives me the listing with the amount of reservations they have. 
-
-  # city that is most full. city with the highest amount of reservations. 
-
-#should return listing 2, 3
-   
-   #where.not where.not(reservations: {checkin: checkin_date..checkout_date}
-   # joins(:reservations)
-   #Listing.joins(:reservations, :city).where.not(reservations:{checkin: checkin_date..checkout_date})
-
-  # binding.pry
- #  reservations_array = []
-
-  #  self.listings.each do |listing|
-   #  reservations_array << listing.reservations
-  #    end
-    
-   
-   #   listings_array = []
-#     i = 0
- #      until reservations_array[i] == nil
-  #      reservations_array[i].each do |reservation|
-   #       if !(checkin_date.to_date..checkout_date.to_date).overlaps?(reservation.checkin..reservation.checkout)
-    #        listings_array << reservation.listing 
-     #     end
-  #      end
-   #     i += 1
-    #  end
-  #  listings_array = listings_array.uniq
-   # listings_array
-
-  #  end
-
-    #reservations.find_all{|x| if (checkin_date - x.checkin_date)}
-
-
-
-    #city - neighborhood - listings - reservations
-    #reservations checks the dates inputted
-    #city.listings[0].reservations - will give all the reservations from that first listing.
-    #city.listings.each etc 
-
-    #city.listings.each do |listing|
-     # listing.reservations.find_all {|x| x.checkin > checkout_date}
-#  end
-
-  #def self.most_res
-  #  city.listings.find_all{ |x| maximum(x.reservations.count_}
-
- # array =[]    
- # city.listings.each do |x|
-  #  array << x.reservations.count
-  #  array.sum
-
- # end
-
 end
 
-
-
-#(start date - other end date) * ( other start date - end date ) >= 0 
-# this will tell if dates overlap. 

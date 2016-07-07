@@ -8,14 +8,9 @@ class Listing < ActiveRecord::Base
 
   validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
 
+  before_create :host_status_change_to_true
+  before_destroy :host_status_change_to_false
 
- # def self.available(checkin_date, checkout_date)
- #   if checkin_date && checkout_date
-  #    joins(:reservations).where.not(reservations:{checkin: (checkin_date..checkout_date)}) & joins(:reservations).where.not(reservations:{checkout: (checkin_date..checkout_date)})
-  #    else
-   #   []
- #   end
-#  end
 
   def self.available(checkin_date, checkout_date)
     if checkin_date && checkout_date
@@ -27,29 +22,29 @@ class Listing < ActiveRecord::Base
     end
   end
 
- # def self.most_listings
- #   binding.pry
-  #  array = []
- #   Listing.joins(:reservations).each do |listing|
-  #    array << listing.reservations.count
-  #  end
-   # joins(:reservations).where(.reservations.count = array.max)
- # end
-
-#where not the argument checkin is between the reservations checkin and checkout
+  def average_review_rating
+    total_review_rating_counter = 0
+    review_count = self.reviews.count
+      self.reviews.each do |review|
+        total_review_rating_counter  += review.rating
+      end
+    total_review_rating_counter  / review_count.to_f
+  end
 
   private
 
   def host_status_change_to_true
-    self.host.host = true
+    @user = User.find(self.host.id)
+    @user.host = true
+    @user.save
   end
 
   def host_status_change_to_false
-    self.host.host = false 
+      @user = User.find(self.host.id)
+      if @user.listings.count <= 1
+        @user.host = false
+        @user.save
+      end
   end
 
-  end
-
-
-  #Listing1 - Has a re 5/2-5/8 
-  #5/1-5/5
+end
