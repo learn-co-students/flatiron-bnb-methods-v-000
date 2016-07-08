@@ -4,9 +4,9 @@ class Reservation < ActiveRecord::Base
   has_one :review
 
   before_validation :cannot_make_a_reservation_on_your_own_listing
-  validates :checkin, :checkout, presence: true
-
   validate :check_if_listing_is_avaliable_before_making_a_reservation
+  validate :checkin_is_before_checkout
+  validates :checkin, :checkout, presence: true
 
   
   def cannot_make_a_reservation_on_your_own_listing
@@ -14,20 +14,27 @@ class Reservation < ActiveRecord::Base
   end
 
   def check_if_listing_is_avaliable_before_making_a_reservation
-    checkin_time = self.checkin
-    checkout_time = self.checkout
-    @listing = Listing.find(self.listing_id)
-   
-    @listing.reservations.detect do |reservation|
-    !((reservation.checkin..reservation.checkout).include?(checkin_time)) && !((reservation.checkin..reservation.checkout).include?(checkout_time))
+    self.listing.reservations.each do |res|
+      reservation_dates = (res.checkin..res.checkout)
+      if reservation_dates === self.checkin || reservation_dates === self.checkout
+        errors.add(:guest_id, "No available dates")
+      end 
     end
   end
 
-    #r = Reservation.where(:checkin => checkin_time..checkout_time).pluck(:listing_id)
-   # r2 = Reservation.where(:checkout => checkin_time..checkout_time).pluck(:listing_id)
-   # listing_id_array = (r + r2).uniq
-   # !listing_id_array.include?(self.listing.id)
-  #end
- 
+  def checkin_is_before_checkout
+    if !checkin || !checkout || checkin > checkout || checkin == checkout
+      errors.add(:guest_id)
+    end
+  end
+
+  def duration
+    checkout-checkin
+  end
+
+  def total_price
+    duration.to_i * (listing.price.to_i)
+  end
 
  end
+
