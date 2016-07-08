@@ -13,10 +13,7 @@ class Listing < ActiveRecord::Base
 
   def average_review_rating
     reviews.average(:rating)
-   # total = reviews.(:ratings).inject(0){|sum,x| sum + x }
-   # len = reviews.(:ratings).length
-   #  average = total.to_f / len
-   #  average
+
   end
   
 
