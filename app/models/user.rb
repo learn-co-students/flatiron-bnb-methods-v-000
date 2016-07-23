@@ -13,6 +13,8 @@ class User < ActiveRecord::Base
   ## As a host
   has_many :guests, :through => :reservations, :class_name => "User"
   has_many :host_reviews, :through => :guests, source: :reviews
+
+  ### For an explanation on the use of :source in has_one/has_many, through: association: http://stackoverflow.com/questions/4632408/need-help-to-understand-source-option-of-has-one-has-many-through-of-rails#
   
 end
   
