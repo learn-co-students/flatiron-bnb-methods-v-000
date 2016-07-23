@@ -1,4 +1,6 @@
 class Listing < ActiveRecord::Base
+  ## See solution for cleaner and more descriptive methods :)
+
   belongs_to :neighborhood
   belongs_to :host, :class_name => "User"
   has_many :reservations

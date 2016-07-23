@@ -1,4 +1,6 @@
 class Review < ActiveRecord::Base
+  ## See solution for cleaner and more descriptive methods :)
+
   belongs_to :reservation
   belongs_to :guest, :class_name => "User"
 

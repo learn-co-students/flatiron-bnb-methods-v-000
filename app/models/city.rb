@@ -1,4 +1,6 @@
 class City < ActiveRecord::Base
+  ## See solution for cleaner and more descriptive methods :)
+
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 

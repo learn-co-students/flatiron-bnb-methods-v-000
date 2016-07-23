@@ -1,4 +1,6 @@
 class Neighborhood < ActiveRecord::Base
+  ## See solution for cleaner and more descriptive methods :)
+
   belongs_to :city
   has_many :listings
 
