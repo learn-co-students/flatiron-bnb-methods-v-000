@@ -5,12 +5,12 @@ class Review < ActiveRecord::Base
   validates_presence_of :rating
   validates_presence_of :description
   validates_presence_of :reservation
-  validate :checkout_has_happened
+  validate :checked_out
 
 
   private
 
-  def checkout_has_happened
+  def checked_out
     if res = Reservation.find_by(id: reservation_id)
       if res.status == "accepted"
         if Date.today < res.checkout
