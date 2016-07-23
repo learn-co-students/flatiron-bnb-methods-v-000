@@ -26,7 +26,7 @@ class Reservation < ActiveRecord::Base
 
   def no_res_for_host
     if self.guest_id == listing.host_id
-      errors.add(:guest, "cannot make reservation on own listing")
+      errors.add(:guest, "Can't book your own listing, yo!")
     end
   end
 
