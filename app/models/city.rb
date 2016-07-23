@@ -4,10 +4,10 @@ class City < ActiveRecord::Base
 
 #private
 
-  def city_openings(date_start, date_end)
+  def city_openings(checkin, checkout)
     self.listings.each do |listing|
       listing.reservations.collect do |reservation|
-        if reservation.checkin == date_start && reservation.checkout == date_end
+        if reservation.checkin == checkin && reservation.checkout == checkout
           listing
         end
       end
