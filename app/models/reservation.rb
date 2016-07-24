@@ -7,7 +7,8 @@ class Reservation < ActiveRecord::Base
   validates :checkout, presence: true
 
   validate :not_host
-  validate :available?
+  validate :available
+  validate :checkout_after_checkin
 
   def duration
     (self.checkout - self.checkin).to_i
@@ -19,19 +20,31 @@ class Reservation < ActiveRecord::Base
     end
   end
 
-   def available?
-  #   reservation = self.listing_id
-  #   if checkin && checkout
-  #     reservation.each do |res|
-  #       if id == res.id
-  #         break
-  #       elsif checkin.between?(res.checkin, res.checkout)
-  #         errors.add(:checkin, "Listing is unavailable")
-  #       elsif checkout.between?(res.checkin, res.checkout)
-  #         errors.add(:checkout, "Listing is unavailable")
-  #       end
-  #     end
-  #   end
+  def total_price
+     self.listing.price * duration
+  end
+
+  def checkout_after_checkin
+    if self.checkout && self.checkin
+      if self.checkout <= self.checkin
+        errors.add(:guest_id, "Your checkin must be before your checkout")
+      end
+    end
+  end
+
+   def available
+    reservation = Reservation.where(listing_id: listing_id)
+    if checkin && checkout
+      reservation.each do |res|
+        if id == res.id
+          break
+        elsif checkin.between?(res.checkin, res.checkout)
+          errors.add(:checkin, "Listing is unavailable")
+        elsif checkout.between?(res.checkin, res.checkout)
+          errors.add(:checkout, "Listing is unavailable")
+        end
+      end
+    end
    end
 
 end
