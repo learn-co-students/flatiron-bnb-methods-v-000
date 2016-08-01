@@ -10,5 +10,9 @@ class Listing < ActiveRecord::Base
   validates :listing_type, presence: true
   validates :price, presence: true
   validates :title, presence: true
+  validates :neighborhood_id, presence: true
+  
+  # before_save :
+  #after_destroy :
 
 end

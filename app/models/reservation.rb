@@ -5,6 +5,13 @@ class Reservation < ActiveRecord::Base
 
   validates :checkin, presence: true
   validates :checkout, presence: true
+  validate :not_host
 
+  private
+  def not_host
+    if self.guest_id == self.listing.host_id
+      errors.add(:guest_id, "You can't book your own listing.")
+    end
+  end
 
 end
