@@ -9,7 +9,7 @@ class Review < ActiveRecord::Base
             only_integer: true
           }
   validates :reservation, presence: true
-  # validates :review_after_checkout
+  validate :review_after_checkout
 
   private
     def review_after_checkout
@@ -18,5 +18,15 @@ class Review < ActiveRecord::Base
       end
     end
 
+    # def average_review_rating
+    #   count = 0
+    #   @total_ratings = 0
+    #
+    #   reviews.all.each do |rating|
+    #     count = count += 1
+    #     @total_ratings += review.rating
+    #   end
+    #   (@total_ratings / count)
+    # end
 
 end

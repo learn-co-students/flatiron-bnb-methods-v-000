@@ -2,10 +2,18 @@
 module Reservable
    extend ActiveSupport::Concern
 
-  # def openings(start_date, end_date)
-  #   listings.merge(Listing.available(start_date, end_date))
-  # end
-  #
+
+
+  def city_openings(date1, date2)
+    @listings = Listing.all
+    # date1 = checkin.parse
+    # date2 = checkout.parse
+    # listings.merge(Listing.available(checkin, checkout))
+  end
+
+
+
+
   # def ratio_reservations_to_listings
   #   if listings.count > 0
   #     reservations.count.to_f / listings.count.to_f
