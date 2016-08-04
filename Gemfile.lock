@@ -208,7 +208,10 @@ DEPENDENCIES
   sdoc (~> 0.4.0)
   selenium-webdriver
   simplecov
-  spring
+  spring (~> 1.3.3)
   sprockets_better_errors
   sqlite3
   uglifier (>= 1.3.0)
+
+BUNDLED WITH
+   1.12.5
