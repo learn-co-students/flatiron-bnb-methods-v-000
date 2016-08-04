@@ -18,8 +18,9 @@ class Reservation < ActiveRecord::Base
    end
 
    def listing_available
-     binding.pry
-     self.listing.neighborhood
+    unless self.listing.neighborhood.neighborhood_openings(checkin, checkout).include?(self.listing)
+      errors.add(:listing, "that listing is not available")
+    end
    end
 
 end
