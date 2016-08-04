@@ -23,6 +23,9 @@ class Reservation < ActiveRecord::Base
 
   private
 
+
+
+
    def cannot_reserve_your_listing
      listing = Listing.find(listing_id)
      if guest_id.present? && guest_id == listing.host_id
