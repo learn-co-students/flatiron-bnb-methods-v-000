@@ -3,6 +3,7 @@ class Neighborhood < ActiveRecord::Base
   require_relative 'res'
   include Openings
   extend Res
+  
   belongs_to :city
   has_many :listings
   has_many :reservations, through: :listings

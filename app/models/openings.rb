@@ -1,7 +1,6 @@
 module Openings
 
   def openings(date1, date2)
-    #binding.pry
     @all_list = Listing.all.map{|list| list}
     @all_list.each do |e|
       if e.neighborhood != self && e.city != self

@@ -32,7 +32,5 @@ class Listing < ActiveRecord::Base
   def average_review_rating
     ratings = self.reviews.map{|rev| rev.rating}
     avg = (ratings.inject(0){|sum, x| sum + x} / ratings.length.to_f)
-  end
-
-  
+  end 
 end

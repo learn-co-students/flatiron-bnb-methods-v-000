@@ -42,7 +42,5 @@ class User < ActiveRecord::Base
 
   def to_guest
     self.update(host: false)
-  end
-
-  
+  end  
 end

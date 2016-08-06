@@ -19,7 +19,7 @@ module Res
     @target = @winner["area"]
   end
 
-  
+
   def highest_ratio_res_to_listings
     @winner = {}
     self.all.each do |area|
@@ -31,9 +31,7 @@ module Res
         end
         if @winner["ratio"].nil? 
           @winner["area"] = area
-          @winner["ratio"] = ratio
-        #elsif @winner["area"] == area
-         # @winner["ratio"] += ratio  
+          @winner["ratio"] = ratio  
         elsif ratio > @winner["ratio"] 
           @winner["area"] = area
           @winner["ratio"] = ratio
@@ -42,7 +40,4 @@ module Res
     end
     @target = @winner["area"]
   end
-
-
-
 end
