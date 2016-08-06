@@ -20,6 +20,29 @@ module Res
   end
 
   
+  def highest_ratio_res_to_listings
+    @winner = {}
+    self.all.each do |area|
+      list_count = area.listings.count
+      area.listings.each do |list|
+        res_count = list.reservations.count
+        if list_count != 0
+         ratio = (res_count / list_count.to_f)
+        end
+        if @winner["ratio"].nil? 
+          @winner["area"] = area
+          @winner["ratio"] = ratio
+        #elsif @winner["area"] == area
+         # @winner["ratio"] += ratio  
+        elsif ratio > @winner["ratio"] 
+          @winner["area"] = area
+          @winner["ratio"] = ratio
+        end
+      end
+    end
+    @target = @winner["area"]
+  end
+
 
 
 end

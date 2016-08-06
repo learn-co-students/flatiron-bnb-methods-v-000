@@ -9,5 +9,5 @@ class City < ActiveRecord::Base
   def city_openings(date1, date2)
     self.openings(date1, date2)
   end
-
 end
+
