@@ -35,11 +35,11 @@ RSpec.configure do |config|
     @listing3 = Listing.create(address: '44 Ridge Lane', listing_type: "whole house", title: "Beautiful Home on Mountain", description: "Whole house for rent on mountain. Many bedrooms.", price: 200.00, neighborhood_id: @nabe3.id, host_id: @arel.id)
     @listing4 = Listing.create(address: '4782 Yaya Lane', listing_type: "private room", title: "Beautiful Room in awesome house", description: "Art collective hosue.", price: 400.00, neighborhood_id: @nabe4.id, host_id: @arel.id)
 
-    @reservation1 = Reservation.create(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: @listing1.id, guest_id: @logan.id, :status => "accepted")
-    @reservation2 = Reservation.create(checkin: '2014-03-10', checkout: '2014-03-25', listing_id: @listing2.id, guest_id: @tristan.id, :status => "accepted")
-    @reservation3 = Reservation.create(checkin: '2014-06-02', checkout: '2014-06-30', listing_id: @listing4.id, guest_id: @avi.id, :status => "accepted")
-    @reservation4 = Reservation.create(checkin: '2014-05-02', checkout: '2014-05-08', listing_id: @listing1.id, guest_id: @tristan.id, :status => "accepted")
-    @reservation5 = Reservation.create(checkin: '2014-05-10', checkout: '2014-05-15', listing_id: @listing1.id, guest_id: @logan.id, :status => "accepted")
+    @reservation1 = Reservation.create(check_in: '2014-04-25', check_out: '2014-04-30', listing_id: @listing1.id, guest_id: @logan.id, :status => "accepted")
+    @reservation2 = Reservation.create(check_in: '2014-03-10', check_out: '2014-03-25', listing_id: @listing2.id, guest_id: @tristan.id, :status => "accepted")
+    @reservation3 = Reservation.create(check_in: '2014-06-02', check_out: '2014-06-30', listing_id: @listing4.id, guest_id: @avi.id, :status => "accepted")
+    @reservation4 = Reservation.create(check_in: '2014-05-02', check_out: '2014-05-08', listing_id: @listing1.id, guest_id: @tristan.id, :status => "accepted")
+    @reservation5 = Reservation.create(check_in: '2014-05-10', check_out: '2014-05-15', listing_id: @listing1.id, guest_id: @logan.id, :status => "accepted")
 
     @review1 = Review.create(description: "This place was great!", rating: 5, guest_id: @logan.id, reservation_id: Reservation.first.id)
     @review2 = Review.create(description: "Great place, close to subway!", rating: 4, guest_id: @tristan.id, reservation_id: Reservation.first.id)
@@ -59,18 +59,18 @@ def make_denver
     neighborhood_id: lakewood.id,
     host_id: User.first.id
   )
-  checkin_day = 1
+  check_in_day = 1
   6.times do |i|
     guest_id = i + 1
     if guest_id != listing.host.id
       Reservation.create(
-        checkin: "2014-08-#{checkin_day}",
-        checkout: "2014-08-#{checkin_day + 3}",
+        check_in: "2014-08-#{check_in_day}",
+        check_out: "2014-08-#{check_in_day + 3}",
         listing_id: listing.id,
         guest_id: "#{guest_id}",
         status: "accepted"
       )
-      checkin_day += 5
+      check_in_day += 5
     end
   end
 end
