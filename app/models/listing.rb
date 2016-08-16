@@ -10,10 +10,24 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
-  after_create :true_host
+  after_create :change_host
+  after_destroy :change_host
 
-  def true_host
-    self.host.host = true
+  def average_review_rating
+    total_reviews = self.reviews.count
+    total_score = 0
+    self.reviews.each do |x|
+      total_score += x.rating
+    end
+    total_score.to_f / total_reviews
+  end
+
+  def change_host
+    if self.host.listings.empty?
+      self.host.update(host: false)
+    else
+      self.host.update(host: true)
+    end
   end
 
   def available?(checkin, checkout)
