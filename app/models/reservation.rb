@@ -3,8 +3,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
 
-  validates :checkin, presence: true
-  validates :checkout, presence: true
+  validates :checkin, :checkout, presence: true
   
   validate :host_cannot_be_guest, :listing_available
 
@@ -17,7 +16,8 @@ class Reservation < ActiveRecord::Base
   end
 
   def listing_available
-    if checkin && checkout && (checkin_changed? || checkout_changed?) && !listing.available?(checkin, checkout)
+    if checkin && checkout && (checkin_changed? || checkout_changed? || !changed?) && 
+      !listing.available?(checkin, checkout)
       errors.add(:guest_id, "dates unavailable")
     end
   end
