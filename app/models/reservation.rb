@@ -16,8 +16,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def listing_available
-    if checkin && checkout && (checkin_changed? || checkout_changed? || !changed?) && 
-      !listing.available?(checkin, checkout, id)
+    if checkin && checkout && !listing.available?(checkin, checkout, id)
       errors.add(:guest_id, "dates unavailable")
     end
   end
