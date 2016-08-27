@@ -2,7 +2,7 @@ module Reservable
   extend ActiveSupport::Concern
 
   def openings(start_date, end_date)
-    listings.collect{|l| l if l.available?(start_date, end_date)}
+    listings.collect{|l| l if l.available?(Date.parse(start_date), Date.parse(end_date))}
   end
 
   def res_to_listings_ratio

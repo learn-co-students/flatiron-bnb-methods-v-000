@@ -15,9 +15,8 @@ class Listing < ActiveRecord::Base
   after_create :make_creating_user_host
   before_destroy :remove_host_status_from_listingless_user
   
-  def available?(start_date, end_date, id = nil)
-    range = start_date..end_date
-    !reservations.where.not(id: id).detect{|r| range === r.checkin || range === r.checkout}
+  def available?(start_date, end_date, res_id = nil)
+    !reservations.where.not(id: res_id).detect{|r| (start_date-r.checkout).numerator <= 0 && (r.checkin-end_date).numerator <= 0}
   end
 
   def average_review_rating
