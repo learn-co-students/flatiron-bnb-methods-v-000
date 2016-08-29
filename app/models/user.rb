@@ -10,5 +10,5 @@ class User < ActiveRecord::Base
 
   ## As a host
   has_many :guests, :through => :reservations, :class_name => "User"
-  has_many :host_reviews, :through => :guests, :source => :reviews
+  has_many :host_reviews, :through => :listings, :source => :reviews
 end
