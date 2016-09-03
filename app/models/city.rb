@@ -28,17 +28,46 @@ class City < ActiveRecord::Base
 
   # Class Methods:
 
-  def self.highest_ratio_res_to_listings # Will always be <= 1
-    ratios = {}
+  ### highest_ratio_res_to_listings Version 1 ###
+  # def self.highest_ratio_res_to_listings # Will always be <= 1
+  #   ratios = {}
+  #
+  #   self.all.each do |city|
+  #     res_count = 0
+  #     city.listings.each do |listing|
+  #       res_count += listing.reservations.size
+  #     end
+  #     ratios[city.name] = res_count/city.listings.size
+  #   end
+  #   self.find_by(name: ratios.max_by {|k,v| v}[0]) # Return the City object
+  # end
 
-    self.all.each do |city|
-      res_count = 0
-      city.listings.each do |listing|
-        res_count += listing.reservations.size
-      end
-      ratios[city.name] = res_count/city.listings.size
+  ### ALTERNATE - highest_ratio_res_to_listings Version 2 ####
+  # this has less code but more #find_by calls, not sure if better or not?
+  def self.highest_ratio_res_to_listings
+    ratios = {}
+    self.res_counts.each do |city_name, num_res|
+      ratios[city_name] = num_res/self.find_by(name: city_name).listings.size
     end
     self.find_by(name: ratios.max_by {|k,v| v}[0]) # Return the City object
+  end
+  ### END ALTERNATE ###
+
+
+  def self.most_res
+    self.find_by(name: self.res_counts.max_by {|k, v| v}[0])
+  end
+
+  def self.res_counts
+    res_counts_hash = {}
+    self.all.each do |city|
+      count = 0
+      city.listings.each do |listing|
+        count += listing.reservations.size
+      end
+      res_counts_hash[city.name] = count
+    end
+    res_counts_hash
   end
 
 end
