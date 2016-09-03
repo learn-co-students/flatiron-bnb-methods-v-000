@@ -4,7 +4,6 @@ class City < ActiveRecord::Base
 
   def city_openings(desired_checkin, desired_checkout)
     problem_listings = []
-    # cycle through all the listings of self
     self.listings.each do |listing|
       listing.reservations.each do |reservation|
         if reservation_conflict?(reservation, desired_checkin, desired_checkout)
@@ -16,9 +15,9 @@ class City < ActiveRecord::Base
   end
 
   def reservation_conflict?(reservation, ckin, ckout)
-    # return true if there is a conflict
     desired_checkin = ckin.to_date
     desired_checkout = ckout.to_date
+    # return true if there is a conflict
     if reservation.checkout > desired_checkin && reservation.checkout < desired_checkout
       return true
     elsif reservation.checkin > desired_checkin && reservation.checkin < desired_checkin
@@ -30,8 +29,6 @@ class City < ActiveRecord::Base
   # Class Methods:
 
   def self.highest_ratio_res_to_listings # Will always be <= 1
-    # City.listings.size => number of listings in a city.
-    # City.listings.reservations.size => number of reservations on one listing
     ratios = {}
 
     self.all.each do |city|
@@ -41,7 +38,7 @@ class City < ActiveRecord::Base
       end
       ratios[city.name] = res_count/city.listings.size
     end
-    self.find_by(name: ratios.max_by {|k,v| v}[0])
+    self.find_by(name: ratios.max_by {|k,v| v}[0]) # Return the City object
   end
 
 end
