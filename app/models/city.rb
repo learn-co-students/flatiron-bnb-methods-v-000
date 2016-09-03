@@ -26,4 +26,22 @@ class City < ActiveRecord::Base
     end
     return false
   end
+
+  # Class Methods:
+
+  def self.highest_ratio_res_to_listings # Will always be <= 1
+    # City.listings.size => number of listings in a city.
+    # City.listings.reservations.size => number of reservations on one listing
+    ratios = {}
+
+    self.all.each do |city|
+      res_count = 0
+      city.listings.each do |listing|
+        res_count += listing.reservations.size
+      end
+      ratios[city.name] = res_count/city.listings.size
+    end
+    self.find_by(name: ratios.max_by {|k,v| v}[0])
+  end
+
 end
