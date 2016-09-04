@@ -6,5 +6,9 @@ class User < ActiveRecord::Base
 
   has_many :guests, :class_name => "User", :through => :reservations
 
-  # has_many :hosts, :class_name => "User", :through => :reservations, :source => :listings
+  # need to clarify
+  has_many :wtf_join, :through => :trips, :source => :listing
+  has_many :hosts, :through => :wtf_join, :foreign_key => :host_id
+
+  has_many :host_reviews, through: :guests, source: :reviews
 end
