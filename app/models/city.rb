@@ -28,26 +28,16 @@ class City < ActiveRecord::Base
 
   # Class Methods:
 
-  ### highest_ratio_res_to_listings Version 1 ###
-  # def self.highest_ratio_res_to_listings # Will always be <= 1
-  #   ratios = {}
-  #
-  #   self.all.each do |city|
-  #     res_count = 0
-  #     city.listings.each do |listing|
-  #       res_count += listing.reservations.size
-  #     end
-  #     ratios[city.name] = res_count/city.listings.size
-  #   end
-  #   self.find_by(name: ratios.max_by {|k,v| v}[0]) # Return the City object
-  # end
-
-  ### ALTERNATE - highest_ratio_res_to_listings Version 2 ####
-  # this has less code but more #find_by calls, not sure if better or not?
   def self.highest_ratio_res_to_listings
     ratios = {}
-    self.res_counts.each do |city_name, num_res|
-      ratios[city_name] = num_res/self.find_by(name: city_name).listings.size
+    self.res_counts.each do |name, num_res|
+      # ratios[city_name] = num_res/self.find_by(name: city_name).listings.size
+      num_listings = self.find_by(name: name).listings.size
+      if num_listings == 0
+        ratios[name] = 0
+      else
+        ratios[name] = num_res/num_listings
+      end
     end
     self.find_by(name: ratios.max_by {|k,v| v}[0]) # Return the City object
   end
