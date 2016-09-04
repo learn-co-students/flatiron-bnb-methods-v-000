@@ -6,7 +6,18 @@ class Reservation < ActiveRecord::Base
   validates :checkin, :checkout, presence: true
   validate :not_own_listing
   validate :dates_available
+  validate :checkin_before_checkout
 
+  # instance methods
+  def duration
+    self.checkout - self.checkin
+  end
+
+  def total_price
+    self.listing.price * self.duration
+  end
+
+  # Class methods
 
   private
 
@@ -24,7 +35,7 @@ class Reservation < ActiveRecord::Base
 
   def available?
     # select all reservations with checkin dates on or after the desired checkin date. Make sure the checkin date is then on or after the desired checkout date.
-    return false if self.checkin == nil || self.checkout == nil
+    return false if dates_nil?
     list_of_upcoming_res = self.listing.reservations.select do |res|
       res.checkout >= self.checkin unless res.checkin >= self.checkout
     end
@@ -32,6 +43,20 @@ class Reservation < ActiveRecord::Base
       res.checkin < self.checkout
     end
     return true if conflicting_res.empty?
+    return false
+  end
+
+  def checkin_before_checkout
+    if !dates_nil?
+      if self.checkin >= self.checkout
+        errors.add(:dates, "are not chronological")
+      end
+    end
+  end
+
+  # helper methods
+  def dates_nil?
+    return true if self.checkin == nil || self.checkout == nil
     return false
   end
 
