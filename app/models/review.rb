@@ -3,7 +3,6 @@ class Review < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
 
   validates :rating, :description, presence: true
-
   validate :has_completed_reservation
 
   private
