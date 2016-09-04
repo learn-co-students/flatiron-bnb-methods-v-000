@@ -51,7 +51,7 @@ class City < ActiveRecord::Base
     end
     self.find_by(name: ratios.max_by {|k,v| v}[0]) # Return the City object
   end
-  ### END ALTERNATE ###
+  ### end ALTERNATE ###
 
 
   def self.most_res

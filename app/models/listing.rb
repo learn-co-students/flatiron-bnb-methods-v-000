@@ -12,6 +12,14 @@ class Listing < ActiveRecord::Base
   # using after_destroy. Might need before_destroy in order to see object attributes?
   after_destroy :check_user_host_status
 
+  def average_review_rating
+    sum = 0
+    self.reviews.each do |review|
+      sum += review.rating
+    end
+    sum.to_f/self.reviews.size
+  end
+
   private
 
   def toggle_user_host_status
