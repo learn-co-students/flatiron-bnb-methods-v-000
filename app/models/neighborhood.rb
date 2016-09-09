@@ -26,12 +26,16 @@ class Neighborhood < ActiveRecord::Base
         res_count += listing.reservations.count
       end
       res_count
+    else
+      res_count = 0
     end
   end
 
   def ratio_reservations_to_listings
-    if listings.count > 0
+    if listings.count > 0 && res_count > 0
       res_count.to_f / listings.count.to_f
+    else
+      return 0
     end
   end
 
