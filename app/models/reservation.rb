@@ -4,7 +4,9 @@ class Reservation < ActiveRecord::Base
   has_one :review
 
   validates_presence_of :checkin, :checkout
-  validate :host_is_not_guest, :checkout_after_checkin, :checkin_checkout_different, :is_available
+  validate :host_is_not_guest, :checkout_after_checkin, :checkin_checkout_different
+
+  before_validation :is_available
 
   def duration
     (checkout - checkin).to_i
@@ -21,9 +23,12 @@ class Reservation < ActiveRecord::Base
   end
 
   def is_available
-    Reservation.where(listing_id: listing.id).where.not(id: id).each do |reservation|
-      if ((checkin > reservation.checkin) && !(checkin > reservation.checkout)) || ((checkin < reservation.checkin) && !(checkout < reservation.checkin))
-        errors.add(:guest_id, "This rental is already booked during those dates.")
+    return if checkin.nil? || checkout.nil?
+    if Reservation.where(listing_id: listing_id).where.not(id: id)
+      Reservation.where(listing_id: listing_id).where.not(id: id).each do |reservation|
+        if ((checkin > reservation.checkin) && !(checkin > reservation.checkout)) || ((checkin < reservation.checkin) && !(checkout < reservation.checkin))
+          errors.add(:guest_id, "This rental is already booked during those dates.")
+        end
       end
     end
   end
