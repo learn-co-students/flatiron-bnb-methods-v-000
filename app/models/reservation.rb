@@ -21,7 +21,6 @@ class Reservation < ActiveRecord::Base
     listing.price * duration
   end
 
-
   def available
     self.listing.reservations.each do |res|
       booked = (res.checkin..res.checkout).to_a
@@ -30,11 +29,6 @@ class Reservation < ActiveRecord::Base
       end
     end
   end
-
-
-
-
-
 
 
   private

@@ -14,7 +14,7 @@ class Listing < ActiveRecord::Base
   after_destroy :make_host_user
 
   def average_review_rating
-    #Listing#average_review_rating knows its average ratings from its reviews
+    self.reviews.average(:rating)
   end
 
 
