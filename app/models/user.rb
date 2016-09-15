@@ -3,5 +3,16 @@ class User < ActiveRecord::Base
   has_many :reservations, :through => :listings
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
   has_many :reviews, :foreign_key => 'guest_id'
+
+  
+
+  def guests
+  end
+
+  def hosts
+  end
+
+  def host_reviews
+  end
   
 end
