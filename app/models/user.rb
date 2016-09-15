@@ -7,12 +7,15 @@ class User < ActiveRecord::Base
   
 
   def guests
+    self.reservations.collect { |reservation| reservation.guest }
   end
 
   def hosts
+    self.trips.collect { |trip| trip.listing.host}
   end
 
   def host_reviews
+    self.reservations.collect { |reservation| reservation.review }
   end
   
 end

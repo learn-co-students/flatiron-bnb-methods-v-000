@@ -3,7 +3,8 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
 
-  validates :checkin, :checkout, presence: true
+  validates :checkin, presence: true
+  validates :checkout, presence: true
   validate :same_day
   validate :checkin_before_checkout
   validate :same_person
@@ -36,8 +37,17 @@ class Reservation < ActiveRecord::Base
   end
 
   def available
-    if checkin != nil || checkout != nil
-     errors.add(:reservation, "This listing is already reserved.")
+    if self.checkin && self.checkout != nil
+      listing = self.listing
+      listing.reservations.each do |reservation|
+        if reservation != self
+          if self.checkin.between?(reservation.checkin, reservation.checkout)
+            errors.add(:avialable, "This listing is already reserved.")
+          elsif self.checkout.between?(reservation.checkin, reservation.checkout)
+              errors.add(:avialable, "This listing is already reserved.")
+            end
+          end
+        end
     end
   end
 

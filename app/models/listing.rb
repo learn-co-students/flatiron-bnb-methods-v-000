@@ -8,6 +8,8 @@ class Listing < ActiveRecord::Base
   validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
   before_save :change_user_host_status
 
+  before_destroy :user_host_to_false
+
   def average_review_rating
    self.reviews.average(:rating)
   end
@@ -20,7 +22,11 @@ class Listing < ActiveRecord::Base
   end
 
   def user_host_to_false
-   self.host.update(host: false) if self.host.listings.count == 1
+   user = User.find_by(id: self.host)
+    if user.listings.length == 1
+      user.host = false
+      user.save
+    end
   end
 
 end
