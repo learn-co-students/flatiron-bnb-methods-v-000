@@ -8,9 +8,13 @@ class Listing < ActiveRecord::Base
 
   after_create do
     self.host.host = true
+    self.host.save
   end
 
   before_destroy do
-    self.host.host = false
+    if self.host.listings.size == 1
+      self.host.host = false
+      self.host.save
+    end
   end
 end

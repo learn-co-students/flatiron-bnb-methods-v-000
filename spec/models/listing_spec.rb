@@ -133,7 +133,6 @@ describe Listing do
 
       it 'changes user host status' do
         expect(user.host?).to eq(false)
-
         listing = Listing.create(address: '123 Main Street',
           listing_type: "private room",
           title: "Foo",
