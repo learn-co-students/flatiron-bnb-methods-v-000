@@ -17,4 +17,11 @@ class Listing < ActiveRecord::Base
       self.host.save
     end
   end
+
+  def average_review_rating
+    ratingSum = reviews.inject(0) do |sum, review|
+      sum + review.rating
+    end
+    ratingSum.to_f / reviews.size
+  end
 end
