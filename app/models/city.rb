@@ -23,11 +23,11 @@ class City < ActiveRecord::Base
   #   end
   # end
 
-  def self.most_res
-    all.max do |a, b|
-      a.reservations.count <=> b.reservations.count
-    end
-  end
+  # def self.most_res
+  #   all.max do |a, b|
+  #     a.reservations.count <=> b.reservations.count
+  #   end
+  # end
 
 end
 

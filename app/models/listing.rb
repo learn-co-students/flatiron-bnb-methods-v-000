@@ -23,7 +23,7 @@ class Listing < ActiveRecord::Base
   end
 
   def unset_host
-    if Listing.where(host: host).where.not(id: id).empty?
+    if Listing.where(host: host).where.not(id: id).empty? # select listings that match self.host
       host.update(host: false)
     end
   end
