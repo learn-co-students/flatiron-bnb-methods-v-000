@@ -3,84 +3,79 @@ class City < ActiveRecord::Base
   has_many :listings, :through => :neighborhoods
 
   def city_openings(date1, date2)
-    @openings = []
-    @listings = Listing.all
-    listings.each do |listing|
-      listing.reservations.each do |reservation|
-        checkin = reservation.checkin.strftime
-        checkout = reservation.checkout.strftime
-        if !(date1 <= checkout) and (date2 <= checkin)
-          @openings << listing
-        end
-      end
+    Listing.all.each do |listing|
+      listing_reservations(listing, date1, date2)
     end
   end
 
   def self.highest_ratio_res_to_listings
-    city_reservations = {}
-    city_listings = {}
-    city_ratios = []
-
-    name_cities.each do |city|
-      city_reservations(city)
-      binding.pry
-      #reservations_of_city should be city_reservations(city) once it returns properly
-      city_reservations[city] = reservations_of_city.count
-      city_listings[city] = c.listings.count
-    end
-
-
-
-
-
-    city_ratios = {}
-    @@city_reservations = city_reservations
-    @@city_reservations.each do |city, count|
-      city_ratios[city] = count.to_f/city_listings[city].to_f
-    end
-
     max_city(city_ratios)
   end
 
   def self.most_res
-
-
-    #max_city(@city_reservations)
-    max = @@city_reservations.values.max
-    city = @@city_reservations.select { |k, v| v == max }
-
-    City.find_by(name: city.keys)
+    max_city(reservations_by_city)
   end
 
 private
 
-  def self.name_cities
-    cities = City.all
-    cities.each do |c|
-      c.name
+  def listing_reservations(listing, date1, date2)
+    openings = []
+    listing.reservations.each do |reservation|
+      if !(date1 <= checkout(reservation)) and (date2 <= checkin(reservation))
+        openings << listing
+      end
     end
   end
 
-  def self.city_reservations(city)
-    if city_name_of_reservation == city
-      #need to figure out how to pass reservation to reservations of city, r_city doesn't exist
-        reservations_of_city << r_city
+  def checkin(reservation)
+    reservation.checkin.strftime
+  end
+
+  def checkout(reservation)
+    reservation.checkout.strftime
+  end
+
+  def self.city_ratios
+    city_ratios = {}
+    reservations_by_city.each do |city, count|
+      city_ratios[city] = count.to_f/listings_by_city(city).count.to_f
     end
+    city_ratios
   end
 
-  def self.city_name_of_reservation
-    list_reservations.each do |r|
-      r.listing.neighborhood.city.name
+  def self.reservations_by_city
+    city_reservations = {}
+    cities.each do |city|
+      city_reservations[city.name] = city_name_of_reservation(city).count
     end
+    city_reservations
   end
 
-  def self.list_reservations
-    Reservation.all
+  def self.listings_by_city(city)
+    city_listings = {}
+    cities.each do |x|
+      city_listings[x.name] = x.listings
+    end
+    city_listings[city]
   end
 
-  def self.max_city(array)
-    max = array.values.max
-    city = array.select { |k, v| v == max}
+  def self.city_name_of_reservation(city)
+    reservation_by_city = []
+    Reservation.all.each do |r|
+      if r.listing.neighborhood.city.name == city.name
+        reservation_by_city << r
+      end
+    end
+    reservation_by_city
+  end
+
+  def self.cities
+    City.all
+  end
+
+  def self.max_city(hash)
+    max = hash.values.max
+    city = hash.select { |k, v| v == max}
     City.find_by(name: city.keys)
   end
 
