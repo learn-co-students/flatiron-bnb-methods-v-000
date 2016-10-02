@@ -17,45 +17,71 @@ class City < ActiveRecord::Base
   end
 
   def self.highest_ratio_res_to_listings
-    cities = City.all
     city_reservations = {}
     city_listings = {}
     city_ratios = []
 
-    res_cities
-
-    cities.each do |c|
-      city_res = []
-      res_cities.each do |r|
-        if r.name == c.name
-          city_res << r
-        end
-      end
-      city = c.name
-      city_reservations[city] = city_res.count
+    name_cities.each do |city|
+      city_reservations(city)
+      binding.pry
+      #reservations_of_city should be city_reservations(city) once it returns properly
+      city_reservations[city] = reservations_of_city.count
       city_listings[city] = c.listings.count
     end
 
+
+
+
+
     city_ratios = {}
-    city_reservations.each do |city, count|
+    @@city_reservations = city_reservations
+    @@city_reservations.each do |city, count|
       city_ratios[city] = count.to_f/city_listings[city].to_f
     end
-    max = city_ratios.values.max
-    city = city_ratios.select { |k, v| v == max }
-    City.find_by(name: city.keys)
+
+    max_city(city_ratios)
   end
 
   def self.most_res
 
+
+    #max_city(@city_reservations)
+    max = @@city_reservations.values.max
+    city = @@city_reservations.select { |k, v| v == max }
+
+    City.find_by(name: city.keys)
   end
 
 private
 
-  def self.res_cities
-    reservations = Reservation.all
-    reservations.collect do |r|
-      r.listing.neighborhood.city
+  def self.name_cities
+    cities = City.all
+    cities.each do |c|
+      c.name
     end
+  end
+
+  def self.city_reservations(city)
+    if city_name_of_reservation == city
+      #need to figure out how to pass reservation to reservations of city, r_city doesn't exist
+        reservations_of_city << r_city
+    end
+  end
+
+  def self.city_name_of_reservation
+    list_reservations.each do |r|
+      r.listing.neighborhood.city.name
+    end
+  end
+
+  def self.list_reservations
+    Reservation.all
+  end
+
+  def self.max_city(array)
+    max = array.values.max
+    city = array.select { |k, v| v == max}
+    City.find_by(name: city.keys)
   end
 
 end
