@@ -12,6 +12,15 @@ class Listing < ActiveRecord::Base
   validates :neighborhood, presence: true
   before_create :change_host_status, :unless => :host?
   after_destroy :change_host_to_guest, :if => :has_no_listings?
+
+  def average_review_rating
+    ratings = []
+    self.reviews.each do |review|
+      ratings << review.rating
+    end
+    ratings.sum.to_f/ratings.count
+  end
+
 private
 
   def host?
