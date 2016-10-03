@@ -14,11 +14,9 @@ class Reservation < ActiveRecord::Base
   end
 
   def listing_available_at_checkin?
-    binding.pry
-    listing.reservations.each do |r|
-      binding.pry
+    Reservation.where(listing_id: listing_id).where.not(id: id).each do |r|
       if checkin.to_s.between?(r.checkin.to_s, r.checkout.to_s)
-        errors.add(:reservation, "Reservation is not available for this checkin date")
+        errors.add(:checkin, "Reservation is not available for this checkin date")
       end
     end
   end
