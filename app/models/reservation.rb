@@ -14,6 +14,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def listing_available_at_checkin?
+    binding.pry
     listing.reservations.each do |r|
       binding.pry
       if checkin.to_s.between?(r.checkin.to_s, r.checkout.to_s)
