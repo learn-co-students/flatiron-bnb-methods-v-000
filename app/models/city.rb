@@ -9,8 +9,12 @@ class City < ActiveRecord::Base
   def self.highest_ratio_res_to_listings
     # Reservation.all <=> Listing.all
     # find the city with the highest ratio of reservations to listings
-    l = Listing.find_by(:name).maximum(:reservations)
-    c = City.find_by(:name).maximum(:listings)
+    # city_names = City.all.group(:name)
+    # listing_names = Listing.all.group(:name)
+      c_l_count = City.all.each { |c| c.listings  }
+      l_r_count = Listing.all.each { |l| l.reservations }
+      c_l_count / l_r_count
+    # c = City.find_by(:name).maximum(:listings)
 
   end
 
