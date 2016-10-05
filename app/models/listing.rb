@@ -11,6 +11,10 @@ class Listing < ActiveRecord::Base
   after_save :set_to_true
   before_destroy :keep_status_or_change_to_false
 
+  def average_review_rating
+     reviews.average(:rating)
+  end
+  
   private
       def set_to_true
         if host[:host] == false
@@ -23,10 +27,5 @@ class Listing < ActiveRecord::Base
         if Listing.where(host: host).where.not(id: id).empty?
           host.update(host: false)
         end
-
-      def average_review_rating
-         reviews.average(:rating)
       end
   end
-
-end

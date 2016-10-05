@@ -3,4 +3,11 @@ class Neighborhood < ActiveRecord::Base
   has_many :listings
 
 
+  def neighborhood_openings(start_date, end_date)
+    # Listing.where(created_at: (start_date..end_date))
+    Listing.all
+  end
+
+  
+
 end

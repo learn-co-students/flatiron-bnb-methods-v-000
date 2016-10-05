@@ -20,6 +20,5 @@ class City < ActiveRecord::Base
   def self.most_res
     self.highest_ratio_res_to_listings
   end
-  private
 
 end
