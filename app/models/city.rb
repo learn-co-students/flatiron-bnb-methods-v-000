@@ -68,6 +68,7 @@ class City < ActiveRecord::Base
   	end
   	city_with_highest_ratio
   end
-  
+
+end
 end
 
