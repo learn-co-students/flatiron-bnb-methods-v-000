@@ -18,7 +18,9 @@ class Reservation < ActiveRecord::Base
 
   def listing_available
     if checkin && checkout && listing
-      listing.listing_open?(checkin, checkout)
+      if !listing.listing_open?(checkin, checkout)
+        errors.add(:listing, "Listing not available")
+      end
     end
   end
 

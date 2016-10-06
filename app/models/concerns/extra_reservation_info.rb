@@ -27,6 +27,7 @@ module ReservationHelpers
 		end
 
 		def listing_open?(date1, date2)
+			
 			if !self.reservations || self.reservations.empty?
 				true
 			else
