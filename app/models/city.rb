@@ -10,15 +10,15 @@ class City < ActiveRecord::Base
   end
 
   def self.highest_ratio_res_to_listings
-      hash ={}
-      self.all.map.max_by do |city|
-        hash["#{city.name}"] = city.reservations
-        hash["#{city.name}"][-1]
-      end
+    hash ={}
+    self.all.map.max_by do |this|
+    this.reservations.length
+    end
   end
 
   def self.most_res
     self.highest_ratio_res_to_listings
   end
+  private
 
 end
