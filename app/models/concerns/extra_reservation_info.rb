@@ -3,8 +3,8 @@ module ReservationHelpers
 
 	module InstanceMethods
 		def dates_overlap?(date1_start, date1_end, date2_start, date2_end)
-			puts "date1_start: #{date1_start}, date1_end: #{date1_end}, date2_start:#{date2_start}, date2_end:#{date2_end}"
-			puts "result #{(date1_start..date1_end).overlaps?(date2_start..date2_end)}"
+			# puts "date1_start: #{date1_start}, date1_end: #{date1_end}, date2_start:#{date2_start}, date2_end:#{date2_end}"
+			# puts "result #{(date1_start..date1_end).overlaps?(date2_start..date2_end)}"
 			(date1_start..date1_end).overlaps?(date2_start..date2_end)
 		end
 		
@@ -13,7 +13,7 @@ module ReservationHelpers
 			self.listings.each do |listing|
 				if listing.reservations.empty?
 					listings_open << listing
-				elsif listing.listing_open?(date1, date2)
+				elsif listing.listing_is_open?(date1, date2)
 					listings_open << listing
 				end
 			end
@@ -28,36 +28,16 @@ module ReservationHelpers
 			end
 		end
 
-		def listing_open?(date1, date2)
-			#puts "in listing open"
-			
-			if !self.reservations || self.reservations.empty?
-				# puts "no reservations"
-				return true
-			elsif self.reservations || !self.reservations.empty?
-				reservations_with_no_conflict = 0
-
+		def listing_is_open?(proposed_date1, proposed_date2)
+			if self.reservations
 				self.reservations.each do |reservation|
-					# puts "listing reservation #{reservation.id} checkin: #{reservation.checkin}, checkout:  #{reservation.checkout}"
-			 		reservations_with_no_conflict = 0
-			  		if !dates_overlap?(reservation.checkin, reservation.checkout, date1, date2)
-			  			# puts "no conflict reservation_id: #{reservation.id}"
-			  			#puts "date1:#{date1}, date2:#{date2}, checkin:#{reservation.checkin}, checkout:#{reservation.checkout}"
-			    		reservations_with_no_conflict += 1
-			  		end
+					if dates_overlap?(proposed_date1, proposed_date2, reservation.checkin, reservation.checkout)
+						return false
+					end
 				end
-				if reservations_with_no_conflict == self.reservations.count
-					
-					return true
-				else
-					# puts "res no conflict count: #{reservations_with_no_conflict}"
-					#  puts "listing #{self.id} res count: #{self.reservations.count}"
-				#puts "rogue false???"	
-					return false
-				end
-			else
-				return false
+				return true
 			end
+			return true
 		end
 
 	end

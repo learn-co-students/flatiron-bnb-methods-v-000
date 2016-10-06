@@ -6,7 +6,7 @@ class Reservation < ActiveRecord::Base
 
   validates_presence_of :checkin, :checkout, :listing
 
-   validate :guest_is_not_host, :listing_available
+   validate :guest_is_not_host, :listing_available, :checkin_before_checkout, :dates_not_same
 
   def guest_is_not_host
     if checkin && checkout && listing && guest
@@ -20,11 +20,25 @@ class Reservation < ActiveRecord::Base
     #puts "listing_available called"
     if checkin && checkout && listing
       #puts "checkin && checkout && listing"
-      if !listing.listing_open?(checkin, checkout)
-        #puts "WAT:#{self.listing.id}checkin #{checkin}, checkout #{checkout}"
+      if !listing.listing_is_open?(checkin, checkout)
+        #puts "WAAAAT from proposed:checkin #{checkin}, checkout #{checkout}"
         errors.add(:listing, "Listing not available")
       else
       end
+    end
+  end
+
+  def checkin_before_checkout
+    if checkin && checkout && listing
+      if checkin > checkout
+        errors.add(:checkin, "Checkin must be before checkout")
+      end
+    end
+  end
+
+  def dates_not_same
+    if checkin == checkout
+      errors.add(:checkout, "Checkout must not equal checkin")
     end
   end
 
