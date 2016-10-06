@@ -2,8 +2,10 @@ module ReservationHelpers
 	
 
 	module InstanceMethods
-		def dates_overlap?(start1, end1, start2, end2)
-			(start1..end1).overlaps?(start2..end2)
+		def dates_overlap?(date1_start, date1_end, date2_start, date2_end)
+			puts "date1_start: #{date1_start}, date1_end: #{date1_end}, date2_start:#{date2_start}, date2_end:#{date2_end}"
+			puts "result #{(date1_start..date1_end).overlaps?(date2_start..date2_end)}"
+			(date1_start..date1_end).overlaps?(date2_start..date2_end)
 		end
 		
 		def open_listings(date1, date2)
@@ -30,18 +32,31 @@ module ReservationHelpers
 			#puts "in listing open"
 			
 			if !self.reservations || self.reservations.empty?
-				true
-			else
+				# puts "no reservations"
+				return true
+			elsif self.reservations || !self.reservations.empty?
 				reservations_with_no_conflict = 0
+
 				self.reservations.each do |reservation|
+					# puts "listing reservation #{reservation.id} checkin: #{reservation.checkin}, checkout:  #{reservation.checkout}"
 			 		reservations_with_no_conflict = 0
 			  		if !dates_overlap?(reservation.checkin, reservation.checkout, date1, date2)
+			  			# puts "no conflict reservation_id: #{reservation.id}"
+			  			#puts "date1:#{date1}, date2:#{date2}, checkin:#{reservation.checkin}, checkout:#{reservation.checkout}"
 			    		reservations_with_no_conflict += 1
 			  		end
 				end
 				if reservations_with_no_conflict == self.reservations.count
-					true
+					
+					return true
+				else
+					# puts "res no conflict count: #{reservations_with_no_conflict}"
+					#  puts "listing #{self.id} res count: #{self.reservations.count}"
+				#puts "rogue false???"	
+					return false
 				end
+			else
+				return false
 			end
 		end
 

@@ -38,7 +38,6 @@ describe Reservation do
     end
 
     it 'is valid with a checkin and checkout' do 
-
       expect(@reservation1).to be_valid
     end
 

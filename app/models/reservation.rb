@@ -17,10 +17,13 @@ class Reservation < ActiveRecord::Base
   end
 
   def listing_available
-    "listing_available called"
+    #puts "listing_available called"
     if checkin && checkout && listing
+      #puts "checkin && checkout && listing"
       if !listing.listing_open?(checkin, checkout)
+        #puts "WAT:#{self.listing.id}checkin #{checkin}, checkout #{checkout}"
         errors.add(:listing, "Listing not available")
+      else
       end
     end
   end
