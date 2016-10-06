@@ -68,7 +68,7 @@ describe Listing do
     end
 
     let(:listing) { listing = Listing.create(address: '123 Main Street',
-                                            listing_type: "private room",
+                                              listing_type: "private room",
                                             title: "Foo",
                                             description: "Foo",
                                             price: "150.00",
@@ -79,12 +79,12 @@ describe Listing do
     let(:lisa_simpson) { User.create }
 
     it 'has many reservations' do
-      binding.pry
       expect(listing.reservations).to include(@older_reservation)
       expect(listing.reservations).to include(@recent_reservation)
     end
 
     it 'has many guests' do
+      #binding.pry
       expect(listing.guests).to include(bart_simpson)
       expect(listing.guests).to include(lisa_simpson)
     end

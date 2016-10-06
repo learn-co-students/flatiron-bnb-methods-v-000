@@ -38,7 +38,7 @@ describe Reservation do
     end
 
     it 'is valid with a checkin and checkout' do 
-      binding.pry
+
       expect(@reservation1).to be_valid
     end
 

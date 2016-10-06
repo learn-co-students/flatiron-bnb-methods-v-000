@@ -27,6 +27,7 @@ module ReservationHelpers
 		end
 
 		def listing_open?(date1, date2)
+			#puts "in listing open"
 			
 			if !self.reservations || self.reservations.empty?
 				true
@@ -60,6 +61,7 @@ module ReservationHelpers
 				end
 			end
 			place_with_max_reservations
+
 		end
 
 		def highest_ratio_res_to_listings

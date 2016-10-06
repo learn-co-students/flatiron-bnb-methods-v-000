@@ -6,7 +6,7 @@ class Reservation < ActiveRecord::Base
 
   validates_presence_of :checkin, :checkout, :listing
 
-  validate :guest_is_not_host, :listing_available
+   validate :guest_is_not_host, :listing_available
 
   def guest_is_not_host
     if checkin && checkout && listing && guest
@@ -17,6 +17,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def listing_available
+    "listing_available called"
     if checkin && checkout && listing
       if !listing.listing_open?(checkin, checkout)
         errors.add(:listing, "Listing not available")
@@ -31,7 +32,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def total_price
-  	self.duration * self.price
+  	self.duration * self.listing.price
   end
 
 
