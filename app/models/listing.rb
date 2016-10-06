@@ -1,4 +1,8 @@
+require 'concerns/extra_reservation_info'
+
 class Listing < ActiveRecord::Base
+  include ReservationHelpers::InstanceMethods
+  
   belongs_to :neighborhood
   belongs_to :host, :class_name => "User"
   has_many :reservations
@@ -8,32 +12,28 @@ class Listing < ActiveRecord::Base
   validates_presence_of :address, :listing_type, :title, :description, :price, :neighborhood
 
   before_create :convert_user_to_host
-  before_save
+  after_destroy :unconvert_user
 
-  def :convert_user_to_host
+  def convert_user_to_host
+  	#puts "hostname #{host.name}"
   	host.host = true
+  	host.save
+  	# puts "hoststatus #{host.host}"
   end
 
-  def :unconvert_user
-  	if host.empty?
+  def unconvert_user
+  	if host.listings.empty?
   		host.host = false
+  		host.save
   	end
   end
 
-  def all_reviews_for_listing
-  	all_reviews = []
-  	self.reservations.all do |reservation|
-  		all_reviews << reservation.reviews
-  	end
-  	all_reviews.flatten.compact!
+  def average_review_rating
+  	all_reviews = self.reviews.collect{|review| review.rating}
+  	all_reviews.sum.to_f / all_reviews.count.to_f
   end
 
-  def averate_review_rating
-  	all_ratings = []
-  	self.all_reviews_for_listing.each do |review|
-  		all_ratings << review.rating
-  	end
-  	all_ratings.sum.to_f / all_ratings.count.to_f
-  end
   
+
+
 end

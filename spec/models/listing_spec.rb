@@ -1,3 +1,5 @@
+require 'pry'
+
 describe Listing do
   describe 'attributes' do
 
@@ -77,6 +79,7 @@ describe Listing do
     let(:lisa_simpson) { User.create }
 
     it 'has many reservations' do
+      binding.pry
       expect(listing.reservations).to include(@older_reservation)
       expect(listing.reservations).to include(@recent_reservation)
     end
@@ -141,6 +144,7 @@ describe Listing do
           price: "150.00",
           neighborhood: santa_monica,
           host: user)
+        #binding.pry
         expect(user.reload.host?).to eq(true)
       end
     end

@@ -2,20 +2,19 @@ class Review < ActiveRecord::Base
   belongs_to :reservation
   belongs_to :guest, :class_name => "User"
 
-  validates_presence_of :rating, :description
-  validate :checkout_past, :reservation_accepted
-
-  def checkout_past
-  	if !reservation.checkout.past?
-  		errors.add(:reservation, "Checkout must have occured")
-  	end
-  end
+  validates_presence_of :rating, :description, :reservation
+  
+  validate :reservation_accepted, :checkout_past
 
   def reservation_accepted
-  	if !reservation.status == "accepted"
-  		errors.add(:reservation, "Reservation must have accepted status")
-  	end
+    if rating && description && reservation
+      errors.add(:reservation, "Reservation must be accepted") unless reservation.status == "accepted"
+    end
   end
-  
 
+  def checkout_past
+    if rating && description && reservation
+      errors. add(:reservation, "Reservation checkout must be in the past.") unless reservation.checkout.past?
+    end
+  end
 end

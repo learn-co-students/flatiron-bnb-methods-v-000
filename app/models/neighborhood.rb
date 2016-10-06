@@ -1,8 +1,8 @@
-require './concerns/reservation_methods'
+require 'concerns/extra_reservation_info'
 
 class Neighborhood < ActiveRecord::Base
-	include ReservationMethods::InstanceMethods
-	extend ReservationMethods::ClassMethods
+	include ReservationHelpers::InstanceMethods
+	extend ReservationHelpers::ClassMethods
 
   	belongs_to :city
   	has_many :listings
@@ -10,4 +10,5 @@ class Neighborhood < ActiveRecord::Base
   	def neighborhood_openings(date1, date2)
   		open_listings(self.listings, date1, date2)
   	end
+
 end

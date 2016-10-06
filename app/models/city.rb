@@ -1,4 +1,9 @@
+require 'concerns/extra_reservation_info'
+
 class City < ActiveRecord::Base
+  include ReservationHelpers::InstanceMethods
+  extend ReservationHelpers::ClassMethods
+
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
@@ -6,38 +11,37 @@ class City < ActiveRecord::Base
   	(start1..end1).overlaps?(start2..end2)
   end
 
-  def all_listings_for_city
-  	city_listings = []
-  	self.neighborhoods.each do |neighborhood|
-  		city_listings << neighborhood.listings
-  	end
-  	city_listings.flatten.compact!
-  end
-
   def all_reservations_for_city
   	city_reservations = []
-  	self.city_listings.each do |listing|
+  	self.listings.each do |listing|
   		city_reservations << listing.reservations
   	end
-  	city_reservations.flatten.compact!
+  	city_reservations.flatten
   end
 
   def city_openings(date1, date2)
   	listings_open = []
-  	self.all_listings_for_city.each do |listing|
+  	self.listings.each do |listing|
   		if listing.reservations.empty?
   			listings_open << listing
   		else
+  			reservations_with_no_conflict = 0
   			listing.reservations.each do |reservation|
   				reservations_with_no_conflict = 0
-  			if !dates_overlap?(reservation.checkin, reservation.checkout, date1, date2)
-  				reservations_with_no_conflict += 1
+  				if !dates_overlap?(reservation.checkin, reservation.checkout, date1, date2)
+  					reservations_with_no_conflict += 1
+  					puts "reservation has no conflict"
+  				end
   			end
   		end
   		if reservations_with_no_conflict == listing.reservations.count
+  			puts "listing has no conflict"
   			listings_open << listing
+  			puts "open #{listings_open}"
   		end
   	end
+  	puts "final open #{listings_open}"
+  	listings_open
   end
 
   def self.most_res
@@ -53,22 +57,24 @@ class City < ActiveRecord::Base
   	city_with_max_reservations
   end
 
-  def reservations_to_listings_ratio(city)	
-  	city.all_reservations_for_city.count / city.all_listings_for_city.count
+  def ratio_res_to_listings
+  	total_res = self.all_reservations_for_city.count
+  	total_listings = self.listings.count
+  	ratio = total_res / total_listings
   end
 
   def self.highest_ratio_res_to_listings
   	city_with_highest_ratio = self.all.first
-  	highest_ratio = reservations_to_listings_ratio(city_with_highest_ratio)
+  	max_ratio = city_with_highest_ratio.ratio_res_to_listings
   	self.all.each do |city|
-  		if reservations_to_listings_ratio(city) > highest_ratio
+  		if city.ratio_res_to_listings > max_ratio
   			city_with_highest_ratio = city
-  			highest_ratio = reservations_to_listings_ratio(city)
+  			max_ratio = city.ratio_res_to_listings
   		end
   	end
   	city_with_highest_ratio
   end
 
-end
+
 end
 
