@@ -6,12 +6,12 @@ module ReservationHelpers
 			(start1..end1).overlaps?(start2..end2)
 		end
 		
-		def open_listings(listings, date1, date2)
+		def open_listings(date1, date2)
 			listings_open = []
-			listings.each do |listing|
+			self.listings.each do |listing|
 				if listing.reservations.empty?
 					listings_open << listing
-				elsif listing.listing_open?
+				elsif listing.listing_open?(date1, date2)
 					listings_open << listing
 				end
 			end
@@ -23,16 +23,6 @@ module ReservationHelpers
 				ratio = 0 
 			else
 				ratio = self.reservations.count / self.listings.count
-			end
-		end
-
-		def reservations
-			if self.class != Listing
-				all_reservations = []
-				self.listings.each do |listing|
-					all_reservations << listing.reservations
-				end
-				all_reservations.flatten
 			end
 		end
 
