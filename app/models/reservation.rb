@@ -39,8 +39,7 @@ class Reservation < ActiveRecord::Base
     end
 
     def total_price
-      @listing = Listing.find(self.listing_id)
-      @listing.price * self.duration
+      self.listing.price * self.duration
     end
 
 end

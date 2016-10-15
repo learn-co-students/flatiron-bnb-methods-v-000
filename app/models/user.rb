@@ -16,12 +16,7 @@ class User < ActiveRecord::Base
     guests
   end
 
-  # a guest knows about the hosts it had
-  # a guest has reservations
-  # reservations have a listing_id
-  # a listing belongs to a host and has a host_id
-  # through the host_id - we cna query the database and collect 
-  # all hosts based on a guests reservations
+  # self.reservations.map {|reservation| reservation.guest}
 
   def hosts
     all_hosts = [] 
@@ -33,15 +28,24 @@ class User < ActiveRecord::Base
     all_hosts 
   end
 
+  # self.trips.map {|rsvp| rsvp.listing.host}
+
   def host_reviews
     all_reviews = []
 
     self.listings.each do |listing|
       listing.reservations.each do |reservation|
       all_reviews << reservation.review
+      end
     end
-  end
     all_reviews 
   end
+
+  # has_many :host_reviews, through: :reservations, source: :review  
+  # => harnessese a host_review by digging
+  # direct into a reservation object and calling "source" which is 
+  # a method in the table, in this case
+  # the review
+
   
 end
