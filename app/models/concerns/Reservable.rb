@@ -21,11 +21,12 @@ module Reservable
     end
 
     def most_res
-      binding.pry
+      
       locations = {}
       self.all.collect do |location|
         locations[location.name] = location.listings.collect {|listing|listing.reservations.count}.inject {|sum, count| sum + count }
       end
+      binding.pry
       most_res_location_name = locations.key(locations.values.compact.max)
       self.find_by(name: most_res_location_name)
     end

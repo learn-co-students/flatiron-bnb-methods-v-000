@@ -60,7 +60,7 @@ def make_denver
     host_id: User.first.id
   )
   checkin_day = 1
-  6.times do |i|
+  8.times do |i|
     guest_id = i + 1
     if guest_id != listing.host.id
       Reservation.create(
