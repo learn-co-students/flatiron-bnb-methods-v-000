@@ -15,8 +15,8 @@ class Neighborhood < ActiveRecord::Base
   end
 
   def ratio_res_to_listings
-    if Listing.all.count > 0
-      Reservation.all.count.to_f / Listing.all.count.to_f
+    if self.listings.count > 0
+      self.listings.inject(0) { |sum, listing| sum + listing.reservations.count }.to_f / self.listings.count.to_f
     else
       0
     end
@@ -24,7 +24,7 @@ class Neighborhood < ActiveRecord::Base
 
   def self.most_res
     all.max do |a, b|
-      a.listings.collect {|listing| listing.reservations}.count  <=> b.listings.collect {|listing| listing.reservations}.count
+      a.listings.inject(0) { |sum, listing| sum + listing.reservations.count }.to_f  <=> b.listings.inject(0) { |sum, listing| sum + listing.reservations.count }.to_f
     end
   end
 
