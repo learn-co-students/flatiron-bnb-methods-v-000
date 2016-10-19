@@ -14,17 +14,24 @@ class Neighborhood < ActiveRecord::Base
     available
   end
 
-  def self.highest_ratio_res_to_listings
-    ratios = {}
-    Neighborhood.all.each do |n|
-
+  def ratio_res_to_listings
+    if Listing.all.count > 0
+      Reservation.all.count.to_f / Listing.all.count.to_f
+    else
+      0
     end
   end
 
   def self.most_res
-    array = Listing.all.collect {|listing| listing.neighborhood_id}
-    freq = array.inject(Hash.new(0)) { |h,v| h[v] += 1; h }
-    Neighborhood.find(array.max_by { |v| freq[v] } )
+    all.max do |a, b|
+      a.listings.collect {|listing| listing.reservations}.count  <=> b.listings.collect {|listing| listing.reservations}.count
+    end
+  end
+
+  def self.highest_ratio_res_to_listings
+    all.max do |a, b|
+      a.ratio_res_to_listings <=> b.ratio_res_to_listings
+    end
   end
 
 end

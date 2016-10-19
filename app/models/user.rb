@@ -4,14 +4,7 @@ class User < ActiveRecord::Base
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
   has_many :reviews, :foreign_key => 'guest_id'
 
-
-  def city_openings
-
-  end
-
-  def self.highest_ratio_res_to_listings
-  end
-
-  def self.most_res
-  end
+  has_many :hosts, :through => :listings, :foreign_key => :host_id
+  has_many :guests, :through => :reservations, :foreign_key => :guest_id
+  has_many :host_reviews, :through => :listings, :source => :reviews
 end

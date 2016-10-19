@@ -4,8 +4,8 @@ class Reservation < ActiveRecord::Base
   has_one :review
   validates :checkin, presence: true
   validates :checkout, presence: true
-  after_validation :own_listing
-  before_save :available?
+  validate :own_listing
+  validate :available
 
 
   def duration
@@ -16,13 +16,16 @@ class Reservation < ActiveRecord::Base
     duration * self.listing.price
   end
 
-  private
-
-  def available?
-    if !self.listing.reservations.empty?
-      self.listing.reservations.each do |res|
-        if self.checkin.between?(res.checkin, res.checkout) || self.checkout.between?(res.checkin, res.checkout) || res.checkin.between?(self.checkin, self.checkout) || res.checkout.between?(self.checkin, self.checkout)
-          errors.add(:listing_id, "already booked")
+  def available
+    res = Reservation.where(listing_id: listing.id)
+    if checkin && checkout
+      res.each do |r|
+        if id == r.id
+          break
+        elsif checkin.between?(r.checkin, r.checkout) || checkout.between?(r.checkin, r.checkout)
+          errors.add(:guest_id, "Not available")
+        elsif checkout <= checkin
+          errors.add(:guest_id, "Can't checkin before you checkout")
         end
       end
     end
@@ -30,7 +33,7 @@ class Reservation < ActiveRecord::Base
 
   def own_listing
     if self.guest == self.listing.host
-       errors.add(:guest_id, "can't book your own listing")
+       errors.add(:guest_id, "Can't book your own listing")
     end
   end
 
