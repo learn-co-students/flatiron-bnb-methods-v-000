@@ -1,6 +1,7 @@
 class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
+  has_many :reservations, :through => :listings 
 
   def city_openings(start_date, end_date)
     available_reservations = []
@@ -14,5 +15,17 @@ class City < ActiveRecord::Base
     end
     available_reservations
   end  
+
+  def self.highest_ratio_res_to_listings
+    City.all.max_by do |city|
+      res = city.reservations.count 
+      city_listings = city.listings.count 
+      res.to_f/city_listings
+    end 
+  end 
+
+  def self.most_res
+
+  end 
 
 end
