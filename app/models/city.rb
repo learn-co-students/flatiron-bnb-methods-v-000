@@ -25,7 +25,9 @@ class City < ActiveRecord::Base
   end 
 
   def self.most_res
-
+    City.all.max_by do |city|
+      city.reservations.count
+    end 
   end 
 
 end
