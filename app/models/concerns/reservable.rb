@@ -8,6 +8,8 @@ module Reservable
   def ratio_reservations_to_listings
     if listings.count > 0
       reservations.count.to_f / listings.count.to_f
+    else
+      0
     end
   end
 
