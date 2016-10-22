@@ -11,6 +11,10 @@ class Listing < ActiveRecord::Base
 
   before_destroy :user_is_no_longer_host
 
+  def average_review_rating
+
+  end 
+
   private
 
   def set_user_to_host

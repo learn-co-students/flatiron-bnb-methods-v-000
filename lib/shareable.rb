@@ -18,7 +18,11 @@ module Shareable
       self.all.max_by do |area|
         res = area.reservations.count 
         area_listings = area.listings.count 
-        res.to_f/area_listings
+        if area_listings > 0
+          res.to_f/area_listings
+        else 
+          0
+        end 
       end 
     end 
 
