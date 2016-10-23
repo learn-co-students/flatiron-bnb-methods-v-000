@@ -12,7 +12,7 @@ class Listing < ActiveRecord::Base
   before_destroy :user_is_no_longer_host
 
   def average_review_rating
-
+    reviews.average(:rating)
   end 
 
   private
