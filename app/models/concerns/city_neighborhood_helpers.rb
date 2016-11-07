@@ -1,6 +1,4 @@
-class City < ActiveRecord::Base
-  has_many :neighborhoods
-  has_many :listings, :through => :neighborhoods
+module CityNeighborhoodHelpers
 
   def city_openings(start_date, end_date)
     date_time_start = DateTime.strptime(start_date, "%Y-%m-%d")
