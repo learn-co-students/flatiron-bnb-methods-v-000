@@ -9,6 +9,11 @@ class Listing < ActiveRecord::Base
 
   before_create :make_host
 
+  def average_review_rating
+      self.reviews.sum(:rating)/self.reviews.count.to_f
+  end
+
+
   private
 
   def make_host
