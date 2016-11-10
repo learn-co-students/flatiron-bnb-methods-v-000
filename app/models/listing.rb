@@ -7,16 +7,17 @@ class Listing < ActiveRecord::Base
 
   validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
 
-  before_create :make_host
+  before_validation :make_host_true
 
   def average_review_rating
       self.reviews.sum(:rating)/self.reviews.count.to_f
   end
 
-
   private
 
-  def make_host
-      self.host.host = true
+  def make_host_true
+      if self.host.present?
+          self.host.host = true
+      end
   end
 end

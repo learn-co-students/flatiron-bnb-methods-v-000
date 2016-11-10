@@ -11,6 +11,10 @@ class Neighborhood < ActiveRecord::Base
       @hood = Neighborhood.all.max_by { |hood| hood.reservations.count }
   end
 
+  def neighborhood_openings(start_date, end_date)
+      reservations = self.reservations.select { |r| r.checkin > Date.parse(start_date) && r.checkout < Date.parse(end_date)}
+  end
+
   def ratio
       unless self.listings.empty?
           self.reservations.count/self.listings.count
