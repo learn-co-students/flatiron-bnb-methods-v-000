@@ -5,7 +5,7 @@ class Review < ActiveRecord::Base
 
   validates :rating, :description, presence: true
 
-  #before_validation :check_reservation
+  before_validation :check_reservation
 
   def check_reservation
       unless self.reservation.present? && self.reservation.status == 'accepted' && self.reservation.checkout < Date.today

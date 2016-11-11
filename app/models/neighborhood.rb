@@ -12,7 +12,7 @@ class Neighborhood < ActiveRecord::Base
   end
 
   def neighborhood_openings(start_date, end_date)
-      reservations = self.reservations.select { |r| r.checkin > Date.parse(start_date) && r.checkout < Date.parse(end_date)}
+      self.listings.select { |l| !l.reserved?(start_date, end_date) }.flatten
   end
 
   def ratio
