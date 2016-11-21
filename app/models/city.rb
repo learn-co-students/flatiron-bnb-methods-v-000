@@ -10,8 +10,4 @@ class City < ActiveRecord::Base
     openings(date1, date2)
   end
 
-  def self.highest_ratio_res_to_listings
-    all.max { |a, b| a.ratio_res_to_listings <=> b.ratio_res_to_listings }
-  end
-
 end

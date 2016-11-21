@@ -22,6 +22,10 @@ module ClassMethods
     def most_res
       all.max { |a, b| a.reservations.count <=> b.reservations.count }
     end
+
+    def highest_ratio_res_to_listings
+      all.max { |a, b| a.ratio_res_to_listings <=> b.ratio_res_to_listings }
+    end
   end
 
 end

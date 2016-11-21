@@ -18,24 +18,22 @@ class Reservation < ActiveRecord::Base
   private
 
   def not_same_user?
-    if self.guest_id == self.listing.host_id
+    if guest_id == listing.host_id
       errors.add(:guest_id, "Guest and Host cannot be the same.")
     end
   end
 
   def is_available?
-    if self.checkin && self.checkout
-      if self.listing.reservations.find {|existing_reservation| (self.checkin <= existing_reservation.checkout) || (self.checkout >= existing_reservation.checkin)}
-        errors.add(:checkout, "Cannot overlap with an existing reservation.")
+    if checkin && checkout
+      if listing.reservations.find {|existing_reservation| (checkin <= existing_reservation.checkout) || (checkout >= existing_reservation.checkin)}
+        errors.add(:guest_id, "Cannot overlap with an existing reservation.")
       end
     end
   end
 
   def checkout_after_checkin?
-    if self.checkin && self.checkout
-      if self.checkin > self.checkout
+    if checkin && checkout && checkin >= checkout
         errors.add(:guest_id, "Checkout date must be after checkin date.")
-      end
     end
   end
 
