@@ -12,11 +12,9 @@ class Listing < ActiveRecord::Base
   after_destroy :host_false
 
   def average_review_rating
-    @reviews = []
-    self.reviews.each {|review| @reviews << review.rating.to_f }
-    @reviews.reduce(:+) / @reviews.size
+    reviews.average(:rating)
   end
-  
+
   private
 
   def host_true

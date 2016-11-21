@@ -1,6 +1,7 @@
 module Available
+  extend ActiveSupport::Concern
 
-  module InstanceMethods
+  #module InstanceMethods
     def openings(date1, date2)
       Listing.all.select do |listing|
         listing.reservations.each do |reservation|
@@ -18,12 +19,12 @@ module Available
         0
       end
     end
-  end
+  #end
 
-module ClassMethods
-    def most_res
-      all.max { |a, b| a.reservations.count <=> b.reservations.count }
-    end
-  end
+#module ClassMethods
+#    def most_res
+#      all.max { |a, b| a.reservations.count <=> b.reservations.count }
+#    end
+#  end
 
 end

@@ -4,8 +4,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
 
-  validates :checkin, presence: true
-  validates :checkout, presence: true
+  validates :checkin, :checkout, presence: true
   validate :not_same_user?, :is_available?, :checkout_after_checkin?
 
   def duration
@@ -19,7 +18,9 @@ class Reservation < ActiveRecord::Base
   private
 
   def not_same_user?
-    errors.add(:guest_id, "Guest and Host cannot be the same.") if self.guest_id == self.listing.host_id
+    if self.guest_id == self.listing.host_id
+      errors.add(:guest_id, "Guest and Host cannot be the same.")
+    end
   end
 
   def is_available?
