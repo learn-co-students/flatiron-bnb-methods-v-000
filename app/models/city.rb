@@ -1,7 +1,7 @@
 class City < ActiveRecord::Base
   has_many :neighborhoods
-  has_many :listings, :through => :neighborhoods
-  has_many :reservations, :through => :listings
+  has_many :listings, through: :neighborhoods
+  has_many :reservations, through: :listings
 
   include Reservable::InstanceMethods
   extend Reservable::ClassMethods

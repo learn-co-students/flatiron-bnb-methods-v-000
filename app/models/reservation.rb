@@ -29,6 +29,8 @@ class Reservation < ActiveRecord::Base
   end
 
   def valid_checkout_time?
-    checkout < checkin
+    if !checkin.nil? && !checkout.nil?
+      checkout < checkin
+    end
   end
 end
