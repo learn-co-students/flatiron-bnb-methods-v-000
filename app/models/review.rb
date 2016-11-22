@@ -2,8 +2,7 @@ class Review < ActiveRecord::Base
   belongs_to :reservation
   belongs_to :guest, :class_name => "User"
 
-  validates :description, :rating, presence: true
-  validates_associated :reservation
+  validates :description, :rating, :reservation, presence: true
 
   validate :been_accepted?
   validate :checkout_happened?
@@ -20,7 +19,7 @@ class Review < ActiveRecord::Base
 
   def checkout_happened?
     unless reservation.nil?
-      if Time.now < reservation.checkout
+      if Date.today < reservation.checkout
         errors.add(:reservation, "Cannot leave a review unless the reservation has passed")
       end
     end

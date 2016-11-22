@@ -25,12 +25,17 @@ class Reservation < ActiveRecord::Base
   end
 
   def unique_reservation?
-    checkin != checkout
-  end
+    Reservation.where(listing_id: listing.id).where.not(id: id).each do |r|
+      rsvp_dates = r.checkin..r.checkout
+       if rsvp_dates.include?(checkin) || rsvp_dates.include?(checkout)
+         errors.add(:guest_id, "This listing is not available during your requested dates.")
+       end
+     end
+   end
 
   def valid_checkout_time?
-    if !checkin.nil? && !checkout.nil?
-      checkout < checkin
+    if checkin && checkout && checkout <= checkin
+      errors.add(:guest_id, "Your checkin date needs to be before your checkout date.")
     end
   end
 end
