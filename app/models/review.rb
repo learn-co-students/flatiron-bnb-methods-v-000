@@ -19,10 +19,8 @@ class Review < ActiveRecord::Base
   end
 
   def pass_checkout
-    if reservation != nil
-      if reservation.checkout  > Date.today
-        errors.add(:reservation, "Cannot make a review until after checked out.")
-      end
+    if reservation && reservation.checkout  > Date.today
+      errors.add(:reservation, "Cannot make a review until after checked out.")
     end
   end
 end

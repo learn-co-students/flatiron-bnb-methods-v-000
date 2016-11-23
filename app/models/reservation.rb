@@ -31,11 +31,9 @@ class Reservation < ActiveRecord::Base
   end
 
   def checkin_before_checkout
-    # if checkin != nil && checkout != nil
-      if checking && checkout && checkin >= checkout
-        errors.add(:checkin, "Checkin must be before checkout.")
-      end
-    # end
+    if checkin && checkout && checkin >= checkout
+      errors.add(:checkin, "Checkin must be before checkout.")
+    end
   end
 
 end
