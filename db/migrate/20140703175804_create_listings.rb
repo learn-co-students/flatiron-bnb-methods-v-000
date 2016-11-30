@@ -1,9 +1,11 @@
 class CreateListings < ActiveRecord::Migration
   def change
     create_table :listings do |t|
+      t.string :title
+      t.date :start_date
+      t.date :end_date
       t.string :address
       t.string :listing_type
-      t.string :title
       t.text :description
       t.decimal :price, :precision => 8, :scale => 2
       t.integer :neighborhood_id

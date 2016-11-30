@@ -24,10 +24,10 @@ def make_users
 end
 
 def make_listings
-  Listing.create(address: '123 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: 50.00, neighborhood_id: Neighborhood.first.id, host_id: User.first.id)
-  Listing.create(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", description: "shared a room with me because I'm poor", price: 15.00, neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
-  Listing.create(address: '44 Ridge Lane', listing_type: "whole house", title: "Beautiful Home on Mountain", description: "Whole house for rent on mountain. Many bedrooms.", price: 200.00, neighborhood_id: Neighborhood.find_by(id: 3).id, host_id: User.find_by(id: 3).id)
-  Listing.create(address: '4782 Yaya Lane', listing_type: "private room", title: "Beautiful Room in awesome house", description: "Art collective hosue.", price: 400.00, neighborhood_id: Neighborhood.find_by(:name => "Pacific Heights").id, host_id: User.find_by(id: 3).id)
+  Listing.create(address: '123 Main Street', listing_type: "private room", title: "Beautiful Apartment on Main Street", start_date: '2014-02-20', end_date: '2015-01-14', description: "My apartment is great. there's a bedroom. close to subway....blah blah", price: 50.00, neighborhood_id: Neighborhood.first.id, host_id: User.first.id)
+  Listing.create(address: '6 Maple Street', listing_type: "shared room", title: "Shared room in apartment", start_date: '2014-02-20', end_date: '2015-01-14', description: "shared a room with me because I'm poor", price: 15.00, neighborhood_id: Neighborhood.find_by(id: 2).id, host_id: User.find_by(id: 2).id)
+  Listing.create(address: '44 Ridge Lane', listing_type: "whole house", title: "Beautiful Home on Mountain", start_date: '2014-02-20', end_date: '2015-01-14', description: "Whole house for rent on mountain. Many bedrooms.", price: 200.00, neighborhood_id: Neighborhood.find_by(id: 3).id, host_id: User.find_by(id: 3).id)
+  Listing.create(address: '4782 Yaya Lane', listing_type: "private room", title: "Beautiful Room in awesome house", start_date: '2014-02-20', end_date: '2015-01-14', description: "Art collective hosue.", price: 400.00, neighborhood_id: Neighborhood.find_by(:name => "Pacific Heights").id, host_id: User.find_by(id: 3).id)
 end
 
 def make_reservations
@@ -35,7 +35,7 @@ def make_reservations
   Reservation.create!(checkin: '2014-01-01', checkout: '2014-01-07', listing_id: 1, guest_id: User.last.id, :status => "accepted")
   Reservation.create!(checkin: '2014-01-09', checkout: '2014-01-20', listing_id: 1, guest_id: 5, :status => "accepted")
   Reservation.create!(checkin: '2014-04-25', checkout: '2014-04-30', listing_id: 1, guest_id: 4, :status => "accepted")
-  # second listing 
+  # second listing
   Reservation.create!(checkin: '2014-03-10', checkout: '2014-03-25', listing_id: Listing.find(2).id, guest_id: User.find_by(id: 5).id, :status => "accepted")
   # last listing
   Reservation.create!(checkin: '2014-06-02', checkout: '2014-06-30', listing_id: Listing.last.id, guest_id: User.find(6).id, :status => "accepted")
