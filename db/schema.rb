@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710181927) do
+ActiveRecord::Schema.define(version: 20140709193156) do
 
   create_table "cities", force: :cascade do |t|
     t.string   "name"
@@ -20,9 +20,11 @@ ActiveRecord::Schema.define(version: 20140710181927) do
   end
 
   create_table "listings", force: :cascade do |t|
+    t.string   "title"
+    t.date     "start_date"
+    t.date     "end_date"
     t.string   "address"
     t.string   "listing_type"
-    t.string   "title"
     t.text     "description"
     t.decimal  "price",           precision: 8, scale: 2
     t.integer  "neighborhood_id"
@@ -41,11 +43,11 @@ ActiveRecord::Schema.define(version: 20140710181927) do
   create_table "reservations", force: :cascade do |t|
     t.date     "checkin"
     t.date     "checkout"
+    t.string   "status",     default: "pending"
     t.integer  "listing_id"
     t.integer  "guest_id"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.string   "status",     default: "pending"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -59,9 +61,9 @@ ActiveRecord::Schema.define(version: 20140710181927) do
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
+    t.boolean  "host",       default: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
-    t.boolean  "host",       default: false
   end
 
 end

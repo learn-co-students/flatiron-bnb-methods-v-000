@@ -3,6 +3,7 @@ class CreateReservations < ActiveRecord::Migration
     create_table :reservations do |t|
       t.date :checkin
       t.date :checkout
+      t.string :status, default: "pending"
       t.integer :listing_id
       t.integer :guest_id
       t.timestamps null: false
