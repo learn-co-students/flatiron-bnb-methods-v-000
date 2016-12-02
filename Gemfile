@@ -39,3 +39,6 @@ group :development, :test do
   gem "pry"
   gem 'rack_session_access'
 end
+
+# Make ActiveRecord look pretty on the console
+gem 'hirb'
