@@ -40,3 +40,20 @@ describe City do
     end
   end
 end
+
+
+
+
+  # def self.highest_ratio_res_to_listings
+  #   most_popular_city = ""
+  #   highest_ratio = 0
+  #   self.all.each do |c|
+  #     if c.reservation_to_listing_ratio > highest_ratio.to_i
+  #       highest_ratio = c.reservation_to_listing_ratio
+  #       most_popular_city = c
+  #     end
+  #   end
+  #   most_popular_city
+  # end 
+
+ 
