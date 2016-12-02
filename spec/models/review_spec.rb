@@ -43,7 +43,9 @@ describe Review do
       res_not_passed = Review.create(description: "Hi!", rating: 3, guest_id: User.find_by(id: 5).id, reservation_id: new_res.id)
       expect(no_res).to_not be_valid
       expect(res_not_accepted).to_not be_valid
+      #binding.pry
       expect(res_not_passed).to_not be_valid
+      puts "res_not_passed.reservation.checkout.to_date"
     end
   end
 end
