@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140710181927) do
+ActiveRecord::Schema.define(version: 20160318223330) do
 
   create_table "cities", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.float    "ratio_res_to_listings"
   end
 
   create_table "listings", force: :cascade do |t|
@@ -29,6 +30,8 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.integer  "host_id"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.datetime "start_date"
+    t.datetime "end_date"
   end
 
   create_table "neighborhoods", force: :cascade do |t|

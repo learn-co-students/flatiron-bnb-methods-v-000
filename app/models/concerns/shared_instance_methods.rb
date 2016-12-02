@@ -1,19 +1,16 @@
-class City < ActiveRecord::Base
-  include SharedInstanceMethods
-  extend SharedClassMethods
+module SharedInstanceMethods
+  def find_ratio_res_to_listings
+    total_res = self.listings.map do |listing|
+      listing.reservations.count
+    end.sum
 
-  has_many :neighborhoods
-  has_many :listings, :through => :neighborhoods
-  #before_save :find_ratio_res_to_listings
-
-
-  def city_openings(check_in, check_out)
-    self.listings.map do |listing|
-      listing
+    if self.listings.count != 0
+      the_ratio = total_res / self.listings.count
+    else 
+      the_ratio = 0
     end
+    the_ratio
   end
-
-
 
   def city_or_neighborhood_reservations
     if self.class == City
@@ -31,4 +28,3 @@ class City < ActiveRecord::Base
   end
 
 end
-
