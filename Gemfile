@@ -25,6 +25,7 @@ gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
+gem 'jc-validates_timeliness', '~> 3.1.1'
 
 group :development, :test do
   gem "rspec-rails"
