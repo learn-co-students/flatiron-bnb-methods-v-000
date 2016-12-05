@@ -2,29 +2,14 @@ class Review < ActiveRecord::Base
   belongs_to :reservation
   belongs_to :guest, :class_name => "User"
 
-  validates :description, presence: true
-  validates :rating, presence: true, numericality: {
-              greater_than_or_equal_to: 0,
-              less_than_or_equal_to: 5,
-              only_integer: true
-            }
-  validates :reservation, presence: true
+  validates :description, :rating, :reservation, presence: true
+  validate :already_done
 
-  validate :checked_out
-  validate :reservation_accepted
-
-  private
-
-  def checked_out
-    if reservation && reservation.check_out > Date.today
-      errors.add(:reservation, "Reservation must have ended to leave a review.")
+  def already_done
+    unless reservation.nil?
+      if reservation.checkout.to_date > Date.today
+        errors.add(:reservation, "can't review on future use")
+      end
     end
   end
-
-  def reservation_accepted
-    if reservation.try(:status) != 'accepted'
-      errors.add(:reservation, "Reservation must be accepted to leave a review.")
-    end
-  end
-
 end

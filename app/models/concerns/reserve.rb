@@ -5,21 +5,30 @@ module Reserve
         listings.select{|x| !x.occupied?(start_date, end_date)}
       end
 
-    def ratio_reservations_to_listings
-      if listings.count > 0
-        reservations.count.to_f / listings.count.to_f
-      end
-    end
-
-    class_methods do
-
-      def highest_ratio_res_to_listings
-        all.max_by{|x| x.highest_ratio}
+      def highest_ratio
+        if listings.count == 0
+          0
+        else
+          listings.max_by{|x| x.res_num}.res_num
+        end
       end
 
-      def most_res
-        all.max_by{|x| x.res_num}
+      def res_num
+        ans = 0
+        listings.each{|x| ans += x.res_num}
+        ans
       end
 
-    end
+      class_methods do
+
+        def highest_ratio_res_to_listings
+          all.max_by{|x| x.highest_ratio}
+        end
+
+        def most_res
+          all.max_by{|x| x.res_num}
+        end
+
+      end
+
 end

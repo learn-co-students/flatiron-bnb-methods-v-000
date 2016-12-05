@@ -1,48 +1,39 @@
 class Listing < ActiveRecord::Base
   belongs_to :neighborhood
   belongs_to :host, :class_name => "User"
-
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
 
-  validates :address, presence: true
-  validates :listing_type, presence: true
-  validates :title, presence: true
-  validates :description, presence: true
-  validates :price, presence: true
-  validates :neighborhood, presence: true
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
 
-  after_save :make_host
+  after_create :set_host
 
-  before_destroy :remove_host
+  before_destroy :unset_host, if: :last_listings?
 
   def average_review_rating
-    reviews.average(:rating)
+    sum = 0.0
+    reviews.each{|x| sum += x.rating}
+    ans = sum/reviews.count
   end
 
-  private
-
-  def self.available(start_date, end_date)
-    if start_date && end_date
-      joins(:reservations).
-        where.not(reservations: {check_in: start_date..end_date}) &
-      joins(:reservations).
-        where.not(reservations: {check_out: start_date..end_date})
-    else
-      []
-    end
+  def res_num
+    reservations.count
   end
 
-  def remove_host
-    if Listing.where(host: host).where.not(id: id).empty?
-      host.update(is_host: false)
-    end
+  def occupied?(start_date, end_date)
+    !!reservations.detect{|x| x.occupied?(start_date, end_date)}
   end
 
-  def make_host
-    unless host.is_host?
-      host.update(is_host: true)
-    end
+  def set_host
+    host.update(host: true)
+  end
+
+  def unset_host
+    host.update(host: false)
+  end
+
+  def last_listings?
+    host.listings.count == 1
   end
 end

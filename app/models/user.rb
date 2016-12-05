@@ -3,11 +3,13 @@ class User < ActiveRecord::Base
   has_many :reservations, :through => :listings
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
   has_many :reviews, :foreign_key => 'guest_id'
+  has_many :guests, through: :listings
 
-  has_many :trip_listings, :through => :trips, :source => :listing
-  has_many :hosts, :through => :trip_listings, :foreign_key => :host_id
+  def hosts
+    trips.map{|x| x.listing.host}.flatten
+  end
 
-  has_many :guests, :through => :reservations, :class_name => "User"
-  has_many :host_reviews, :through => :listings, :source => :reviews
-
+  def host_reviews
+    listings.map{|x| x.reviews}.flatten
+  end
 end
