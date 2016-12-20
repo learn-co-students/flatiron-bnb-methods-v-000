@@ -19,9 +19,9 @@ class Neighborhood < ActiveRecord::Base
    end
  end
  def neighborhood_openings(date1, date2)
-   self.listings.each do |listing|
+   self.listings.collect do |listing|
      listing.reservations.collect do |r|
-       
+
 
        if r.checkin <= date2.to_date && r.checkout >= date1.to_date
 
