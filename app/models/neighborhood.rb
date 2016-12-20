@@ -1,3 +1,4 @@
+require 'pry'
 class Neighborhood < ActiveRecord::Base
   belongs_to :city
   has_many :listings
@@ -20,7 +21,10 @@ class Neighborhood < ActiveRecord::Base
  def neighborhood_openings(date1, date2)
    self.listings.each do |listing|
      listing.reservations.collect do |r|
+       
+
        if r.checkin <= date2.to_date && r.checkout >= date1.to_date
+
          listing
        end
      end
