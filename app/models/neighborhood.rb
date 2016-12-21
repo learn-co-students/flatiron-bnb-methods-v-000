@@ -18,23 +18,18 @@ class Neighborhood < ActiveRecord::Base
      city.listings.map {|listing| listing.reservations.count}.sum
    end
  end
- def neighborhood_openings(date1, date2)
-   self.listings.collect do |listing|
-     listing.reservations.collect do |r|
 
 
-       if r.checkin <= date2.to_date && r.checkout >= date1.to_date
-
-         listing
+ def neighborhood_openings(start_date, end_date)
+   openings = []
+     self.listings.collect do |listing|
+       listing.reservations.collect do |res|
+         if res.checkin <= end_date.to_date || res.checkout >= start_date.to_date
+           openings << listing
+         end
        end
      end
-   end
- end
-
-  def availability
-
-    #reservation where the listing id doesn't have a reservation id, in other words so it is open.
-    #collect the list and iterate over it to see if any of the dates match the booked dates.
+     openings
   end
 
 
