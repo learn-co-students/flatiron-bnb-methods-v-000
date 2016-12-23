@@ -1,27 +1,41 @@
 class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
+
   has_one :review
 
   validates :checkin, :checkout, presence: true
-  validate :host_cannot_be_guest, :listing_available_at_checkin
+  validate :available, :checkout_after_checkin, :guest_and_host_not_the_same
+
+  def duration
+    (checkout - checkin).to_i
+  end
+
+  def total_price
+    listing.price * duration
+  end
+
+  private
 
 
-  def host_cannot_be_guest
-      if guest_id == listing.host_id
-        errors.add(:guest_id, "host cannot reserve it's on listing")
+  def available
+    Reservation.where(listing_id: listing.id).where.not(id: id).each do |r|
+      booked_dates = r.checkin..r.checkout
+      if booked_dates === checkin || booked_dates === checkout
+        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
       end
-  end
-
-  def listing_available_at_checkin
-    # if the new checking and checkout dates is not the same as the checkin date of the user
-    Reservation.all.inspect do |res|
-     checkin_checkout_range = res.checkin..res.checkout
-     if checkin_checkout_range == checkin || checkin_checkout_range == checkout
-       errors.add(:guest_id, "this reservation has already been taken")
-    end
-    # if listing_id !=
     end
   end
 
+  def guest_and_host_not_the_same
+    if guest_id == listing.host_id
+      errors.add(:guest_id, "You can't book your own apartment.")
+    end
+  end
+
+  def checkout_after_checkin
+    if checkout && checkin && checkout <= checkin
+      errors.add(:guest_id, "Your check-out date needs to be after your check-in.")
+    end
+  end
 end
