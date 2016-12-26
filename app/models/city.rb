@@ -9,14 +9,31 @@ class City < ActiveRecord::Base
     open_listings = []
 
     self.listings.each do |listing|
-       if listing.reservations.none? do |reservation|
-             range = reservation.checkin..reservation.checkout
-             range.overlaps?(input)
-          end
-          open_listings << listing
+     if listing.reservations.none? do |reservation|
+           range = reservation.checkin..reservation.checkout
+           range.overlaps?(input)
         end
+        open_listings << listing
       end
-      open_listings
+    end
+    open_listings
   end
+
+
+  def self.highest_ratio_res_to_listings
+    city_with_most = ""
+    index = 0
+    Self.all.each do |city|
+      reservation_count = 0
+      city.listings.each do |listing|
+        reservation_count += listing.reservations.count
+      end
+       index = reservation_count; city_with_most = city if   reservation_count > index
+     end
+     city_with_most
+   end
+
+
+
 
 end
