@@ -23,14 +23,17 @@ class City < ActiveRecord::Base
   def self.highest_ratio_res_to_listings
     city_with_most = ""
     index = 0
-    Self.all.each do |city|
+    City.all.each do |city|
       reservation_count = 0
       city.listings.each do |listing|
         reservation_count += listing.reservations.count
       end
-       index = reservation_count; city_with_most = city if   reservation_count > index
+      if reservation_count > index
+       index = reservation_count
+       city_with_most = city
      end
-     city_with_most
+    end
+    city_with_most
    end
 
 
