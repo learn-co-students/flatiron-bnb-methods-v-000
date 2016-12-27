@@ -1,22 +1,15 @@
 class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
+  has_many :reservations, through: :listings
+
+
 
   def city_openings(s_date, e_date)
 
     input = Date.parse(e_date)..Date.parse(s_date)
+    Helpers.openings(self.listings, input)
 
-    open_listings = []
-
-    self.listings.each do |listing|
-     if listing.reservations.none? do |reservation|
-           range = reservation.checkin..reservation.checkout
-           range.overlaps?(input)
-        end
-        open_listings << listing
-      end
-    end
-    open_listings
   end
 
 
@@ -35,6 +28,19 @@ class City < ActiveRecord::Base
     end
     city_with_most
    end
+
+   def self.most_res
+     index = 0
+     city_with_most_res = ""
+      self.all.each do |city|
+        if city.reservations.count > index
+          index = city.reservations.count
+          city_with_most_res = city
+        end
+      end
+      city_with_most_res
+   end
+
 
 
 
