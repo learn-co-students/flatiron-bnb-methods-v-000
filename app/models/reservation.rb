@@ -4,7 +4,7 @@ class Reservation < ActiveRecord::Base
   has_one :review
   validates :checkin, :checkout, presence: true
   validate :cannot_make_resevation_on_own_name
-  validate :checkin_is_available
+  validate :checkin_is_available, unless: 'self.checkin.nil? || self.checkout.nil?'
 
   def cannot_make_resevation_on_own_name
     if self.guest == self.listing.host
@@ -13,14 +13,15 @@ class Reservation < ActiveRecord::Base
   end
 
   def checkin_is_available
-    binding.binding.pry
-    query_range = self.checkin..self.checkout
-    if listing.reservations.any? do |listing|
-        range = listing.checkin..listing.checkout
-        range.overlaps?(query_range)
+      query_range = checkin..checkout
+      if listing.reservations.any? do |reservation|
+
+          range = reservation.checkin..reservation.checkout
+          range.overlaps?(query_range)
+        end
+        errors.add(:checkin_is_available, "checkin time is not available!")
       end
-      errors.add(:checkin_is_available, "checkin time is not available!")
-    end
+    
   end
 
 
