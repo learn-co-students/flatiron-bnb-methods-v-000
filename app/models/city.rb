@@ -1,4 +1,5 @@
 class City < ActiveRecord::Base
+  include Shared
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
@@ -22,38 +23,39 @@ class City < ActiveRecord::Base
 
   def self.highest_ratio_res_to_listings
     high = 0
-    return_city = nil
-    City.all.each do |city|
-      listings = city.listings.count
+    return_object = nil
+    self.all.each do |object|
+      listings = object.listings.count
       reservations = 0
-      city.listings.all.each do |listing|
+      object.listings.all.each do |listing|
         reservations += listing.reservations.count
       end
       if listings > 0
         ratio = reservations / listings
         if ratio > high
-          return_city = city
+          return_object = object
           high = ratio
         end
       end
     end
-    return_city
+    return_object
   end
 
   def self.most_res
     high = 0
-    return_city = nil
-    City.all.each do |city|
+    return_object = nil
+    self.all.each do |object|
       reservations = 0
-      city.listings.all.each do |listing|
+      object.listings.all.each do |listing|
         reservations += listing.reservations.count
       end
-      if reservations > high
-        return_city = city
+      #binding.pry
+      if reservations >= high
+        return_object = object
         high = reservations
       end
     end
-    return_city
+    return_object
   end
 
 end
