@@ -4,7 +4,8 @@ class Reservation < ActiveRecord::Base
   has_one :review
   validates :checkin, :checkout, presence: true
   validate :invalid_same_ids
-#  validate :invalidcheckin
+  validate :invalidcheckin
+  validate :invalidcheckout
 
 
   private
@@ -15,12 +16,20 @@ class Reservation < ActiveRecord::Base
     end
   end
 
-#  def invalidcheckin
-#    self.listing.reservations.each do |reservation|
-#      if self.checkin > reservation.checkin && self.checkin < reservation.checkout
-#        errors.add(:checkin, "invalid checkin")
-#      end
-#    end
-#  end
+ def invalidcheckin
+   self.listing.reservations.each do |reservation|
+     if self.checkin > reservation.checkin && self.checkin < reservation.checkout
+       errors.add(:checkin, "invalid checkin")
+     end
+   end
+ end
+
+ def invalidcheckout
+   self.listing.reservations.each do |reservation|
+     if self.checkout > reservation.checkin && self.checkout < reservation.checkout
+       errors.add(:checkout, "invalid checkout")
+     end
+   end
+ end
 
 end
