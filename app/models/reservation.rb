@@ -4,9 +4,8 @@ class Reservation < ActiveRecord::Base
   has_one :review
   validates :checkin, :checkout, presence: true
   validate :invalid_same_ids
-  validate :invalidcheckin
-  validate :invalidcheckout
   validate :same_checkout
+  validate :overlap
 
   def duration
     (self.checkout - self.checkin).to_i
@@ -16,7 +15,6 @@ class Reservation < ActiveRecord::Base
     self.listing.price.to_f * self.duration
   end
 
-
   private
 
   def invalid_same_ids
@@ -25,22 +23,13 @@ class Reservation < ActiveRecord::Base
     end
   end
 
- def invalidcheckin
-   checkdate(self.checkin) && errors.add(:checkin, "invalid checkin")
- end
-
- def invalidcheckout
-   checkdate(self.checkout) && errors.add(:checkout, "invalid checkout")
- end
-
- def checkdate(day)
+  def overlap
     self.listing.reservations.each do |reservation|
-      if day.nil? || day > reservation.checkin && day < reservation.checkout
-        return true
+      if self.checkin.nil? || self.checkout.nil? || ((self.checkin - reservation.checkout) * (reservation.checkin - self.checkout)) >= 0
+        errors.add(:checkin, "invalid reservation")
       end
     end
-    false
- end
+  end
 
  def same_checkout
    if !self.checkin.nil? && !self.checkout.nil? && self.checkout <= self.checkin

@@ -7,7 +7,7 @@ class Review < ActiveRecord::Base
   private
 
   def reservation_valid
-    if self.reservation.status != "accepted"
+    if self.reservation.nil? || self.reservation.status != "accepted"
       errors.add(:reservation, "reservation not accepted")
     end
   end
