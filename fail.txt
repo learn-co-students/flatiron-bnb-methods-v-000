@@ -1,0 +1,45 @@
+
+Reservation
+  associations
+    has a checkin time
+    has a checkout time
+    has a status, default is pending
+    belongs to a guest
+    belongs to a listing
+    has a review
+  reservation validations
+    is valid with a checkin and checkout
+    is invalid without a checkin (FAILED - 1)
+
+Failures:
+
+  1) Reservation reservation validations is invalid without a checkin
+     Failure/Error: expect(@invalidcheckin).to_not be_valid
+     NoMethodError:
+       undefined method `>' for nil:NilClass
+     # ./app/models/reservation.rb:21:in `block in invalidcheckin'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activerecord-4.2.0/lib/active_record/relation/delegation.rb:46:in `each'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activerecord-4.2.0/lib/active_record/relation/delegation.rb:46:in `each'
+     # ./app/models/reservation.rb:20:in `invalidcheckin'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:427:in `block in make_lambda'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:189:in `block in simple'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:190:in `block in simple'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:190:in `block in simple'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:92:in `_run_callbacks'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:734:in `_run_validate_callbacks'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activemodel-4.2.0/lib/active_model/validations.rb:395:in `run_validations!'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activemodel-4.2.0/lib/active_model/validations/callbacks.rb:113:in `block in run_validations!'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:88:in `_run_callbacks'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activesupport-4.2.0/lib/active_support/callbacks.rb:734:in `_run_validation_callbacks'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activemodel-4.2.0/lib/active_model/validations/callbacks.rb:113:in `run_validations!'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activemodel-4.2.0/lib/active_model/validations.rb:334:in `valid?'
+     # /usr/local/rvm/gems/ruby-2.3.1/gems/activerecord-4.2.0/lib/active_record/validations.rb:58:in `valid?'
+     # ./spec/models/reservation_spec.rb:45:in `block (3 levels) in <top (required)>'
+
+Finished in 1.64 seconds (files took 4.36 seconds to load)
+8 examples, 1 failure
+
+Failed examples:
+
+rspec ./spec/models/reservation_spec.rb:44 # Reservation reservation validations is invalid without a checkin
+
