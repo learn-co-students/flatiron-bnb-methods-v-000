@@ -4,6 +4,7 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
+  has_many :ratings, :through => :guests
 
   validates :address, presence: true
   validates :listing_type, presence: true
@@ -15,11 +16,18 @@ class Listing < ActiveRecord::Base
   after_create :make_host
   after_destroy :stop_host
 
-  def average_review_rating
-  end
-
   def available?(start_date, end_date)
     !self.reservations.any? { |reservation| (start_date.to_datetime <= reservation.checkout.to_datetime) and (end_date.to_datetime >= reservation.checkin.to_datetime) || (start_date.to_datetime <= reservation.checkout.to_datetime) and (end_date.to_datetime >= reservation.checkin.to_datetime)}
+  end
+
+  def average_review_rating
+    ratings = []
+    self.reviews.each do |review|
+      ratings << review.rating
+    end
+    total = 0
+    ratings.each { |rating| total += rating }
+    avg_rating = total.to_f / self.reviews.count.to_f
   end
 
   private
