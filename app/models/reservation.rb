@@ -6,9 +6,10 @@ class Reservation < ActiveRecord::Base
   validates :checkin, presence: true
   validates :checkout, presence: true
 
-  before_create :check_available
-  before_create :check_if_own
-  before_create :checkin_before_checkout?
+  validate :check_if_own
+  validate :checkin_before_checkout?
+  validate :same_day
+  validate :check_available
 
   def duration
     self.checkout - self.checkin
@@ -18,10 +19,12 @@ class Reservation < ActiveRecord::Base
     duration * self.listing.price
   end
 
-  private
-
   def check_available
-    self.listing.available?(self.checkin, self.checkout)
+    if self.checkin == nil || self.checkout == nil
+      false
+    else
+      self.listing.available?(self.checkin, self.checkout)
+    end
   end
 
   def check_if_own
@@ -33,6 +36,12 @@ class Reservation < ActiveRecord::Base
   def checkin_before_checkout?
     if self.checkin > self.checkout
       errors.add(:checkin, "Checkin can't be before Checkout!")
+    end
+  end
+
+  def same_day
+    if self.checkin == self.checkout
+      errors.add(:checkin, "Checkin can't be the same as Checkout!")
     end
   end
 

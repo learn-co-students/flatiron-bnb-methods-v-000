@@ -34,10 +34,14 @@ class Listing < ActiveRecord::Base
 
     def make_host
       self.host.host = true
+      self.host.save
     end
 
     def stop_host
-      self.host.host = false
+      if Listing.find_by(host_id: self.host.id) == nil
+        self.host.host = false
+        self.host.save
+      end
     end
 
 end
