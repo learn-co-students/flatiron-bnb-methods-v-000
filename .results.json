@@ -1,1 +1,0 @@
-{"version":"3.5.4","examples":[{"description":"has a name","full_description":"City associations has a name","status":"passed","file_path":"./spec/models/city_spec.rb","line_number":3,"run_time":170.49252558,"pending_message":null}],"summary":{"duration":170.993390027,"example_count":1,"failure_count":0,"pending_count":0},"summary_line":"1 example, 0 failures"}
