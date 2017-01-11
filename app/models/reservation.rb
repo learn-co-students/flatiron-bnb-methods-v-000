@@ -9,8 +9,6 @@ class Reservation < ActiveRecord::Base
   validate :check_if_own
   validate :checkin_before_checkout?
   validate :same_day
-  validate :checkin_available
-  validate :checkout_available
   validate :check_available
 
   def duration
@@ -25,30 +23,13 @@ class Reservation < ActiveRecord::Base
     self.checkin == nil || self.checkout == nil
   end
 
-  def checkin_available
+  def check_available
     if empty_checkin_or_checkout
       false
     else
       Reservation.where(listing_id: listing.id).where.not(id: id).each do |reservation|
         (self.checkin <= reservation.checkout) and (self.checkout >= reservation.checkin) || (self.checkin <= reservation.checkout) and (self.checkout >= reservation.checkin)
       end
-    end
-  end
-
-  def checkout_available
-    if empty_checkin_or_checkout
-      false
-    else
-      current_listing = Listing.find_by(id: self.listing_id)
-      !current_listing.reservations.any? { |reservation| reservation.checkin < self.checkout and reservation.checkout > self.checkout }
-    end
-  end
-
-  def check_available
-    if empty_checkin_or_checkout
-      false
-    else
-      checkin_available and checkout_available
     end
   end
 
