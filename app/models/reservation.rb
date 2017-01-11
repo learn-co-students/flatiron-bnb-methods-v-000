@@ -6,12 +6,12 @@ class Reservation < ActiveRecord::Base
   validates :checkin, presence: true
   validates :checkout, presence: true
 
-  validate :check_if_own
-  validate :checkin_before_checkout?
-  validate :same_day
+  #validate :check_if_own
+  #validate :checkin_before_checkout?
+  #validate :same_day
   validate :checkin_available
-  validate :checkout_available
-  validate :check_available
+  #validate :checkout_available
+  #validate :check_available
 
   def duration
     self.checkout - self.checkin
@@ -26,11 +26,11 @@ class Reservation < ActiveRecord::Base
   end
 
   def checkin_available
+    binding.pry
     if empty_checkin_or_checkout
       false
     else
-      current_listing = Listing.find_by(id: self.listing_id)
-      !current_listing.reservations.any? { |reservation| reservation.checkin < self.checkin and reservation.checkout > self.checkin }
+      Reservation.where(listing_id: listing.id).any? { |reservation| reservation.checkin < self.checkin and reservation.checkout > self.checkin }
     end
   end
 
