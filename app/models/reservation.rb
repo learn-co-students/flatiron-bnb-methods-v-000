@@ -29,13 +29,13 @@ class Reservation < ActiveRecord::Base
     else
       Reservation.where(listing_id: listing.id).where.not(id: id).each do |reservation|
         if (reservation.checkin >= self.checkin) && (reservation.checkin <= self.checkout)
-          false
+          errors.add(:checkin, "Existing Reservation!")
         elsif (reservation.checkout >= self.checkin) && (reservation.checkout <= self.checkout)
-          false
+          errors.add(:checkin, "Existing Reservation!")
         elsif (self.checkin >= reservation.checkin) && (self.checkin <= reservation.checkout)
-          false
+          errors.add(:checkin, "Existing Reservation!")
         elsif (self.checkout >= reservation.checkin) && (self.checkout <= reservation.checkout)
-          false
+          errors.add(:checkin, "Existing Reservation!")
         else
           true
         end
