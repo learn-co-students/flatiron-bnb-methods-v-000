@@ -28,10 +28,13 @@ class Reservation < ActiveRecord::Base
       false
     else
       Reservation.where(listing_id: listing.id).where.not(id: id).each do |reservation|
-        binding.pry
-        if (self.checkout >= reservation.checkin) && (self.checkout <= reservation.checkout)
+        if (reservation.checkin >= self.checkin) && (reservation.checkin <= self.checkout)
           false
         elsif (reservation.checkout >= self.checkin) && (reservation.checkout <= self.checkout)
+          false
+        elsif (self.checkin >= reservation.checkin) && (self.checkin <= reservation.checkout)
+          false
+        elsif (self.checkout >= reservation.checkin) && (self.checkout <= reservation.checkout)
           false
         else
           true
