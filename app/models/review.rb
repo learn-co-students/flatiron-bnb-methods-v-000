@@ -12,7 +12,7 @@ class Review < ActiveRecord::Base
   def has_valid_reservation
 
     if self.reservation #if there is a reservation but it isn't valid
-      errors.add(:review, "can't create if reservation isn't valid") if self.reservation.valid? == false 
+      errors.add(:review, "can't create if reservation isn't valid") if self.reservation.valid?
     else
       errors.add(:review, "not associated to a reservation")
     end
