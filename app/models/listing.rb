@@ -19,17 +19,11 @@ class Listing < ActiveRecord::Base
   after_destroy :change_status
 
   def host_true
-    # this gives me even more errors than before with the previous creations
-    # self.host.host = self.host.host
-
-
     self.host.host = true
     self.host.save
   end
 
   def change_status
-    #this should change the status to host:true if the user has any listings
-    #if all of them are destroyed, then change status host:false
     if self.host.listings.empty?
       self.host.host = false
       self.host.save
