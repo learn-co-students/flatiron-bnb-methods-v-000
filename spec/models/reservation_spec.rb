@@ -42,7 +42,7 @@ describe Reservation do
     end
 
     it 'is invalid without a checkin' do
-      expect(@invalidcheckin).to_not be_valid 
+      expect(@invalidcheckin).to_not be_valid
     end
 
     it 'is invalid without a checkout' do

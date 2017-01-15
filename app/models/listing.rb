@@ -12,7 +12,7 @@ class Listing < ActiveRecord::Base
   validates :price, presence: true
   validates :neighborhood, presence: true
 
-  # before_create :host_true
+  before_create :host_true
   # before_destroy :change_status
 
   # after_create :host_true
@@ -24,6 +24,7 @@ class Listing < ActiveRecord::Base
 
 
     self.host.host = true
+    self.host.save
   end
 
   def change_status
@@ -31,10 +32,31 @@ class Listing < ActiveRecord::Base
     #if all of them are destroyed, then change status host:false
     if self.host.listings.empty?
       self.host.host = false
+      self.host.save
     else
       self.host.host = true
+      self.host.save
     end
   end
 
+  def average_review_rating
+    x = 0.0
+    count = 0
+    self.reviews.each do |review|
+      count += 1
+      x = x + review.rating
+    end
+    # changed the count number to a float because as this scales, the count will typically be a lower number than x
+    # x divided by count. The to_f (to float) so we can get the decimal point
+    x / count
+  end
+
   
+
+
+
+
+
+
+
 end
