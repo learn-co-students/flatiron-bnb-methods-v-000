@@ -6,10 +6,9 @@ class Reservation < ActiveRecord::Base
   validates :checkin, presence: true
   validates :checkout, presence: true
 
-  validate :host_also_guest?
-  validate :checkin_available?
-  validate :checkout_available?
-  validate :checkin_before_checkout?
+  validate :host_also_guest
+  validate :dates_available
+  validate :checkin_before_checkout
 
   def duration
     checkout - checkin
@@ -19,29 +18,27 @@ class Reservation < ActiveRecord::Base
     duration * listing.price
   end
 
-  def checkin_available?
-    if other_reservations_on_date?(checkin)
-      errors.add(:checkin, "is not available")
-    end
-  end
-
-  def checkout_available?
-    if other_reservations_on_date?(checkout)
-      errors.add(:checkout, "is not available")
-    end
-  end
-
-  def checkin_before_checkout?
+  private
+  def checkin_before_checkout
     if checkin? && checkout?
       unless checkin < checkout
+        errors.add(:checkin, "must be before check out")
         errors.add(:checkout, "must be after check in")
       end
     end
   end
 
-  def host_also_guest?
+  def host_also_guest
     if guest_id == listing.host_id
       errors.add(:guest_id, "host cannot reserve their own listing")
+    end
+  end
+
+  def dates_available
+    if other_reservations_on_date(checkin).any?
+      errors.add(:checkin, "is not available")
+    elsif other_reservations_on_date(checkout).any?
+      errors.add(:checkout, "is not available")
     end
   end
 
@@ -50,10 +47,6 @@ class Reservation < ActiveRecord::Base
       "checkin <= :date AND :date <= checkout",
       date: date
     )
-  end
-
-  def other_reservations_on_date?(date)
-    other_reservations_on_date(date).any?
   end
 end
 
