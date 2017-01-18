@@ -18,6 +18,10 @@ class Reservation < ActiveRecord::Base
     duration * listing.price
   end
 
+  def passed?
+    checkout <= Date.today
+  end
+
   private
   def checkin_before_checkout
     if checkin? && checkout?
