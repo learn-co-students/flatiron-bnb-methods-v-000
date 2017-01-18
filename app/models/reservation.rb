@@ -3,12 +3,9 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
 
-  validates :checkin, presence: true
-  validates :checkout, presence: true
+  validates :checkin, :checkout, presence: true
 
-  validate :host_also_guest
-  validate :dates_available
-  validate :checkin_before_checkout
+  validate :host_also_guest, :dates_available, :checkin_before_checkout
 
   def duration
     checkout - checkin
