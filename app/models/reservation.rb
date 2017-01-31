@@ -1,6 +1,6 @@
 class Reservation < ActiveRecord::Base
   belongs_to :listing
-  belongs_to :guest, :class_name => "User"
+  belongs_to :guest, class_name: "User"
   has_one :review
   
   validates :checkin, :checkout, presence: true
@@ -8,6 +8,10 @@ class Reservation < ActiveRecord::Base
   
   def duration
     checkout - checkin
+  end
+  
+  def total_price
+    listing.price * duration
   end
   
   private
@@ -27,7 +31,7 @@ class Reservation < ActiveRecord::Base
 
   def checkout_after_checkin?
     if checkin && checkout && checkin >= checkout
-        errors.add(:guest_id, "Checkout date must be after checkin date.")
+      errors.add(:guest_id, "Checkout date must be after checkin date.")
     end
   end
 end
