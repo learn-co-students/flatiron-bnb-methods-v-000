@@ -5,4 +5,9 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
   
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
+
+  before_create do
+  	self.host.is_host = true
+  end
 end
