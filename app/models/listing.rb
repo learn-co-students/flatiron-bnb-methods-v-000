@@ -8,7 +8,6 @@ class Listing < ActiveRecord::Base
   validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
 
   before_create :host_true
-
   after_destroy :host_false
 
   def average_review_rating
