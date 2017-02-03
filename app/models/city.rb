@@ -37,12 +37,13 @@ class City < ActiveRecord::Base
 	  	self.all.each do |city|
 	  		city.listings.each do |listing|
 	  			city_reservations << listing.reservations
+	  			city_reservations
 	  		end 
-			if city_reservations.length > highest_res
+			if city_reservations.flatten.length > highest_res
 			  	highest_res = city_reservations.length 
 			  	highest_res_city = city 
 		  	end 
-		  	binding.pry
+		  	# binding.pry
 	  	city_reservations.clear
   		end 
   	highest_res_city
