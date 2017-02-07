@@ -23,7 +23,7 @@ class Reservation < ActiveRecord::Base
 
   def is_available?
     if checkin && checkout
-      if listing.reservations.find {|existing_reservation| (checkin <= existing_reservation.checkout) || (checkout >= existing_reservation.checkin)}
+      if listing.reservations.find {|existing_reservation| (checkin <= existing_reservation.checkout) && (checkout >= existing_reservation.checkin)}
         errors.add(:guest_id, "Cannot overlap with an existing reservation.")
       end
     end
@@ -31,7 +31,7 @@ class Reservation < ActiveRecord::Base
 
   def checkout_after_checkin?
     if checkin && checkout && checkin >= checkout
-        errors.add(:guest_id, "Checkout date must be after checkin date.")
+      errors.add(:guest_id, "Checkout date must be after checkin date.")
     end
   end
 end

@@ -2,9 +2,9 @@ module Available
 
   module InstanceMethods
     def openings(date1, date2)
-      listings.select do |listing|
-        listing.reservations.each do |reservation|
-          ((reservation.checkin.to_date)..(reservation.checkout.to_date)) == ((date1.to_date)..(date2.to_date))
+      listings.reject do |listing|
+        listing.reservations.detect do |reservation|
+          date1.to_date <= reservation.checkout && date2.to_date >= reservation.checkin
         end
       end
     end
