@@ -28,8 +28,8 @@ class Reservation < ActiveRecord::Base
   end
 
   def no_time_traveling?
-    if checkin & checkout
-      if checking.to_date > checkout.to_date
+    if checkin && checkout
+      if checkin.to_date > checkout.to_date
         errors.add(:checkin, "cannot occur after checkout.")
       end
     end
