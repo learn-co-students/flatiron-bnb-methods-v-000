@@ -9,6 +9,18 @@ class Reservation < ActiveRecord::Base
   validate :no_evictions?
   validate :no_time_traveling?
 
+  # INSTANCE METHODS ARE BELOW
+
+  def duration
+    checkout.to_date - checkin.to_date
+  end
+
+  def total_price
+    duration * listing.price
+  end
+
+  # VALIDATION METHODS ARE BELOW
+
   def no_shilling?
     if guest_id == listing.host_id
       errors.add(:guest_id, "cannot be the same user as the reservation’s listing’s host’s ID.")
