@@ -17,7 +17,10 @@ class Listing < ActiveRecord::Base
   private
 
   def make_user_host
-    self.user.host = true
+    # binding.pry
+    self.host.host = true
+    self.host.save
+    # binding.pry
   end
-  
+
 end
