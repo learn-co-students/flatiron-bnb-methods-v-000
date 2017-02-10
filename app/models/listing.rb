@@ -11,4 +11,13 @@ class Listing < ActiveRecord::Base
   validates :description, presence: true
   validates :price, presence: true
   validates :neighborhood, presence: true
+
+  before_create :make_user_host
+
+  private
+
+  def make_user_host
+    self.user.host = true
+  end
+  
 end
