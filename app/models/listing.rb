@@ -13,14 +13,30 @@ class Listing < ActiveRecord::Base
   validates :neighborhood, presence: true
 
   before_create :make_user_host
+  before_destroy :make_user_nonhost
+
+  def average_review_rating
+    reviews_count = 0
+    stars_count = 0
+    self.reviews.each do |r|
+      reviews_count += 1
+      stars_count += r.rating
+    end
+    stars_count.to_f / reviews_count
+  end
 
   private
 
   def make_user_host
-    # binding.pry
     self.host.host = true
     self.host.save
-    # binding.pry
+  end
+
+  def make_user_nonhost
+    if self.host.listings.length == 1
+      self.host.host = false
+      self.host.save
+    end
   end
 
 end
