@@ -6,10 +6,23 @@ class Reservation < ActiveRecord::Base
   validates :checkin, presence: true
   validates :checkout, presence: true
   validate :no_shilling?
+  validate :no_conflicts?
 
   def no_shilling?
     if guest_id == listing.host_id
-      errors.add(:guest_id, "cannot be the same user as the reservation’s listing’s host’s ID")
+      errors.add(:guest_id, "cannot be the same user as the reservation’s listing’s host’s ID.")
+    end
+  end
+
+  def no_conflicts?
+    listing.reservations.each do |r|
+      if checkin && checkout
+      # The conditional above is to avoid erroring out when checkin or checkout is missing
+        if r.checkout < checkin.to_date || r.checkin > checkout.to_date
+        else
+          errors.add(:checkin, "cannot occur during an existing reservation.")
+        end
+      end
     end
   end
 
