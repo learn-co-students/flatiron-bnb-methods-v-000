@@ -24,6 +24,24 @@ module Measurable
     end # Close method
   end
 
+  def self.most_res
+    winner = nil
+    winning_count = 0
+    self.all.each do |geo|
+      count = 0
+      geo.listings.each do |l|
+        l.reservations.each do |r|
+          count += 1
+        end # Close reservation loop
+      end # Close listing loop
+      if count > winning_count
+        winner = geo
+        winning_count = count
+      end # Close leaderboard testing
+    end # Close geo loop
+    winner
+  end # Close method
+
   module InstanceMethods
   end
 end
