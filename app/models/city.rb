@@ -35,7 +35,7 @@ class City < ActiveRecord::Base
           reservations += 1
         end # Close reservation loop
       end # Close listing loop
-      contestant_ratio = reservations % listings
+      contestant_ratio = reservations / listings
       if contestant_ratio > winning_ratio
         winner = c
         winning_ratio = contestant_ratio
