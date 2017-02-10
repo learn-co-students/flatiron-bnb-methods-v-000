@@ -2,6 +2,8 @@ class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
+  extend Measurable::ClassMethods
+
   def city_openings(start_date, end_date)
     openings = []
     Listing.all.each do |l|
@@ -22,27 +24,6 @@ class City < ActiveRecord::Base
     # At this point, all listings have been analyzed. Let's return the ones without conflicts.
     openings
   end
-
-  def self.highest_ratio_res_to_listings
-    winner = nil
-    winning_ratio = 0
-    City.all.each do |c|
-      reservations = 0
-      listings = 0
-      c.listings.each do |l|
-        listings += 1
-        l.reservations.each do |r|
-          reservations += 1
-        end # Close reservation loop
-      end # Close listing loop
-      contestant_ratio = reservations / listings
-      if contestant_ratio > winning_ratio
-        winner = c
-        winning_ratio = contestant_ratio
-      end # Close leaderboard testing
-    end # Close city loop
-    winner
-  end # Close method
 
   def self.most_res
     winner = nil
