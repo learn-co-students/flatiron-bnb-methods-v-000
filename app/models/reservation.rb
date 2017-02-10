@@ -7,6 +7,7 @@ class Reservation < ActiveRecord::Base
   validates :checkout, presence: true
   validate :no_shilling?
   validate :no_conflicts?
+  validate :no_time_traveling?
 
   def no_shilling?
     if guest_id == listing.host_id
@@ -22,6 +23,14 @@ class Reservation < ActiveRecord::Base
         else
           errors.add(:checkin, "cannot occur during an existing reservation.")
         end
+      end
+    end
+  end
+
+  def :no_time_traveling?
+    if checkin & checkout
+      if checking.to_date > checkout.to_date
+        errors.add(:checkin, "cannot occur after checkout.")        
       end
     end
   end
