@@ -25,22 +25,4 @@ class City < ActiveRecord::Base
     openings
   end
 
-  def self.most_res
-    winner = nil
-    winning_count = 0
-    City.all.each do |c|
-      count = 0
-      c.listings.each do |l|
-        l.reservations.each do |r|
-          count += 1
-        end # Close reservation loop
-      end # Close listing loop
-      if count > winning_count
-        winner = c
-        winning_count = count
-      end # Close leaderboard testing
-    end # Close city loop
-    winner
-  end # Close method
-
 end
