@@ -1,6 +1,7 @@
 class Listing < ActiveRecord::Base
-  belongs_to :neighborhood
+  belongs_to :neighborhood, required: true
   belongs_to :host, :class_name => "User"
+
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
@@ -10,10 +11,9 @@ class Listing < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
   validates :price, presence: true
-  validates :neighborhood_id, presence: true
 
-  after_create :change_user_host_status
-  after_destroy :check_host_status
+  after_save :change_user_to_host
+  before_destroy :revoke_host_status
 
   def average_review_rating
     reviews.average(:rating)
@@ -32,14 +32,14 @@ class Listing < ActiveRecord::Base
     end
   end
 
-  def change_user_host_status
+  def change_user_to_host
     unless self.host == true
       self.host.update(host: true)
     end
   end
 
-  def check_host_status
-    if self.host.listings.count <= 0
+  def revoke_host_status
+    if self.host.listings.count <= 1
       self.host.update(host: false)
     end
   end

@@ -6,23 +6,28 @@ module Reservable
   end
 
   def ratio_res_to_listings
-    if listings.count > 0
-      reservations.count.to_f / listings.count.to_f
-    end
+    num_listings = self.listings.count
+      num_reservations = self.listings.collect { |l| l.reservations.count }.sum
+
+      num_listings == 0 ? 0 : num_reservations.to_f / num_listings
   end
 
   class_methods do
 
     def highest_ratio_res_to_listings
-      all.max do |a, b|
-        a.ratio_res_to_listings <=> b.ratio_res_to_listings
+      results = {}
+
+      all.each do |geo_area|
+        results[geo_area] = geo_area.ratio_res_to_listings
       end
+
+      results.max_by { |k,v| v }.first
     end
 
     def most_res
-      all.max do |a, b|
-        a.reservations.count <=> b.reservations.count
-      end
+      sum_cities = self.all.each_with_object(Hash.new(0)) { |city, counts| counts[city] += city.listings.collect { |l| l.reservations.count }.sum }
+      sum_cities.max_by { |k,v| v }.first
     end
+
   end
 end

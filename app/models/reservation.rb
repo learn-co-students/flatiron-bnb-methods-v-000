@@ -1,6 +1,7 @@
 class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
+
   has_one :review
 
   validates :checkin, presence: true
@@ -10,11 +11,11 @@ class Reservation < ActiveRecord::Base
   validate :is_available
 
   def duration
-    self.checkout - self.checkin
+    (checkout - checkin).to_i
   end
 
   def total_price
-    self.duration * self.listing.price
+    duration * listing.price
   end
 
   private
