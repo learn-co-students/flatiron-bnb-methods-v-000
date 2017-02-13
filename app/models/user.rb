@@ -6,7 +6,8 @@ class User < ActiveRecord::Base
   has_many :guests, through: :reservations
 
   #as a guest, knows about the hosts its had (FAILED - 1)
-  has_many :hosts, through: :reservations, source: "guest_id"
+  has_many :trip_listings, through: :trips, source: "listing"
+  has_many :hosts, through: :trip_listings, foreign_key: "host_id"
   #as a host, knows about its reviews from guests (FAILED - 2)
   has_many :host_reviews, through: :guests, source: "reviews"
 end

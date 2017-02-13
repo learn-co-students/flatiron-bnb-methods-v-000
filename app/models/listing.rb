@@ -1,10 +1,10 @@
 class Listing < ActiveRecord::Base
+  validates :listing_type, :description, :address, :title, :price, :neighborhood, presence: true
   belongs_to :neighborhood
   belongs_to :host, class_name: "User"
   has_many :reservations
   has_many :reviews, through: :reservations
   has_many :guests, class_name: "User", through: :reservations
-  validates :listing_type, :description, :address, :title, :price, :neighborhood, presence: true
 
   #Whenever a listing is created, the user attached to that listing should be
   #converted into a "host". This means that the user's host field is set to true
