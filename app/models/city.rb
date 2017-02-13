@@ -6,7 +6,7 @@ class City < ActiveRecord::Base
   #available for the entire span that is inputted.
 
   def city_openings(start_date, end_date)
-    listing.reservations narrow down reservations 
+    #listing.reservations narrow down reservations 
   end
 
 

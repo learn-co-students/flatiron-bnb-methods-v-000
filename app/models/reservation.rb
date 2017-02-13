@@ -29,6 +29,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def reserved
+    if checkin && checkout
       Reservation.where(:listing_id => listing.id).where.not(id: id).each do |r|
         reserved_days = r.checkin..r.checkout
        if reserved_days === r.checkin || reserved_days === r.checkout
@@ -37,3 +38,11 @@ class Reservation < ActiveRecord::Base
       end
     end
   end
+
+
+  # def check_out_after_check_in
+  #   if self.checkout && self.checkin && self.checkout <= self.checkin
+  #     errors.add(:guest_id, "Your check-out date needs to be after your check-in.")
+  #   end
+  # end
+end
