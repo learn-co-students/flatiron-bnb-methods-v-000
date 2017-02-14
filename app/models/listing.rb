@@ -19,18 +19,15 @@ class Listing < ActiveRecord::Base
     reviews.average(:rating)
   end
 
-  private
-
-  def self.available(start_date, end_date)
-    if start_date && end_date
-      joins(:reservations).
-        where.not(reservations: {checkin: start_date..end_date}) &
-      joins(:reservations).
-        where.not(reservations: {checkout: start_date..end_date})
-    else
-      []
+  def available?(start_date, end_date)
+    parsed_start_date = start_date.class == String ? Date.parse(start_date) : start_date
+    parsed_end_date = end_date.class == String ? Date.parse(end_date) : end_date
+    reservations.any? do |reservation|
+      parsed_start_date < reservation.checkout && reservation.checkin < parsed_end_date
     end
   end
+
+  private
 
   def change_user_to_host
     unless self.host == true

@@ -7,9 +7,9 @@ module Reservable
 
   def ratio_res_to_listings
     num_listings = self.listings.count
-      num_reservations = self.listings.collect { |l| l.reservations.count }.sum
+    num_reservations = self.listings.collect { |l| l.reservations.count }.sum
 
-      num_listings == 0 ? 0 : num_reservations.to_f / num_listings
+    num_listings == 0 ? 0 : num_reservations.to_f / num_listings
   end
 
   class_methods do

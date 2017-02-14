@@ -7,7 +7,7 @@ class Neighborhood < ActiveRecord::Base
   include Reservable
 
   def neighborhood_openings(start_date, end_date)
-    openings(start_date, end_date)
+    listings.select {|listing| !listing.available?(start_date, end_date)}
   end
 
 end
