@@ -4,21 +4,23 @@ class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
 
-# binding.pry
+    def city_openings(start_date, end_date)
+      available_listings = []
+      unavailable_listings = []
 
-    def city_openings
-      openings=[]
-      # binding.pry
       Reservation.all.each do |reservation|
-          city = reservation.listing.neighborhood.city
-          if self == city
-
-          end
+              unavailable_listings << reservation.listing if reservation.listing.neighborhood.city == self && overlaps?(start_date, end_date, reservation)
       end
+
+      Listing.all.each do |listing|
+          available_listings << listing unless unavailable_listings.include? listing
+        end
+      available_listings
     end
 
    def overlaps?(start_date, end_date, other)
-      (start_date - other.checkout) * (other.checkin - end_date) >= 0
+      # (start_date - other.checkout) * (other.checkin - end_date) >= 0
+      (DateTime.parse(start_date).to_date - other.checkout) * (other.checkin - DateTime.parse(end_date).to_date) >= 0
    end
 
    def self.highest_ratio_res_to_listings

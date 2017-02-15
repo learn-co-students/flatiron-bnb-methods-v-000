@@ -2,6 +2,25 @@ class Neighborhood < ActiveRecord::Base
   belongs_to :city
   has_many :listings
 
+    def neighborhood_openings(start_date, end_date)
+      available_listings = []
+      unavailable_listings = []
+
+      Reservation.all.each do |reservation|
+              unavailable_listings << reservation.listing if reservation.listing.neighborhood == self && overlaps?(start_date, end_date, reservation)
+      end
+
+      Listing.all.each do |listing|
+          available_listings << listing unless unavailable_listings.include? listing
+        end
+      available_listings
+    end
+
+   def overlaps?(start_date, end_date, other)
+      # (start_date - other.checkout) * (other.checkin - end_date) >= 0
+      (DateTime.parse(start_date).to_date - other.checkout) * (other.checkin - DateTime.parse(end_date).to_date) >= 0
+   end
+
     def self.most_res
         neighborhood_count = []
           Reservation.all.each do |reservation|
@@ -12,7 +31,6 @@ class Neighborhood < ActiveRecord::Base
        end
 
     def self.highest_ratio_res_to_listings
-        # binding.pry
         listing_count = {}
         ratios = {}
         neighborhoods = self.reservation_count
