@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170210214416) do
+ActiveRecord::Schema.define(version: 20170214205624) do
 
   create_table "cities", force: :cascade do |t|
     t.string   "name"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20170210214416) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.string   "status",     default: "pending"
+    t.integer  "host_id"
   end
 
   create_table "reviews", force: :cascade do |t|
@@ -64,6 +65,13 @@ ActiveRecord::Schema.define(version: 20170210214416) do
     t.boolean  "host",       default: false
     t.integer  "host_id"
     t.integer  "guest_id"
+  end
+
+  create_table "users_users", force: :cascade do |t|
+    t.integer  "host_id"
+    t.integer  "guest_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
