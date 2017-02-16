@@ -16,20 +16,15 @@ class Listing < ActiveRecord::Base
   before_create :change_user_to_host
 
     def change_user_to_host
-        @user = User.find_by(:id=>self.host_id)
-        @user.host = true
-        @user.save
+        self.host.host = true
+        self.host.save
     end
 
     def change_host_to_false_when_listings_deleted
-        # binding.pry
-        @user = User.find_by(:id=>self.host_id)
-        # if self.host
-            if @user.listings.empty? && @user.host == true
-                @user.host = false
-                @user.save
-            end
-        # end
+      if self.host.listings.length == 1
+        self.host.host = false
+        self.host.save
+      end
     end
 
     def average_review_rating
