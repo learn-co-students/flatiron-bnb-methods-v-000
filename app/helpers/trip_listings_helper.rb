@@ -1,0 +1,2 @@
+module TripListingsHelper
+end

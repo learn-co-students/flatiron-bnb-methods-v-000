@@ -1,0 +1,2 @@
+module HospitalitiesHelper
+end

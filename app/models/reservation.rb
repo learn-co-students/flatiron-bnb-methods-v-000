@@ -1,7 +1,8 @@
 class Reservation < ActiveRecord::Base
   belongs_to :listing
   belongs_to :guest, :class_name => "User"
-  belongs_to :host, :class_name => "User"
+  # belongs_to :host, :class_name => "User"
+  # A reservation probably shouldn't belong directly to a host. Instead, it should probably belong to a listing, which belongs to a host.
   has_one :review
 
   validates :checkin, presence: true
