@@ -84,6 +84,7 @@ describe Listing do
     end
 
     it 'has many guests' do
+      binding.pry
       expect(listing.guests).to include(bart_simpson)
       expect(listing.guests).to include(lisa_simpson)
     end
