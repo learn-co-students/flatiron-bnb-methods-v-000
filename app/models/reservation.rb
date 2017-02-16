@@ -3,7 +3,7 @@ class Reservation < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
   has_one :review
   validates :checkin, :checkout, presence: true
-  validate :no_reserve_on_own_listing, :reserved
+  validate :no_reserve_on_own_listing, :reserved, :checkout_after_checkin
 
   def duration
     day = 0
@@ -29,20 +29,17 @@ class Reservation < ActiveRecord::Base
   end
 
   def reserved
-    if checkin && checkout
-      Reservation.where(:listing_id => listing.id).where.not(id: id).each do |r|
-        reserved_days = r.checkin..r.checkout
-       if reserved_days === r.checkin || reserved_days === r.checkout
-         errors.add(:guest_id, "Sorry this has been reserved already.")
-       end
+    Reservation.where(listing_id: listing.id).where.not(id: id).each do |r|
+      booked_dates = r.checkin..r.checkout
+      if booked_dates === checkin || booked_dates === checkout
+        errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
       end
     end
   end
 
-
-  # def check_out_after_check_in
-  #   if self.checkout && self.checkin && self.checkout <= self.checkin
-  #     errors.add(:guest_id, "Your check-out date needs to be after your check-in.")
-  #   end
-  # end
+  def checkout_after_checkin
+   if checkout && checkin && checkout <= checkin
+    errors.add(:guest_id, "Your check-out date needs to be after your check-in.")
+    end
+  end
 end

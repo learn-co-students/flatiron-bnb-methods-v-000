@@ -6,7 +6,12 @@ class City < ActiveRecord::Base
   #available for the entire span that is inputted.
 
   def city_openings(start_date, end_date)
-    #listing.reservations narrow down reservations 
+    #listing.reservations narrow down reservations
+    self.listings.reservations.each do |r|
+      if r.listing.vacant?(start_date, end_date)
+        r.listing
+      end
+    end
   end
 
 

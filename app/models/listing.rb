@@ -18,6 +18,18 @@ class Listing < ActiveRecord::Base
     self.reviews.average(:rating)
   end
 
+  def vacant?(start_date, end_date)
+     reservations.collect do |r|
+      reserved_dates = r.checkin..r.checkout
+        desired_date_range = start_date..end_date
+      if reserved_dates != desired_date_range
+        true
+      else
+        false
+      end
+     end
+  end
+
   private
 
   def host_status_change
