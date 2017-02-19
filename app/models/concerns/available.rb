@@ -22,12 +22,31 @@ module Available
 
     openings
     end
+
+    def reservations_count
+      x_reservations = 0
+      self.listings.each do |listing|
+        x_reservations += listing.reservations.count
+      end
+      x_reservations
+    end
+
+
   end
 
   module ClassMethods
     #knows the city with the highest ratio of reservations to listings
-    def highest_ration_res_to_listings
+    def highest_ratio_res_to_listings
+      x_ratio = 0.0
+      highest_ratio_res_to_listings = nil
 
+      self.all.each do |x|
+        if x_ratio < x.reservations_count/x.listings.count.to_f
+          x_ratio = x.reservations_count/x.listings.count.to_f
+          highest_ratio_res_to_listings = x
+        end
+      end
+      highest_ratio_res_to_listings
     end
 
     #knows the city with the most reservations
