@@ -1,20 +1,10 @@
 class Neighborhood < ActiveRecord::Base
   belongs_to :city
   has_many :listings
+  include Available::InstanceMethods
  #knows avil. listings given date range
-  def neighborhood_openings(beg_date, end_date)
-    self.listings do |listing|
-      collection = []
-      listing.reservations.each do |one|
-        dates = beg_date..end_date
-        if one.checkin === dates && one.checkout === dates
-          false
-        else
-          collection << listing
-        end
-      end
-      collection 
-    end
+  def neighborhood_openings(start_date, end_date)
+    openings(start_date, end_date)
   end
 
 end

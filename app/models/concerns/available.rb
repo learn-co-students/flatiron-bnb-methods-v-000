@@ -2,11 +2,25 @@ module Available
 
   module InstanceMethods
     def openings(start_date, end_date)
-      listings.select do |listing|
-        listing.reservations.each do |reservation|
-          ((reservation.checkin.to_date)..(reservation.checkout.to_date)) == ((start_date.to_date)..(end_date.to_date))
-        end
+
+    search_range = (start_date.to_date .. end_date.to_date)
+    openings = []
+
+
+    self.listings.each do |listing|
+      checkins = []
+      checkouts = []
+
+      listing.reservations.each do |reservation|
+        checkins << reservation.checkin
+        checkouts << reservation.checkout
       end
+
+      openings << listing if !search_range.overlaps?(checkins.sort.first .. checkouts.sort.last)
+
+    end
+
+    openings
     end
   end
 
