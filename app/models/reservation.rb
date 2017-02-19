@@ -25,11 +25,20 @@ class Reservation < ActiveRecord::Base
   end
 
   def checkin_before_checkout?
-    binding.pry
+    # binding.pry
 
-    # if checkin < checkout
-    #   errors.add(:guest_id, "Great Scott, time traveler, check your booking dates")
-    # end
+     if checkout && checkin && checkout <= checkin
+       errors.add(:guest_id, "Great Scott, time traveler, check your booking dates")
+     end
+  end
+
+  def duration
+    (checkout - checkin).to_i
+  end
+
+  def total_price
+    listing.price * duration
+
   end
 
 

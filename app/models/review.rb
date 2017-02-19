@@ -4,6 +4,23 @@ class Review < ActiveRecord::Base
 
   validates :rating, presence: true
   validates :description, presence: true
-  
+
+  validate :checkout, :valid_review
+
+
+  def checkout
+    if reservation && reservation.checkout > Date.today
+      errors.add(:reservation, "Checkout error")
+    end
+  end
+
+  def valid_review
+
+    if reservation.try(:status) != 'accepted'
+      errors.add(:reservation, "Checkout error")
+    end
+
+  end
+
 
 end
