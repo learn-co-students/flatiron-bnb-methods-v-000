@@ -1,24 +1,13 @@
 class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
+  include Available::InstanceMethods
 
   #city_openings method should return all of the Listing objects that are
   #available for the entire span that is inputted.
 
   def city_openings(start_date, end_date)
-    #listing.reservations narrow down reservations
-    self.listings.reservations.each do |r|
-      if r.listing.vacant?(start_date, end_date)
-        r.listing
-      end
-    end
+    openings(start_date, end_date)
   end
 
-
 end
-
-#   reservations.each do |r|
-#     if r.listing.vacant?(start_date, end_date)
-#       r.listing
-#     end
-#   end
