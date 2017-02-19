@@ -23,9 +23,18 @@ class Listing < ActiveRecord::Base
     self.reservations.each do |reservation|
 
         total += reservation.review.rating
-        
+
     end
     avg = total/self.reservations.count.to_f
+  end
+
+  def booked
+      booked = []
+
+    self.reservations.each do |reservation|
+      booked << [reservation.checkin ..  reservation.checkout]
+    end
+    booked.flatten
   end
 
   private
