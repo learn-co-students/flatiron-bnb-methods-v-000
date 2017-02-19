@@ -2,25 +2,19 @@ module Available
 
   module InstanceMethods
     def openings(start_date, end_date)
+      search_range = (start_date.to_date .. end_date.to_date)
+      openings = []
 
-    search_range = (start_date.to_date .. end_date.to_date)
-    openings = []
-
-
-    self.listings.each do |listing|
-      checkins = []
-      checkouts = []
-
-      listing.reservations.each do |reservation|
-        checkins << reservation.checkin
-        checkouts << reservation.checkout
+      self.listings.each do |listing|
+        checkins = []
+        checkouts = []
+        listing.reservations.each do |reservation|
+          checkins << reservation.checkin
+          checkouts << reservation.checkout
+        end
+        openings << listing if !search_range.overlaps?(checkins.sort.first .. checkouts.sort.last)
       end
-
-      openings << listing if !search_range.overlaps?(checkins.sort.first .. checkouts.sort.last)
-
-    end
-
-    openings
+      openings
     end
 
     def reservations_count
@@ -51,8 +45,16 @@ module Available
 
     #knows the city with the most reservations
     def most_res
-
+      reservations = 0
+      most_res = nil
+      self.all.each do |x|
+        if reservations < x.reservations_count
+          reservations = x.reservations_count
+          most_res = x
+        end
+      end
+      most_res
+      end
     end
-  end
 
 end
