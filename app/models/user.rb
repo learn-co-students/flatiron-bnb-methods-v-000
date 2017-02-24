@@ -5,10 +5,10 @@ class User < ActiveRecord::Base
   has_many :reviews, :foreign_key => 'guest_id'
 
   #host associations
-  has_many :guests, through: :reservations
-  has_many :host_reviews, through: :guests, source: :reviews
+  has_many :guests, :through => :reservations, :class_name => "User"
+  has_many :host_reviews, :through => :listings, source: :reviews
 
   #guest associations
-  has_many :trip_listings, through: :trips, source: :listing
-  has_many :hosts, through: :trip_listings, foreign_key: :host_id
+  has_many :trip_listings, :through => :trips, :source => :listing
+  has_many :hosts, :through => :trip_listings, :foreign_key => :host_id
 end

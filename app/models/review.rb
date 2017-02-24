@@ -10,9 +10,11 @@ class Review < ActiveRecord::Base
   private
 
   def valid_reservation?
-      if reservation && reservation.status != "accepted" && !reservation.checkout.past?
+    if reservation
+      if !reservation.checkout.past? || reservation.status != "accepted"
         errors.add(:reservation, "Reservation must be accepted and completed before leaving a review.")
       end
+    end
   end
 
 end
