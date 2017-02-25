@@ -10,7 +10,7 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
+#s
 ActiveRecord::Schema.define(version: 20140710181927) do
 
   create_table "cities", force: :cascade do |t|
