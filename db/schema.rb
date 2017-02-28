@@ -24,11 +24,11 @@ ActiveRecord::Schema.define(version: 20140710181927) do
     t.string   "listing_type"
     t.string   "title"
     t.text     "description"
-    t.decimal  "price",           precision: 8, scale: 2
+    t.decimal  "price"
     t.integer  "neighborhood_id"
     t.integer  "host_id"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   create_table "neighborhoods", force: :cascade do |t|
