@@ -5,4 +5,26 @@ class Listing < ActiveRecord::Base
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
   
+  validates :address, presence: true
+  validates :listing_type, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :price, presence: true
+  validates :neighborhood_id, presence: true
+
+  after_create :change_host_value
+
+  # after_destroy :delete_host
+
+  private 
+
+  def change_host_value
+    self.host.host = true
+  end
+
+  # def delete_host
+  #   binding.pry
+  #   self.host.host = false
+  # end 
+   
 end
