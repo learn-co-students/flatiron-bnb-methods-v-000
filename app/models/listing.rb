@@ -13,18 +13,21 @@ class Listing < ActiveRecord::Base
   validates :neighborhood_id, presence: true
 
   after_create :change_host_value
-
-  # after_destroy :delete_host
+  after_destroy :delete_host
 
   private 
 
   def change_host_value
     self.host.host = true
+    self.host.save
   end
 
-  # def delete_host
-  #   binding.pry
-  #   self.host.host = false
-  # end 
+  def delete_host
+   
+    if self.host.listings.empty?
+      self.host.host = false
+      self.host.save
+    end 
+  end 
    
 end
