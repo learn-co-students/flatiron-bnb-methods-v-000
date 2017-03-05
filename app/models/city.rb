@@ -36,4 +36,3 @@ class City < ActiveRecord::Base
     city_hash.key(city_hash.values.max)
   end 
 end
-

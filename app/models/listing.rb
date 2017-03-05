@@ -15,6 +15,16 @@ class Listing < ActiveRecord::Base
   after_create :change_host_value
   after_destroy :delete_host
 
+  def average_review_rating
+    number_of_reviews = self.reviews.length
+    review_total = 0 
+    reviews.each do |review|
+      review_total += review.rating 
+    end 
+    average_review = review_total.fdiv(number_of_reviews)
+    average_review
+  end 
+
   private 
 
   def change_host_value
@@ -23,11 +33,10 @@ class Listing < ActiveRecord::Base
   end
 
   def delete_host
-   
     if self.host.listings.empty?
       self.host.host = false
       self.host.save
     end 
   end 
-   
+  
 end
