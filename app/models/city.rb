@@ -1,4 +1,6 @@
 class City < ActiveRecord::Base
+  extend Sortable::ClassMethods
+  include Sortable::InstanceMethods
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
   has_many :reservations, :through => :listings
@@ -15,29 +17,5 @@ class City < ActiveRecord::Base
     end
     arr
   end
-
-  def self.most_res
-    most_res = City.first
-    City.all.each do |city|
-      if most_res.reservations.length < city.reservations.length
-         most_res = city
-       end
-     end
-    most_res
-  end
-
-  def self.highest_ratio_res_to_listings
-    store = City.first
-    City.all.each do |city|
-      if (store.reservations.length / store.listings.length) < (city.reservations.length / city.listings.length)
-         store = city
-       end
-     end
-    store
-  end
-
-
-
-
 
 end
