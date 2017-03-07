@@ -4,9 +4,9 @@ class Reservation < ActiveRecord::Base
   has_one :review
 
   def available?(start_date, end_date)
-    start_date1 = Date.parse(start_date)
-    end_date1 = Date.parse(end_date)
-    self.checkin >= start_date1 && self.checkout <= end_date1
+    start_date2 = Date.parse(start_date)
+    end_date2 = Date.parse(end_date)
+    self.checkin <= end_date2 && self.checkout >= start_date2
   end
 
 end
