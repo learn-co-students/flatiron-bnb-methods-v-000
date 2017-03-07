@@ -7,15 +7,12 @@ class City < ActiveRecord::Base
 
 
   def city_openings(checkin, checkout)
-    arr = []
-    listings.each do |listing|
-      listing.reservations.each do |reservation|
-        if (Date.parse(checkin) <= reservation.checkout) && (Date.parse(checkout) >= reservation.checkin)
-          arr << listing
+    listings.select do |listing|
+      listing.reservations.none? do |reservation|
+        (Date.parse(checkin) <= reservation.checkout) && (Date.parse(checkout) >= reservation.checkin)
         end
       end
     end
-    arr
-  end
+
 
 end
