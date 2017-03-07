@@ -6,8 +6,7 @@ class Reservation < ActiveRecord::Base
   validates_presence_of :checkin, :checkout
   validate :checkin_before_checkout
   validate :host_isnt_guest
-
-  before_save :validate_checkin_availability
+  validate :available?
 
   def duration
     checkout - checkin
@@ -19,11 +18,17 @@ class Reservation < ActiveRecord::Base
 
   private
 
-  def validate_checkin_availability
-    listing.reservations.none? do |reservation|
-       checkin <= r.checkout
-     end
+  def available?
+    unless available(checkin, checkout)
+      errors.add(:checkin, "There must be an available listing at checkin and checkout")
+    end
   end
+
+  def available(checkin, checkout)
+    checkin_and_checkout_present && listing.reservations.none? do |reservation|
+       (checkin <= reservation.checkout) && (checkout >= reservation.checkin)
+     end
+   end
 
   def checkin_before_checkout
    unless checkin_and_checkout_present && checkin < checkout
