@@ -15,4 +15,9 @@ class Listing < ActiveRecord::Base
   	end
   end
 
+  def method_name
+  	
+  end
+
+
 end
