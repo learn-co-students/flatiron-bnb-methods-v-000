@@ -4,7 +4,38 @@ class City < ActiveRecord::Base
   has_many :reservations, :through => :listings
 
   def city_openings(start_date, end_date)
-  	self.listings.merge( Listing.bookable(start_date, end_date) )
+
+    self.listings.merge(Listing.available(start_date, end_date))
+    # self.listings.select{ |listing| listing.available(start_date, end_date) }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # Listing.joins(:neighborhood).joins("LEFT OUTER JOIN reservations ON listings.id = reservations.listing_id").where(neighborhoods: {city_id: self.id}, reservations: {id: nil})+Listing.joins(:neighborhood).joins(:reservations).where("neighborhoods.city_id = ?", self.id).where.not("reservations.checkout >= ? AND ? >= reservations.checkin", start_date, end_date)
+
+    # Listing.joins(:neighborhood).joins("LEFT OUTER JOIN reservations ON listings.id = reservations.listing_id").where(neighborhoods: {city_id: 1}, reservations: {id: nil})+Listing.joins(:neighborhood).joins(:reservations).where("neighborhoods.city_id = ? AND NOT ? BETWEEN reservations.checkin AND reservations.checkout AND NOT ? BETWEEN reservations.checkin AND reservations.checkout", 1, '2014-05-01', '2014-05-05').group("listings.id")
+
+  	# self.listings.merge( Listing.bookable(start_date, end_date) )
   	# intersect the city's (neighborhood's) listings with bookable listings
   	# City.first.city_openings('2014-05-01', '2014-05-05')
   	# will SQL query
