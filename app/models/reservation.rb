@@ -5,6 +5,7 @@ class Reservation < ActiveRecord::Base
   has_one :review
   validates_presence_of :checkin, :checkout, :listing_id, :guest_id
   validate :guest_is_not_host, :valid_range, :availability
+  before_save :status_accepted
 
   def duration
    start_date = checkin
@@ -24,6 +25,10 @@ class Reservation < ActiveRecord::Base
    end
  end
 
+ def status_accepted
+   status = "accepted"
+ end
+
  def valid_range
    if checkin && checkout && checkin >= checkout
      errors.add(:guest, "Checkin cannot be after checkout")
@@ -33,7 +38,7 @@ class Reservation < ActiveRecord::Base
  def availability
    if checkin && checkout
    listing.reservations.each do |r|
-     if r.checkin < checkout || r.checkout > checkin
+     if (r.checkin < checkout && r.checkin > checkin) || (r.checkout > checkin  && r.checkout < checkout)
        errors.add(:listing, "This listing is not available for those dates")
      end
    end

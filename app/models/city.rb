@@ -6,8 +6,12 @@ class City < ActiveRecord::Base
   extend Reservable::ClassMethods
   include Reservable::InstanceMethods
 
-  def city_openings
-
+  def city_openings(checkin, checkout)
+    listings.map do |l|
+      l.reservations.none? do |r|
+        (r.checkin < checkout.to_datetime && r.checkin > checkin.to_datetime) || (r.checkout > checkin.to_datetime  && r.checkout < checkout.to_datetime)
+      end
+    end
   end
 
 
