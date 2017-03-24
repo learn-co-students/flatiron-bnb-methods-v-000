@@ -23,11 +23,7 @@ class Listing < ActiveRecord::Base
 
   # returns all the Listings from the supplied collection of Listings that are available for the entire supplied date range.
   def self.find_openings(listings, start_date, end_date)
-    listings.reject { |listing|
-      listing.reservations.detect { |reservation|
-        reservation.conflict?(start_date, end_date)
-      }
-    }
+    listings.reject { |listing| Reservation.has_conflict?(listing.reservations, start_date, end_date) }
   end
 
   # returns the object in the collection that has the highest reservations per listing average.

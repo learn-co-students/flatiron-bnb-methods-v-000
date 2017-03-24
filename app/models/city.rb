@@ -4,7 +4,7 @@ class City < ActiveRecord::Base
 
   # returns all the Listings for this City that are available for the entire supplied date range.
   def city_openings(start_date, end_date)
-    Listing.find_openings(listings, start_date, end_date)
+    Listing.find_openings(listings, Date.parse(start_date), Date.parse(end_date))
   end
 
   # returns the City that has the highest reservations per listing average.
