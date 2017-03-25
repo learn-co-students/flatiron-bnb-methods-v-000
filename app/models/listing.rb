@@ -4,5 +4,15 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
+
+  validates :address, :listing_type, :title, :description, :price, :neighborhood, presence: true
+
+
+  after_create :set_host_status
   
+
+   def set_host_status
+      # binding.pry
+     self.host.host = true
+   end
 end
