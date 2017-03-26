@@ -16,4 +16,17 @@ class City < ActiveRecord::Base
   available
   end
 
+  def self.most_res
+    listing = highest_listings.flatten.max_by do |listing|
+      listing.reservations_count
+    end
+    listing.neighborhood.city
+  end
+
+  def self.highest_listings
+    City.all.collect do |city|
+      city.listings.order("listings.reservations_count DESC").limit(1)
+    end
+  end
+
 end
