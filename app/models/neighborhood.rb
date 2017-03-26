@@ -1,6 +1,9 @@
 class Neighborhood < ActiveRecord::Base
   belongs_to :city
   has_many :listings
+  has_many :reservations, through: :listings
+
+  include ReservationStats
 
   def neighborhood_openings(starting, ending)
     start_date = Date.parse(starting)
@@ -15,5 +18,5 @@ class Neighborhood < ActiveRecord::Base
     end
   available
   end
-
+  
 end

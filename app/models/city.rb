@@ -1,6 +1,9 @@
 class City < ActiveRecord::Base
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
+  has_many :reservations, :through => :listings
+
+  include ReservationStats
 
   def city_openings(starting, ending)
     start_date = Date.parse(starting)
@@ -16,17 +19,5 @@ class City < ActiveRecord::Base
   available
   end
 
-  def self.most_res
-    listing = highest_listings.flatten.max_by do |listing|
-      listing.reservations_count
-    end
-    listing.neighborhood.city
-  end
-
-  def self.highest_listings
-    City.all.collect do |city|
-      city.listings.order("listings.reservations_count DESC").limit(1)
-    end
-  end
 
 end
