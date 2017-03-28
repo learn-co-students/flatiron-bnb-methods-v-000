@@ -33,10 +33,6 @@ describe City do
         expect(City.most_res).to eq(City.find_by(:name => "NYC")) 
       end 
 
-      it 'knows the city with the most reservations' do
-        make_denver
-        expect(City.most_res).to eq(City.find_by(:name => "Denver")) 
-      end
     end
   end
 end
