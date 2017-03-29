@@ -11,13 +11,20 @@ module Shareable
       end
     end
 
+    def ratio
+      if listings.count > 0
+        reservations.count.to_f / listings.count.to_f
+      else
+        0
+      end
+    end
+
   end
 
   module ClassMethods
 
     def highest_ratio_res_to_listings
-      ratio = reservations.count.to_f / listings.count.to_f
-      all.max { |x, y| x.ratio <=> y.ratio }
+      all.max { |a, b| a.ratio <=> b.ratio }
     end
 
     def most_res
