@@ -25,4 +25,5 @@ class Listing < ActiveRecord::Base
       self.host.update(host: false)
     end
   end
+
 end
