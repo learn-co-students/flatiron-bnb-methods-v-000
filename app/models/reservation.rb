@@ -22,7 +22,7 @@ class Reservation < ActiveRecord::Base
   end
 
   def duration
-    d = (checkout - checkin).to_i
+    (checkout - checkin).to_i
   end
 
   def total_price

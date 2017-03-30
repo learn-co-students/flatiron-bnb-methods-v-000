@@ -23,8 +23,12 @@ module Shareable
 
   module ClassMethods
 
+    # a = %w(albatross dog horse)
+    # a.max #=> "horse"
+    # a.max { |a, b| a.length <=> b.length }  #=> "albatross"
+    
     def highest_ratio_res_to_listings
-      all.max { |a, b| a.ratio <=> b.ratio }
+      all.max { |x, y| x.ratio <=> y.ratio }
     end
 
     def most_res
