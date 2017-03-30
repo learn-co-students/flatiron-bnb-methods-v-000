@@ -11,7 +11,7 @@ module AvailableListings
         end
     end
     module ClassMethods
-        def self.highest_ratio_res_to_listings
+        def highest_ratio_res_to_listings
             @ratios = self.all.collect do |city|
                 reservations = city.listings.collect do |listing|
                     listing.reservations
@@ -22,7 +22,7 @@ module AvailableListings
             City.find(@ratios[0][1])
         end
 
-        def self.most_res
+        def most_res
             @ratios = self.all.collect do |city|
                 reservations = city.listings.collect do |listing|
                     listing.reservations
