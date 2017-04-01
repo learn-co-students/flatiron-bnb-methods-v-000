@@ -38,4 +38,5 @@ group :development, :test do
   gem "sqlite3"
   gem "pry"
   gem 'rack_session_access'
+  gem 'rspec-collection_matchers' #req'd for solution specs
 end
