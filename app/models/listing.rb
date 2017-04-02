@@ -9,10 +9,17 @@ class Listing < ActiveRecord::Base
 
 
   after_create :set_host_status
-  
+  after_destroy :unset_host_status
 
    def set_host_status
-      # binding.pry
-     self.host.host = true
+     self.host.update(host: true)
+   end
+
+   def unset_host_status
+     self.host.update(host: false) if self.host.listings.empty?
+   end
+
+   def average_review_rating
+     self.reviews.average(:rating).to_f
    end
 end
