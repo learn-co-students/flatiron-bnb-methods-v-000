@@ -15,7 +15,7 @@ class Listing < ActiveRecord::Base
   after_destroy :release_host_attribute, if: "self.host.listings.empty?"
 
   def average_review_rating
-    private_average_review_rating
+    reviews.average(:rating)
   end
 
   private
@@ -25,15 +25,6 @@ class Listing < ActiveRecord::Base
 
   def release_host_attribute
       host.update(host: false)
-  end
-
-  def private_average_review_rating
-    ratings = []
-    reviews.each do |review|
-      ratings << review.rating
-    end
-
-    ratings.inject{|sum, rating| sum + rating}.to_f/ratings.length
   end
 end
 
