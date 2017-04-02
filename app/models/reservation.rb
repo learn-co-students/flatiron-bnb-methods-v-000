@@ -4,7 +4,7 @@ class Reservation < ActiveRecord::Base
   has_one :review
 
   validates :checkin, :checkout, presence: true
-  validate :is_not_own_listing, :checkout_is_later_than_checkin, :is_available
+  validate :is_not_own_listing, :checkout_is_later_than_checkin, :is_available?
 
   def duration
     (checkout - checkin).to_i
@@ -17,21 +17,29 @@ class Reservation < ActiveRecord::Base
   private
   def is_not_own_listing
     if guest_id == listing.host_id
-      errors.add(:guest, "Sorry: you can't book your own listing")
+      errors.add(:guest_id, "Sorry: you can't book your own listing")
     end
   end
 
-  def is_available # makes sure that listing is available during checkin, checkout dates
-    Reservation.where(listing_id: listing).where.not(id: id).each do |res|
-      if (checkin && checkout) && (res.checkin..res.checkout === (checkin..checkout)) # (checkin && checkout) verifies presence of both; needed to pass master spec
-        errors.add(:guest, "Sorry: this listing is not available for your desired dates")
-      end
-    end
-  end
+  def is_available?
+   if checkin && checkout
+     if listing.reservations.find {|existing_reservation| (checkin <= existing_reservation.checkout) && (checkout >= existing_reservation.checkin)}
+       errors.add(:guest_id, "Cannot overlap with an existing reservation.")
+     end
+   end
+ end
+
+  # def is_available # makes sure that listing is available during checkin, checkout dates
+  #   Reservation.where(listing_id: listing).where.not(id: id).each do |res|
+  #     if (checkin && checkout) && (res.checkin..res.checkout === (checkin..checkout)) # (checkin && checkout) verifies presence of both; needed to pass master spec
+  #       errors.add(:guest, "Sorry: this listing is not available for your desired dates")
+  #     end
+  #   end
+  # end
 
   def checkout_is_later_than_checkin
     if (checkout && checkin) && (checkout <= checkin)
-      errors.add(:checkout, "Sorry: checkout date needs to be later than checkin date")
+      errors.add(:guest_id, "Sorry: checkout date needs to be later than checkin date")
     end
   end
 end
