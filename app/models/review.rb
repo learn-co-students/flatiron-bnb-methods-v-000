@@ -3,8 +3,8 @@ class Review < ActiveRecord::Base
   belongs_to :guest, :class_name => "User"
 
   validates :rating, :description, :reservation, presence: true
-  before_create :checked_out
-  before_create :status
+  validate :checked_out
+  validate :status
 
   def checked_out
        if reservation && Date.today < reservation.checkout
@@ -13,8 +13,7 @@ class Review < ActiveRecord::Base
   end
 
   def status
-    # binding.pry
-    if reservation.status != "accepted" 
+    if reservation.try(:status) != "accepted"
       errors.add(:reservation, "You can only leave a review after your reservation is accepted")
     end
   end

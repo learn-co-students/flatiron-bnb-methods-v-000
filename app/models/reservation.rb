@@ -7,17 +7,16 @@ class Reservation < ActiveRecord::Base
   validates :checkin, :checkout, uniqueness: true
 
   validates_associated :listing, absence: true
-  validate :check_checkin_and_checkout, :checkin_before_checkout
+  validate :check_availablity, :check_checkin_and_checkout, :checkin_before_checkout
 
-
-  before_create :check_availablity
 
   def check_availablity
-    #  binding.pry
-    #  listing.all.each
-    if status != "accepted"
-      errors.add(:status, "This listing is not available for the dates you've chosen")
-    end
+   Reservation.where(listing_id: listing.id).where.not(id: id).each do |r|
+     booked_dates = r.checkin..r.checkout
+       if booked_dates === checkin || booked_dates === checkout
+         errors.add(:guest_id, "Sorry, this place isn't available during your requested dates.")
+       end
+     end
   end
 
   def check_checkin_and_checkout
