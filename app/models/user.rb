@@ -6,9 +6,9 @@ class User < ActiveRecord::Base
 
   #Add'l Host behaviors
   #define guests method
-  has_many :guests, :through => :listings
+  has_many :guests, :through => :reservations
   #defines host_reviews
-  has_many :host_reviews, :through => :reservations, source: :review
+  has_many :host_reviews, :through => :guests, source: :reviews
 
 
   #defines hosts method: guest has many trips (reservations).  trip_listings gets all listings associated with guest_id, which can then be further queried to get listing host
