@@ -4,15 +4,15 @@ class Review < ActiveRecord::Base
 
   validates :description, :rating, :reservation_id, presence: true
   validates :rating, numericality: true
-
-  before_validation :is_trip_completed
+  validate :trip_completed
 
   private
-  def is_trip_completed
-    (reservation) && (reservation.status == "accepted") && (reservation.checkout < Date.today)
+  def trip_completed
+    if (reservation) && (reservation.status == "accepted") && (reservation.checkout > Date.today)
+      errors.add(:reservation, "Reservation needs to be accepted and completed before leaving a review.")
+    end
   end
 
 end
-
 
 ## Passes both master and solution branch specs
