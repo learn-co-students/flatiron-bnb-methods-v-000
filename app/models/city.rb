@@ -6,13 +6,23 @@ class City < ActiveRecord::Base
   extend Reservable::ClassMethods
   include Reservable::InstanceMethods
 
+
+
+
   def city_openings(checkin, checkout)
-    listings.map do |l|
-      l.reservations.none? do |r|
-        (r.checkin < checkout.to_datetime && r.checkin > checkin.to_datetime) || (r.checkout > checkin.to_datetime  && r.checkout < checkout.to_datetime)
-      end
-    end
+     openings = Listing.available(checkin, checkout) & self.listings
   end
+
+
+    #list = []
+    #listings.each do |l|
+    #  if l.reservations.none? do |r|
+    #    (r.checkin < checkout.to_datetime && r.checkin > checkin.to_datetime) || (r.checkout > checkin.to_datetime  && r.checkout < checkout.to_datetime)
+    #  list << l
+    #  end
+    #end
+    #list.flatten
+
 
 
 end

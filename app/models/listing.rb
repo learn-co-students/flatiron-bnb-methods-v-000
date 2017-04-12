@@ -12,6 +12,34 @@ class Listing < ActiveRecord::Base
     reviews.average(:rating)
   end
 
+  def self.available(start_date, end_date)
+    booked = Reservation.booked_listings(start_date, end_date)
+    where.not("id IN (?)", booked.map {|l| l.id})
+  end
+
+
+  def self.booked(start_date, end_date)
+    reservations.where("checkin BETWEEN ? and ?", start_date, end_date)
+  end
+
+  def find_reservations
+    self.reservations.pluck(:checkin, :checkout)
+  end
+
+  def check_checkin(serched_checkin, checkin, checkout)
+    searched_checkin.between?(checkin, checkout)
+  end
+
+
+  def find_res(start_date, end_date)
+     start = Date.parse(start_date)
+     stop = Date.parse(end_date)
+     booked = self.reservations.pluck(:checkin, :checkout)
+     booked.each do |dates|
+        start.between?(dates[0], dates[1])
+    end
+  end
+
   private
 
   def change_user_host_status

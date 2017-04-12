@@ -17,6 +17,17 @@ class Reservation < ActiveRecord::Base
     duration * listing.price
   end
 
+  def self.booked(start_date, end_date)
+    where(checkin: start_date..end_date) & where(checkout: start_date..end_date)
+  end
+
+  def self.booked_listings(start_date, end_date)
+    self.booked(start_date, end_date).map {|b| b.listing}
+  end
+
+
+
+
  private
 
  def guest_is_not_host
@@ -34,6 +45,8 @@ class Reservation < ActiveRecord::Base
      errors.add(:guest, "Checkin cannot be after checkout")
    end
  end
+
+
 
  def availability
    if checkin && checkout

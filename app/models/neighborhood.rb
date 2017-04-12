@@ -7,4 +7,10 @@ class Neighborhood < ActiveRecord::Base
   extend Reservable::ClassMethods
   include Reservable::InstanceMethods
 
+  def neighborhood_openings(start_date, end_date)
+    openings = Reservation.openings(start_date, end_date) & reservations
+
+    openings
+  end
+
 end
