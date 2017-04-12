@@ -8,14 +8,14 @@ class Reservation < ActiveRecord::Base
   validate :guest_is_not_the_host, :reservation_available
 
   def guest_is_not_the_host
-    if self.guest_id == Listing.find(self.listing_id).host_id
+    if guest_id == listing.host_id
       errors.add(:guest_id, "guest cannot be the host")
     end
   end
 
   def reservation_available
     if checkin && checkout
-      reservations = Reservation.where("listing_id = ?", listing.id)
+      reservations = Reservation.where(listing_id: listing.id)
       reservations.each do |reservation|
         if reservation.id == id
           break

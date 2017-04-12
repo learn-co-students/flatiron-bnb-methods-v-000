@@ -11,9 +11,7 @@ class Listing < ActiveRecord::Base
   after_destroy :change_host_status_if_no_other_listing
 
   def average_review_rating
-    all_reservations_ids = Reservation.where("listing_id = ?",self.id).collect{|reservation| reservation.id}
-    ratings = all_reservations_ids.collect{|reservation_id| Review.find_by_reservation_id(reservation_id).rating}
-    ratings.sum.to_f/ratings.count.to_f
+    self.reviews.collect{|review| review.rating}.sum.to_f/self.reviews.count.to_f
   end
 
   protected
