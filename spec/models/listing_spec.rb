@@ -5,9 +5,11 @@ describe Listing do
                                 description: "Whole house for rent on mountain. Many bedrooms.",
                                 address: '123 Main Street',
                                 listing_type: 'shared room',
+                                neighborhood: Neighborhood.first,
                                 price: 15.00) }
 
     it 'has a title' do
+
       expect(listing.title).to eq("Beautiful Apartment on Main Street")
     end
 
@@ -47,7 +49,6 @@ describe Listing do
   describe 'has_many associations' do
 
 
-
     before :each do
       @older_reservation = Reservation.create(checkin: 10.days.ago,
                                               listing: listing,
@@ -62,7 +63,7 @@ describe Listing do
       @review = Review.create(rating: 1, description: 'it was good', reservation_id: @recent_reservation.id)
       @other_review = Review.create(rating: 4, description: 'also good', reservation_id: @older_reservation.id)
 
-      listing.reload
+    listing.reload
     end
 
     let(:listing) { listing = Listing.create(address: '123 Main Street',
@@ -70,13 +71,14 @@ describe Listing do
                                             title: "Foo",
                                             description: "Foo",
                                             price: "150.00",
-                                            neighborhood: Neighborhood.create,
+                                            neighborhood: Neighborhood.first,
                                             host: User.create) }
 
     let(:bart_simpson) { User.create }
     let(:lisa_simpson) { User.create }
 
     it 'has many reservations' do
+
       expect(listing.reservations).to include(@older_reservation)
       expect(listing.reservations).to include(@recent_reservation)
     end
@@ -221,8 +223,8 @@ describe Listing do
 
   describe "#average_review_rating" do
     before do
-      recent_reservation = Reservation.create(listing: listing, checkin: 10.days.ago, checkout: 5.days.ago, status: 'accepted')
-      older_reservation = Reservation.create(listing: listing, checkin: 30.days.ago, checkout: 29.days.ago, status: 'accepted')
+      recent_reservation = Reservation.create(listing: listing, checkin: 10.days.ago, guest_id: 4, checkout: 5.days.ago, status: 'accepted')
+      older_reservation = Reservation.create(listing: listing, checkin: 30.days.ago, guest_id: 6, checkout: 29.days.ago, status: 'accepted')
       review = Review.create(rating: 1, description: 'it was good', reservation_id: recent_reservation.id)
       other_review = Review.create(rating: 4, description: 'also good', reservation_id: older_reservation.id)
     end
@@ -234,7 +236,7 @@ describe Listing do
                                             title: "Foo",
                                             description: "Foo",
                                             price: "150.00",
-                                            neighborhood: Neighborhood.create,
+                                            neighborhood: Neighborhood.first,
                                             host: User.create) }
 
     it 'knows its average ratings from its reviews' do

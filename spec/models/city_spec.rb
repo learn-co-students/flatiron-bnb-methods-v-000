@@ -9,13 +9,12 @@ describe City do
     end
   end
 
-  #describe 'instance methods' do
-  #  it 'knows about all the available listings given a date range' do
-  #    binding.pry
-  #    expect(City.first.city_openings('2014-05-01', '2014-05-05')).to include(@listing2,@listing3)
-  #    expect(City.first.city_openings('2014-05-01', '2014-05-05')).to_not include(@listing1)
-  #  end
-#  end
+  describe 'instance methods' do
+    it 'knows about all the available listings given a date range' do
+      expect(City.first.city_openings('2014-05-01', '2014-05-05')).to include(@listing2,@listing3)
+      expect(City.first.city_openings('2014-05-01', '2014-05-05')).to_not include(@listing1)
+    end
+  end
 
   describe 'class methods' do
     describe ".highest_ratio_res_to_listings" do

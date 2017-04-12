@@ -4,17 +4,32 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
-  validates_presence_of :address, :listing_type, :title, :description, :price, :neighborhood_id
+
+  validates :address, presence: true
+  validates :listing_type, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :price, presence: true
+  validates :neighborhood_id, presence: true
+
   after_create :change_user_host_status
   after_destroy :change_host_status_if_all_listings_destroyed
 
   def average_review_rating
-    reviews.average(:rating)
+    reviews.average(:rating).to_f
   end
 
   def self.available(start_date, end_date)
     booked = Reservation.booked_listings(start_date, end_date)
-    where.not("id IN (?)", booked.map {|l| l.id})
+    if booked.empty?
+      all
+    else
+    available = where.not("id IN (?)", booked.map {|l| l.id})
+    end
+  end
+
+  def available?(start_date, end_date)
+    reservations.where(checkin: start_date..end_date).empty? && reservations.where(checkout: start_date..end_date).empty? && reservations.where("checkin < ? AND checkout > ?", start_date, end_date).empty?
   end
 
 
