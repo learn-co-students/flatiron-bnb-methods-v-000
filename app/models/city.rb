@@ -23,13 +23,23 @@ class City < ActiveRecord::Base
     highest
   end
 
+  def self.most_res
+    highest = City.first
+    self.all.each do |city|
+      highest = city if city.res_count > highest.res_count
+    end
+    highest
+  end
+
   def listings_count
     self.listings.count
   end
 
   def res_count
     count = 0
-    self.listings.each {|res| count += 1}
+    self.listings.each do |listing|
+      listing.reservations.each  {|res| count += 1}
+    end
     count
   end
 
