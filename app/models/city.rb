@@ -15,6 +15,14 @@ class City < ActiveRecord::Base
     availables
   end
 
+  def self.highest_ratio_res_to_listings
+    highest = City.first
+    self.all.each do |city|
+      highest = city if city.ratio > highest.ratio
+    end
+    highest
+  end
+
   def listings_count
     self.listings.count
   end
@@ -23,6 +31,10 @@ class City < ActiveRecord::Base
     count = 0
     self.listings.each {|res| count += 1}
     count
+  end
+
+  def ratio
+    self.res_count/self.listings_count
   end
 
 end
