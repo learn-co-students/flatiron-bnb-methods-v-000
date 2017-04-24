@@ -7,10 +7,9 @@ class Listing < ActiveRecord::Base
 
 
   validates :address, presence: true
-  validates :address, presence: true
-  validates :address, presence: true
-  validates :address, presence: true
-  validates :address, presence: true
-  validates :address, presence: true
+  validates :listing_type, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :price, presence: true
 
 end
