@@ -2,7 +2,6 @@ module Available
   extend ActiveSupport::Concern
 
   def openings(checkin, checkout)
-
     availables = self.listings.collect{|a| a}
     self.listings.each do |listing|
       listing.reservations.each do |res|
@@ -14,22 +13,6 @@ module Available
     availables
   end
 
-  def self.highest_ratio_res_to_listings
-    highest = City.first
-    self.all.each do |city|
-      highest = city if city.ratio > highest.ratio
-    end
-    highest
-  end
-
-  def self.most_res
-    highest = City.first
-    self.all.each do |city|
-      highest = city if city.res_count > highest.res_count
-    end
-    highest
-  end
-
   def listings_count
     self.listings.count
   end
@@ -59,29 +42,22 @@ module Available
   end
 
   def ratio
+    return 0 if self.listings_count == 0
     self.res_count/self.listings_count
   end
 
   class_methods do
 
-    def self.highest_ratio_res_to_listings
-      highest = City.first
-      self.all.each do |city|
-        highest = city if city.ratio > highest.ratio
-      end
-      highest
+    def highest_ratio_res_to_listings
+      all.max {|a, b| a.ratio <=> b.ratio}
     end
-  
-    def self.most_res
-      highest = City.first
-      self.all.each do |city|
-        highest = city if city.res_count > highest.res_count
-      end
-      highest
+
+    def most_res
+      all.max {|a, b| a.res_count <=> b.res_count}
     end
-    
+
   end
 
 
-  
+
 end
