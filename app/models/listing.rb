@@ -14,8 +14,11 @@ class Listing < ActiveRecord::Base
   validates :neighborhood, presence: true
 
   before_create :make_user_host_status_true
-  before_destroy :make_user_host_status_false
+  after_destroy :make_user_host_status_false
 
+  def average_review_rating
+    self.reviews.average(:rating)
+  end
 
 
   private
