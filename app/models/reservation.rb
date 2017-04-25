@@ -13,7 +13,7 @@ class Reservation < ActiveRecord::Base
 
   def total_price
     duration*listing.price
-  end 
+  end
 
   private
 
@@ -35,7 +35,7 @@ class Reservation < ActiveRecord::Base
   def chronological
     if checkout == nil || checkin == nil || checkout <= checkin
       errors.add(:guest_id, "Check-out has to be after check-in")
-    end 
-  end 
+    end
+  end
 
 end
