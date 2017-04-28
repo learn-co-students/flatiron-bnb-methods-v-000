@@ -1,5 +1,4 @@
 class Listing < ActiveRecord::Base
-
   validates :address, :listing_type, :title, :description, :price, :neighborhood_id, presence: true
 
   belongs_to :neighborhood
@@ -28,10 +27,7 @@ class Listing < ActiveRecord::Base
 
   def clear_user_host_status
     find_user
-    if @user.listings.empty?
-      @user.host = false
-      @user.save
-    end
+    @user.host = false if @user.listings.empty?
+    @user.save
   end
-#Listing.all[2].reviews[0].rating
 end
