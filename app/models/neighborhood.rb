@@ -3,13 +3,15 @@ class Neighborhood < ActiveRecord::Base
   has_many :listings
   has_many :reservations, :through => :listings
 
+  include Reservable
+
   def neighborhood_openings(startdate, enddate)
-  		neighborhood_openings = []
-  	listings.each do |listing|
-  		neighborhood_openings << listing if !(listing.reservations.any? {|res|
-		res.checkin.to_s <= enddate && res.checkout.to_s >= startdate})
-  	end
-  	neighborhood_openings
+    neighborhood_openings = []
+    listings.each do |listing|
+      neighborhood_openings << listing if !(listing.reservations.any? {|res|
+        res.checkin.to_s <= enddate && res.checkout.to_s >= startdate})
+    end
+    neighborhood_openings
   end
 
   def self.highest_ratio_res_to_listings
@@ -25,10 +27,5 @@ class Neighborhood < ActiveRecord::Base
 
 	neighborhood.reverse.first
   end
-
-  def self.most_res
-  		neighborhoods = self.all.sort_by {|neighborhood| neighborhood.reservations.count}
-  		neighborhoods.reverse.first
-  	end
   
 end
