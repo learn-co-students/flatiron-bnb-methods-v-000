@@ -60,17 +60,17 @@ def make_denver
     host_id: User.first.id
   )
   checkin_day = 1
-  6.times do |i|
+  7.times do |i|
     guest_id = i + 1
     if guest_id != listing.host.id
       Reservation.create(
         checkin: "2014-08-#{checkin_day}",
-        checkout: "2014-08-#{checkin_day + 3}",
+        checkout: "2014-08-#{checkin_day + 2}",
         listing_id: listing.id,
         guest_id: "#{guest_id}",
         status: "accepted"
       )
-      checkin_day += 5
+      checkin_day += 4
     end
   end
 end
