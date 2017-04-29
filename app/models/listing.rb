@@ -15,8 +15,11 @@ class Listing < ActiveRecord::Base
   end
 
   def available(startdate, enddate)
-    booked = reservations.map {|reso| (reso.checkin..reso.checkout).to_a}.flatten
-    true if !booked.include?(startdate) && !booked.include?(enddate)
+    booked = reservations.map do |reso|
+      (reso.checkin..reso.checkout).to_a
+    end.flatten
+    # binding.pry
+    true if !booked.include?(startdate.to_date) && !booked.include?(enddate.to_date)
   end
 
   private
