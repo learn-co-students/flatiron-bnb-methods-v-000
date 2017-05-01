@@ -22,4 +22,16 @@ class Listing < ActiveRecord::Base
   	end
   end
 
+  def average_review_rating
+  	if !self.reviews.empty?
+
+  		ratings = self.reviews.collect { |r| r.rating }
+  		avg = ratings.inject(:+).to_f / ratings.length
+
+  	else
+  		"Be the first to leave a review"
+  	end
+
+  end
+
 end
