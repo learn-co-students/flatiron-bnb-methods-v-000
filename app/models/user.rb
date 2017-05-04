@@ -4,11 +4,10 @@ class User < ActiveRecord::Base
   has_many :trips, :foreign_key => 'guest_id', :class_name => "Reservation"
   has_many :reviews, :foreign_key => 'guest_id'
 
-  #before_save :change_host_status_back
+  has_many :guests, through: :reservations
+  has_many :host_reviews, through: :guests, source: :reviews
 
-  private
+  has_many :trip_listings, through: :trips, source: :listing
+  has_many :hosts, through: :trip_listings, foreign_key: :host_id
 
-  #def change_host_status_back
-#    self.host = false if !self.listings.any?
-#  end
 end
