@@ -23,6 +23,7 @@ describe Reservation do
     it 'has a review' do 
       expect(@reservation1.review).to eq(@review1)
     end
+    
   end
 
   describe 'reservation validations' do
