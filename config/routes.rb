@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :trip_listings
+
+  resources :friendships
+
+  resources :hospitalities
+
   resources :users
 
   resources :listings
