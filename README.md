@@ -11,6 +11,9 @@ There are many methods here. Check out the specs and **remember to run your code
 ### City
 
   * The `#city_openings` method should return all of the `Listing` objects that are available for the **entire span** that is inputted. (**NOTE**: This isn't easy. Check the resources below and try out a few things in console until you're satisfied with your solution. Don't be afraid to google!)
+
+ ###IF ANY OF THE RESERVATION TIMES IN THE LISTING CONFLICT WITH THE INPUTTED TIME, THE LISTING IS NOT INCLUDED.
+
   * The `.highest_ratio_res_to_listings` method should return the `City` that is "most full". What that means is it has the highest amount of reservations per listing.
   * The `.most_res` method should return the `City` with the most total number of reservations, no matter if they are all on one listing or otherwise.
 
