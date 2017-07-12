@@ -4,5 +4,31 @@ class Listing < ActiveRecord::Base
   has_many :reservations
   has_many :reviews, :through => :reservations
   has_many :guests, :class_name => "User", :through => :reservations
-  
+
+
+  validates :address, presence: true
+  validates :listing_type, presence: true
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :price, presence: true
+  validates :neighborhood, presence: true
+
+  before_create :make_user_host_status_true
+  after_destroy :make_user_host_status_false
+
+  def average_review_rating
+    self.reviews.average(:rating)
+  end
+
+
+  private
+
+  def make_user_host_status_true
+    host.update(host: true) unless host.host == true
+  end
+
+  def make_user_host_status_false
+    host.update(host: false) if host.listings.count == 0
+  end
+
 end
