@@ -9,7 +9,7 @@ class City < ActiveRecord::Base
   end
 
   def self.most_res
-    self.joins(listings: :reservations).where(reservations)
+    self.all.sort {|city1, city2| city1.listings.reservations.count <=> city2.listings.reservations.count}[-1]
   end
 
   def city_openings(range_begin, range_end)
