@@ -1,6 +1,13 @@
 class City < ActiveRecord::Base
+  include Reservable::InstanceMethods
+  extend Reservable::ClassMethods
+
   has_many :neighborhoods
   has_many :listings, :through => :neighborhoods
+  has_many :reservations, :through => :listings
+
+  def city_openings(arrive, depart)    
+    openings(arrive, depart)
+  end  
 
 end
-
