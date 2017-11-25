@@ -20,11 +20,11 @@ describe User do
       expect(@avi.reviews).to include(@review3)
     end
     
-    it 'as a host, knows about the guests its had' do 
+    it 'as a host, knows about the guests it\'s had' do 
       expect(@amanda.guests).to include(@logan)
     end
 
-    it 'as a guest, knows about the hosts its had' do 
+    it 'as a guest, knows about the hosts it\'s had' do 
       expect(@logan.hosts).to include(@amanda)
     end
 
