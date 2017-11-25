@@ -33,10 +33,10 @@ The same class/instance methods as your `City` object. Maybe there is a way they
 
 #### Validations
 
-  * Should have a `checkin` and a `checkout` method.
+  * Should have a `check_in` and a `check_out` method.
   * Make sure the guest and host aren't the same user.
   * Make sure any reservation that is made, doesn't conflict with others.
-  * Make sure the checkout time is after the check in time.
+  * Make sure the check_out time is after the check in time.
 
 **Note:** Remember, if you're having trouble setting up your models' relationships, Google is your friend. There might be ways of designing associations that you haven't encountered yet but that will vastly simplify your code.
 
