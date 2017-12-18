@@ -1,7 +1,12 @@
 source 'https://rubygems.org'
 
+<<<<<<< HEAD
 gem 'rails', '5.0.7.1'
 gem 'coffee-rails'
+=======
+gem 'rails', '4.2.7.1'
+gem 'coffee-rails', '~> 4.0.0'
+>>>>>>> update rails version'
 gem 'jquery-rails'
 gem 'sass-rails'
 gem 'sdoc', '~> 0.4.0',          group: :doc
