@@ -1,3 +1,5 @@
+require 'pry'
+
 describe Listing do
   describe 'attributes' do
 
@@ -66,7 +68,7 @@ describe Listing do
     end
 
     let(:listing) { listing = Listing.create(address: '123 Main Street',
-                                            listing_type: "private room",
+                                              listing_type: "private room",
                                             title: "Foo",
                                             description: "Foo",
                                             price: "150.00",
@@ -82,6 +84,7 @@ describe Listing do
     end
 
     it 'has many guests' do
+      #binding.pry
       expect(listing.guests).to include(bart_simpson)
       expect(listing.guests).to include(lisa_simpson)
     end
@@ -141,6 +144,7 @@ describe Listing do
           price: "150.00",
           neighborhood: santa_monica,
           host: user)
+        #binding.pry
         expect(user.reload.host?).to eq(true)
       end
     end

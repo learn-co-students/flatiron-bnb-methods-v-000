@@ -1,3 +1,4 @@
+require 'pry'
 describe City do
   describe 'associations' do 
     it 'has a name' do 
@@ -35,6 +36,7 @@ describe City do
 
       it 'knows the city with the most reservations' do
         make_denver
+        #binding.pry
         expect(City.most_res).to eq(City.find_by(:name => "Denver")) 
       end
     end
