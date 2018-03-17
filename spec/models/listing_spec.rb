@@ -207,7 +207,7 @@ describe Listing do
           description: "Foo", 
           price: "150.00", 
           neighborhood: santa_monica, 
-          host: user) } 
+          host: other_user) } 
 
       it 'changes host status to false' do 
         expect(user.host).to eq(true)
