@@ -58,7 +58,3 @@ The same class/instance methods as your `City` object. Maybe there is a way they
 * [AR Validations](http://guides.rubyonrails.org/active_record_validations.html)
 * [Rails Callbacks](http://api.rubyonrails.org/classes/ActiveRecord/Callbacks.html)
 * [Date range overlaps](http://stackoverflow.com/questions/325933/determine-whether-two-date-ranges-overlap)
-
-<a href='https://learn.co/lessons/flatiron-bnb-methods' data-visibility='hidden'>View this lesson on Learn.co</a>
-
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/flatiron-bnb-methods'>Flatiron BnB Methods Lab</a> on Learn.co and start learning to code for free.</p>
