@@ -1,4 +1,4 @@
-# Flatiron-bnb: Methods
+# Bonus Lab: Flatiron-BnB Methods
 
 In the previous iteration, we built out our model associations and migrated our database. Now we're going to work on building useful methods (class and instance) for rendering data and our own validations. We're doing this to follow the principle that our controllers should be skinny, our models fat, so therefore our views have very little logic in them.
 
