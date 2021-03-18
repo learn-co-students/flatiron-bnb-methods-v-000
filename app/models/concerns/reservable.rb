@@ -12,9 +12,9 @@ module Reservable
   end
 
   class_methods do
-    # use of 'class_methods' is good, but I think is something that the curriculum 
+    # use of 'class_methods' is good, but I think is something that the curriculum
     # does not currently cover, so would need to be added.
-    def highest_ratio_reservations_to_listings
+    def highest_ratio_res_to_listings
 
       all.max do |a, b|
         a.ratio_reservations_to_listings <=> b.ratio_reservations_to_listings
